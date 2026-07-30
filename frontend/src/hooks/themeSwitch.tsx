@@ -1,16 +1,29 @@
 import {useEffect, useState} from "react";
-import {ThemeModeKey} from "../utils/LocalStorageKeys";
+import {ThemeColorKey, ThemeModeKey} from "../utils/LocalStorageKeys";
 
 /** 主题模式：跟随系统 / 浅色 / 深色 */
 export type ThemeMode = "system" | "light" | "dark";
 
-// 模块级主题模式存储，广播给所有使用主题的组件（antd ConfigProvider 与各 Monaco 编辑器）
+/** antd 默认主色（用户未自定义时展示） */
+export const DefaultThemeColor = "#1677ff";
+
+// 模块级主题状态存储，广播给所有使用主题的组件（antd ConfigProvider 与各 Monaco 编辑器）
 let currentMode: ThemeMode = readStoredMode();
+let currentColor: string | null = readStoredColor();
 const listeners = new Set<() => void>();
 
 function readStoredMode(): ThemeMode {
     const saved = localStorage.getItem(ThemeModeKey);
     return saved === "light" || saved === "dark" ? saved : "system";
+}
+
+function readStoredColor(): string | null {
+    const saved = localStorage.getItem(ThemeColorKey);
+    return saved && /^#[0-9a-fA-F]{6}$/.test(saved) ? saved : null;
+}
+
+function notify(): void {
+    listeners.forEach((listener) => listener());
 }
 
 /** getThemeMode 返回当前主题模式 */
@@ -22,7 +35,33 @@ export function getThemeMode(): ThemeMode {
 export function setThemeMode(mode: ThemeMode): void {
     currentMode = mode;
     localStorage.setItem(ThemeModeKey, mode);
-    listeners.forEach((listener) => listener());
+    notify();
+}
+
+/** setThemeColor 设置自定义主题色（hex）并持久化，传 null 恢复默认色 */
+export function setThemeColor(color: string | null): void {
+    currentColor = color;
+    if (color) {
+        localStorage.setItem(ThemeColorKey, color);
+    } else {
+        localStorage.removeItem(ThemeColorKey);
+    }
+    notify();
+}
+
+/** useThemeColor 返回自定义主题色（null 表示默认）及设置函数 */
+export function useThemeColor(): [string | null, (color: string | null) => void] {
+    const [color, setColor] = useState(currentColor);
+
+    useEffect(() => {
+        const listener = () => setColor(currentColor);
+        listeners.add(listener);
+        return () => {
+            listeners.delete(listener);
+        };
+    }, []);
+
+    return [color, setThemeColor];
 }
 
 function systemPrefersDark(): boolean {

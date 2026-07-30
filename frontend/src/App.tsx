@@ -7,7 +7,7 @@ import HomePage from "./components/HomePage";
 import SettingsPage from "./components/SettingsPage";
 import EditorPageShell from "./components/EditorPageShell";
 import DisclaimerDialog from "./components/DisclaimerDialog";
-import {useDarkMode} from "./hooks/themeSwitch";
+import {useDarkMode, useThemeColor} from "./hooks/themeSwitch";
 import useFileHandlers from "./hooks/fileHandler";
 import {DisclaimerAgreedKey} from "./utils/LocalStorageKeys";
 import {KCESFormats} from "./utils/consts";
@@ -16,6 +16,7 @@ import {StartupFile} from "../bindings/github.com/MeidoPromotionAssociation/KCES
 
 const App: React.FC = () => {
     const isDarkMode = useDarkMode();
+    const [themeColor] = useThemeColor();
     const {handleOpenedFile} = useFileHandlers();
     const [showDisclaimer, setShowDisclaimer] = useState(() => {
         return localStorage.getItem(DisclaimerAgreedKey) !== 'true';
@@ -68,6 +69,7 @@ const App: React.FC = () => {
         <ConfigProvider
             theme={{
                 algorithm: isDarkMode ? theme.darkAlgorithm : theme.defaultAlgorithm,
+                token: themeColor ? {colorPrimary: themeColor} : undefined,
             }}>
             <DisclaimerDialog visible={showDisclaimer} onAgree={handleAgreeDisclaimer}/>
             {!showDisclaimer && (

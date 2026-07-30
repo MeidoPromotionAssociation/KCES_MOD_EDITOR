@@ -14,6 +14,8 @@ export const FileTypeStrictModeKey = "FileTypeStrictMode"; // 存储文件类型
 
 export const ThemeModeKey = "ThemeMode"; // 存储主题模式（system / light / dark）
 
+export const ThemeColorKey = "ThemeColor"; // 存储自定义主题色（hex，空表示默认色）
+
 // 每个格式编辑器的视图模式键统一由此函数生成
 export function editorViewModeKey(formatKey: string): string {
     return `${formatKey}EditorViewMode`;

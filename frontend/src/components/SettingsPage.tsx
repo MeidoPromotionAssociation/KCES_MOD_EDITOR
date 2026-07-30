@@ -1,10 +1,10 @@
 // frontend/src/components/SettingsPage.tsx
-import {Button, Card, Col, Dropdown, Layout, List, MenuProps, Row, Segmented, Space, Switch, Tooltip, Typography} from "antd";
+import {Button, Card, Col, ColorPicker, Dropdown, Layout, List, MenuProps, Row, Segmented, Space, Switch, Tooltip, Typography} from "antd";
 import {useTranslation} from "react-i18next";
 import NavBar from "./NavBar";
 import {Content} from "antd/es/layout/layout";
 import useFileHandlers from "../hooks/fileHandler";
-import {ThemeMode, useThemeMode} from "../hooks/themeSwitch";
+import {DefaultThemeColor, ThemeMode, useThemeColor, useThemeMode} from "../hooks/themeSwitch";
 import React, {useState} from "react";
 import {
     CloseCircleOutlined,
@@ -22,6 +22,7 @@ const SettingsPage: React.FC = () => {
     const {handleSelectFile, handleSaveFile, strictMode, updateStrictMode} = useFileHandlers();
     const [language, setLanguage] = useState(i18n.language);
     const [themeMode, setThemeMode] = useThemeMode();
+    const [themeColor, setThemeColor] = useThemeColor();
 
     const [checkUpdates, setCheckUpdates] = useState(() => {
         const saved = localStorage.getItem(SettingCheckUpdateKey);
@@ -107,6 +108,11 @@ const SettingsPage: React.FC = () => {
                                         title: t('SettingsPage.theme_mode'),
                                         tooltip: t('SettingsPage.theme_mode_tip'),
                                         type: 'theme'
+                                    },
+                                    {
+                                        title: t('SettingsPage.theme_color'),
+                                        tooltip: t('SettingsPage.theme_color_tip'),
+                                        type: 'themeColor'
                                     }
                                 ]}
                                 renderItem={(item: any) => (
@@ -130,6 +136,28 @@ const SettingsPage: React.FC = () => {
                                                         {label: t('SettingsPage.theme_dark'), value: 'dark'},
                                                     ]}
                                                 />
+                                            ) : item.type === 'themeColor' ? (
+                                                <Space key="themeColor">
+                                                    {themeColor ? (
+                                                        <Button size="small" onClick={() => setThemeColor(null)}>
+                                                            {t('SettingsPage.theme_color_reset')}
+                                                        </Button>
+                                                    ) : null}
+                                                    <ColorPicker
+                                                        value={themeColor ?? DefaultThemeColor}
+                                                        showText
+                                                        disabledAlpha
+                                                        presets={[{
+                                                            label: t('SettingsPage.theme_color_presets'),
+                                                            colors: [
+                                                                DefaultThemeColor, '#f5222d', '#fa541c', '#fa8c16',
+                                                                '#faad14', '#a0d911', '#52c41a', '#13c2c2',
+                                                                '#2f54eb', '#722ed1', '#eb2f96', '#8c8c8c',
+                                                            ],
+                                                        }]}
+                                                        onChangeComplete={(color) => setThemeColor(color.toHexString())}
+                                                    />
+                                                </Space>
                                             ) : (
                                                 <Dropdown key="language" menu={languageMenu} placement="bottomRight">
                                                     <Button>
