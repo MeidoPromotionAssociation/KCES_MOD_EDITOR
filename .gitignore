@@ -42,3 +42,5 @@ build/windows/nsis/MicrosoftEdgeWebview2Setup.exe
 KCES_MOD_EDITOR.exe
 /game
 /testdata
+/COM3D2_MOD_EDITOR
+/MeidoSerialization
