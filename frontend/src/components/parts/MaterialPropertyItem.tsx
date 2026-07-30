@@ -25,13 +25,12 @@ function propNameSelect(kind: MaterialPropKind, type: number, onChange: (type: n
     }
     return (
         <Select
-            showSearch
+            showSearch={{optionFilterProp: "label"}}
             size="small"
             style={{width}}
             styles={{popup: {root: {textAlign: "left"}}}}
             value={type}
             options={options}
-            optionFilterProp="label"
             onChange={(value) => onChange(value)}
         />
     );

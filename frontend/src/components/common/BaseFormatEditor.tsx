@@ -1,5 +1,6 @@
 import React, {forwardRef, useEffect, useImperativeHandle, useState} from "react";
-import {Button, Collapse, ConfigProvider, Descriptions, Empty, message, Modal, Radio} from "antd";
+import {Button, Collapse, ConfigProvider, Descriptions, Empty, Modal, Radio} from "antd";
+import {appMessage as message} from "../../utils/feedback";
 import {useTranslation} from "react-i18next";
 import {Window} from "@wailsio/runtime";
 import {FileInfo} from "../../../bindings/github.com/MeidoPromotionAssociation/MeidoSerialization/service/COM3D2/models";

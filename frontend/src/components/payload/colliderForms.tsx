@@ -63,7 +63,7 @@ const VectorFields: React.FC<{
                 size="small"
                 style={{width: 92}}
                 step={0.01}
-                addonBefore={axis.toUpperCase()}
+                prefix={axis.toUpperCase()}
                 value={value?.[axis] ?? 0}
                 onChange={(v) => onChange({...value, [axis]: (v ?? 0) as number})}
             />
@@ -135,13 +135,13 @@ export const ColliderFields: React.FC<{
             {(type === 1 || type === 3) && (
                 <Row label={t('ColliderEditor.capsule_size')}>
                     <Space size={4} wrap>
-                        <InputNumber size="small" style={{width: 130}} step={0.01} addonBefore="start"
+                        <InputNumber size="small" style={{width: 130}} step={0.01} prefix="start"
                                      value={collider.startRadius}
                                      onChange={(v) => set("startRadius", (v ?? 0) as number)}/>
-                        <InputNumber size="small" style={{width: 130}} step={0.01} addonBefore="end"
+                        <InputNumber size="small" style={{width: 130}} step={0.01} prefix="end"
                                      value={collider.endRadius}
                                      onChange={(v) => set("endRadius", (v ?? 0) as number)}/>
-                        <InputNumber size="small" style={{width: 140}} step={0.01} addonBefore="height"
+                        <InputNumber size="small" style={{width: 140}} step={0.01} prefix="height"
                                      value={collider.height}
                                      onChange={(v) => set("height", (v ?? 0) as number)}/>
                     </Space>

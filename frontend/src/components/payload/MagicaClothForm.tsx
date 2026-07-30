@@ -105,7 +105,7 @@ const ValueControl: React.FC<{
             <Space size={4}>
                 {Object.keys(value).map((axis) => (
                     <InputNumber key={axis} size="small" style={{width: 96}} step={0.01}
-                                 addonBefore={axis.toUpperCase()}
+                                 prefix={axis.toUpperCase()}
                                  value={value[axis]}
                                  onChange={(v) => onChange({...value, [axis]: (v ?? 0) as number})}/>
                 ))}
@@ -121,7 +121,7 @@ const ValueControl: React.FC<{
             <div>
                 <Space size={8} style={{marginBottom: 6}} wrap>
                     {"value" in value && (
-                        <InputNumber size="small" style={{width: 140}} step={0.01} addonBefore="value"
+                        <InputNumber size="small" style={{width: 140}} step={0.01} prefix="value"
                                      value={value.value}
                                      onChange={(v) => onChange({...value, value: (v ?? 0) as number})}/>
                     )}

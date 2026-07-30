@@ -1,5 +1,6 @@
 import React, {forwardRef, useRef} from "react";
-import {Button, message, Space} from "antd";
+import {Button, Space} from "antd";
+import {appMessage as message} from "../utils/feedback";
 import {ExportOutlined, ImportOutlined} from "@ant-design/icons";
 import {useTranslation} from "react-i18next";
 import BaseFormatEditor, {BaseFormatEditorProps, FormatEditorRef} from "./common/BaseFormatEditor";

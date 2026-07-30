@@ -1,6 +1,6 @@
 import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router-dom";
-import {message} from "antd";
+import {appMessage as message} from "../utils/feedback";
 import React, {useState} from "react";
 import {formatByFileType, formatByPath} from "../utils/consts";
 import {FileTypeStrictModeKey} from "../utils/LocalStorageKeys";

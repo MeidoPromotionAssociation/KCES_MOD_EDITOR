@@ -1,7 +1,7 @@
 // App.tsx
 import React, {useEffect, useState} from "react";
 import {Route, Routes} from "react-router-dom";
-import {ConfigProvider, theme} from "antd";
+import {App as AntdApp, ConfigProvider, theme} from "antd";
 import {Events} from "@wailsio/runtime";
 import HomePage from "./components/HomePage";
 import SettingsPage from "./components/SettingsPage";
@@ -13,6 +13,16 @@ import {DisclaimerAgreedKey} from "./utils/LocalStorageKeys";
 import {KCESFormats} from "./utils/consts";
 import {registerEditingSchemas} from "./utils/monacoSchemas";
 import {StartupFile} from "../bindings/github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR/internal/app.ts";
+import {bindMessage} from "./utils/feedback";
+
+// MessageBinder 把组件树内（可消费主题上下文）的 message 实例绑定到全局桥
+const MessageBinder: React.FC = () => {
+    const {message} = AntdApp.useApp();
+    useEffect(() => {
+        bindMessage(message);
+    }, [message]);
+    return null;
+};
 
 const App: React.FC = () => {
     const isDarkMode = useDarkMode();
@@ -71,20 +81,23 @@ const App: React.FC = () => {
                 algorithm: isDarkMode ? theme.darkAlgorithm : theme.defaultAlgorithm,
                 token: themeColor ? {colorPrimary: themeColor} : undefined,
             }}>
-            <DisclaimerDialog visible={showDisclaimer} onAgree={handleAgreeDisclaimer}/>
-            {!showDisclaimer && (
-                <Routes>
-                    <Route path="/" element={<HomePage/>}/>
-                    {KCESFormats.map((format) => (
-                        <Route
-                            key={format.key}
-                            path={`/${format.key}-editor`}
-                            element={<EditorPageShell format={format}/>}
-                        />
-                    ))}
-                    <Route path="/settings" element={<SettingsPage/>}/>
-                </Routes>
-            )}
+            <AntdApp component={false}>
+                <MessageBinder/>
+                <DisclaimerDialog visible={showDisclaimer} onAgree={handleAgreeDisclaimer}/>
+                {!showDisclaimer && (
+                    <Routes>
+                        <Route path="/" element={<HomePage/>}/>
+                        {KCESFormats.map((format) => (
+                            <Route
+                                key={format.key}
+                                path={`/${format.key}-editor`}
+                                element={<EditorPageShell format={format}/>}
+                            />
+                        ))}
+                        <Route path="/settings" element={<SettingsPage/>}/>
+                    </Routes>
+                )}
+            </AntdApp>
         </ConfigProvider>
     );
 };

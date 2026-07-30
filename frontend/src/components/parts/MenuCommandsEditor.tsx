@@ -257,7 +257,7 @@ const MenuCommandsEditor: React.FC<{
                     type="warning"
                     showIcon
                     style={{marginBottom: 8}}
-                    message={t('MenuAssetsEditor.command_parse_error')}
+                    title={t('MenuAssetsEditor.command_parse_error')}
                     description={parseError}
                 />
             )}

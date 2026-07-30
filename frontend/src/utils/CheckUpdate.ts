@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import {AppVersion, RetryInterval, SettingCheckUpdateKey, UpdateCheckInterval} from "./consts";
-import {message} from "antd";
+import {appMessage as message} from "./feedback";
 import {t} from "i18next";
 import {LastUpdateCheckTimeKey, LatestVersionKey, NewVersionAvailableKey, UpdateRetryKey} from "./LocalStorageKeys";
 import {CheckLatestVersion} from "../../bindings/github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR/internal/app.ts";

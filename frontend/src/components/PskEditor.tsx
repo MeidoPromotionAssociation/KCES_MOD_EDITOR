@@ -88,7 +88,7 @@ const PskEditor = forwardRef<FormatEditorRef, Omit<BaseFormatEditorProps, "rende
                                                 {(["X", "Y", "Z"] as const).map((axis) => (
                                                     <InputNumber
                                                         key={axis} size="small" style={{width: 100}} step={0.01}
-                                                        addonBefore={axis}
+                                                        prefix={axis}
                                                         value={data?.Gravity?.[axis] ?? 0}
                                                         onChange={(v) => set("Gravity", {
                                                             ...data?.Gravity,

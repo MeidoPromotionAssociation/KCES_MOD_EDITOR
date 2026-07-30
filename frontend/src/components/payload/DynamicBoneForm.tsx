@@ -30,7 +30,7 @@ const Vector3Field: React.FC<{
                 size="small"
                 style={{width: 90}}
                 step={0.01}
-                addonBefore={axis.toUpperCase()}
+                prefix={axis.toUpperCase()}
                 value={value?.[axis] ?? 0}
                 onChange={(v) => onChange({...value, [axis]: (v ?? 0) as number})}
             />
