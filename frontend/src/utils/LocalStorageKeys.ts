@@ -1,0 +1,18 @@
+// CheckUpdate
+export const LastUpdateCheckTimeKey = "LastUpdateCheckTime"; // 存储上次检查时间的键
+
+export const NewVersionAvailableKey = "NewVersionAvailable"; // 存储新版本是否可用的键
+
+export const LatestVersionKey = "LatestVersion"; // 存储最新版本号的键
+
+export const UpdateRetryKey = "UpdateRetry"; // 存储是否重试的键
+
+// Common
+export const DisclaimerAgreedKey = "DisclaimerAgreedKey"; // 存储免责声明同意状态的键
+
+export const FileTypeStrictModeKey = "FileTypeStrictMode"; // 存储文件类型判断的严格模式设置
+
+// 每个格式编辑器的视图模式键统一由此函数生成
+export function editorViewModeKey(formatKey: string): string {
+    return `${formatKey}EditorViewMode`;
+}

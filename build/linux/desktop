@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0
+Name=My Product
+Comment=A KCES_MOD_EDITOR application
+# The Exec line includes %u to pass the URL to the application
+Exec=/usr/local/bin/kces_mod_editor.exe %u
+Terminal=false
+Type=Application
+Icon=kces_mod_editor.exe
+Categories=Utility;
+StartupWMClass=kces_mod_editor.exe
+
+ 
