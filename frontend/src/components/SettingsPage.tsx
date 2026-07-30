@@ -1,9 +1,10 @@
 // frontend/src/components/SettingsPage.tsx
-import {Button, Card, Col, Dropdown, Layout, List, MenuProps, Row, Space, Switch, Tooltip, Typography} from "antd";
+import {Button, Card, Col, Dropdown, Layout, List, MenuProps, Row, Segmented, Space, Switch, Tooltip, Typography} from "antd";
 import {useTranslation} from "react-i18next";
 import NavBar from "./NavBar";
 import {Content} from "antd/es/layout/layout";
 import useFileHandlers from "../hooks/fileHandler";
+import {ThemeMode, useThemeMode} from "../hooks/themeSwitch";
 import React, {useState} from "react";
 import {
     CloseCircleOutlined,
@@ -20,6 +21,7 @@ const SettingsPage: React.FC = () => {
     const {t, i18n} = useTranslation();
     const {handleSelectFile, handleSaveFile, strictMode, updateStrictMode} = useFileHandlers();
     const [language, setLanguage] = useState(i18n.language);
+    const [themeMode, setThemeMode] = useThemeMode();
 
     const [checkUpdates, setCheckUpdates] = useState(() => {
         const saved = localStorage.getItem(SettingCheckUpdateKey);
@@ -100,6 +102,11 @@ const SettingsPage: React.FC = () => {
                                         title: t('Common.choose_language'),
                                         type: 'language',
                                         value: language
+                                    },
+                                    {
+                                        title: t('SettingsPage.theme_mode'),
+                                        tooltip: t('SettingsPage.theme_mode_tip'),
+                                        type: 'theme'
                                     }
                                 ]}
                                 renderItem={(item: any) => (
@@ -111,6 +118,17 @@ const SettingsPage: React.FC = () => {
                                                     key="switch"
                                                     checked={item.checked}
                                                     onChange={item.onChange}
+                                                />
+                                            ) : item.type === 'theme' ? (
+                                                <Segmented
+                                                    key="theme"
+                                                    value={themeMode}
+                                                    onChange={(value) => setThemeMode(value as ThemeMode)}
+                                                    options={[
+                                                        {label: t('SettingsPage.theme_system'), value: 'system'},
+                                                        {label: t('SettingsPage.theme_light'), value: 'light'},
+                                                        {label: t('SettingsPage.theme_dark'), value: 'dark'},
+                                                    ]}
                                                 />
                                             ) : (
                                                 <Dropdown key="language" menu={languageMenu} placement="bottomRight">

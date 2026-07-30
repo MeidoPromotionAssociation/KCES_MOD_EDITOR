@@ -12,6 +12,8 @@ export const DisclaimerAgreedKey = "DisclaimerAgreedKey"; // 存储免责声明�
 
 export const FileTypeStrictModeKey = "FileTypeStrictMode"; // 存储文件类型判断的严格模式设置
 
+export const ThemeModeKey = "ThemeMode"; // 存储主题模式（system / light / dark）
+
 // 每个格式编辑器的视图模式键统一由此函数生成
 export function editorViewModeKey(formatKey: string): string {
     return `${formatKey}EditorViewMode`;
