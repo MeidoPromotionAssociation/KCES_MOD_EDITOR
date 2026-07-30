@@ -1,4 +1,4 @@
-package main
+package internal
 
 import (
 	"encoding/json"
@@ -30,8 +30,8 @@ func decodeInto[T any](write func(path string, value *T) error) func(string, []b
 	}
 }
 
-// newStructuredFormats 构建 formatKey → 桥接的注册表，全部直接调用 MeidoSerialization 的 service 包
-func newStructuredFormats() map[string]structuredFormat {
+// NewStructuredFormats 构建 formatKey → 桥接的注册表，全部直接调用 MeidoSerialization 的 service 包
+func NewStructuredFormats() map[string]structuredFormat {
 	menu := &KCESService.MenuAssetsService{}
 	mat := &KCESService.MaterialAssetsService{}
 	pmat := &KCESService.PriorityMaterialAssetsService{}

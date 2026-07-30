@@ -1,4 +1,4 @@
-package main
+package internal
 
 import (
 	"bytes"
@@ -66,7 +66,7 @@ func findSample(t *testing.T, suffix string) string {
 // TestStructuredRoundTrip 验证编辑器实际使用的 JSON 字符串通道：
 // read → JSON 文本 →（前端编辑）→ write 解码写回 → 重读语义一致
 func TestStructuredRoundTrip(t *testing.T) {
-	formats := newStructuredFormats()
+	formats := NewStructuredFormats()
 	workDir := t.TempDir()
 
 	for key, suffix := range structuredFormatSuffixes {
@@ -109,7 +109,7 @@ func TestStructuredRoundTrip(t *testing.T) {
 
 // TestStructuredFormatsCoverEditorFormats 确保注册表覆盖前端全部格式 key
 func TestStructuredFormatsCoverEditorFormats(t *testing.T) {
-	formats := newStructuredFormats()
+	formats := NewStructuredFormats()
 	expected := []string{
 		"menuassets", "materialassets", "pmatassets", "model",
 		"dbconf", "dbcol", "db2conf", "dsbconf", "dsb2conf",
@@ -126,7 +126,7 @@ func TestStructuredFormatsCoverEditorFormats(t *testing.T) {
 
 // TestNewDocumentRoundTrip 验证每个格式的新建文档模板可以合法写出并重新读取
 func TestNewDocumentRoundTrip(t *testing.T) {
-	formats := newStructuredFormats()
+	formats := NewStructuredFormats()
 	workDir := t.TempDir()
 
 	for key, suffix := range structuredFormatSuffixes {

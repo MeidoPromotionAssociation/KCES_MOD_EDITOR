@@ -29,8 +29,9 @@ import {
 } from "../../bindings/github.com/MeidoPromotionAssociation/MeidoSerialization/service/KCES";
 import {
     ReadStructuredFile,
-    WriteStructuredFile,
-} from "../../bindings/github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR/app";
+    WriteStructuredFile
+} from "../../bindings/github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR/internal/app.ts";
+
 
 /**
  * 单个格式的读写与转换能力。

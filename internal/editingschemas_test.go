@@ -1,4 +1,4 @@
-package main
+package internal
 
 import (
 	"encoding/json"
@@ -117,9 +117,9 @@ func TestSchemaPatternDocsExpanded(t *testing.T) {
 		t.Fatalf("GetEditingSchemas: %v", err)
 	}
 	checks := map[string][]string{
-		"menuassets":   {"已编译菜单命令", "菜单标识与元数据"},              // /assetArray/*/commandList/* 与 {…} 枚举
+		"menuassets":   {"已编译菜单命令", "菜单标识与元数据"},                 // /assetArray/*/commandList/* 与 {…} 枚举
 		"dbconf":       {"DynamicBone 关键帧", "DynamicBone 标量状态"}, // *KeyFrames 段内通配
-		"psk":          {"裙子参数关键帧", "逐骨骼半径组"},                // /{A,B,C}/* 经 $ref
+		"psk":          {"裙子参数关键帧", "逐骨骼半径组"},                   // /{A,B,C}/* 经 $ref
 		"model":        {"骨骼变换条目", "皮肤厚度组", "变形（BlendShape）条目"},
 		"dbcol":        {"碰撞体形状参数", "肢体碰撞体启用状态"},
 		"ikcol":        {"IK 效应器碰撞体组"},

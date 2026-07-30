@@ -8,7 +8,9 @@ import {convertCsvToNei, convertNeiToCsv} from "../utils/formatServices";
 import {
     SelectFile,
     SelectPathToSave
-} from "../../bindings/github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR/app";
+} from "../../bindings/github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR/internal/app.ts";
+
+
 
 /**
  * NeiEditor .nei 表格数据编辑器

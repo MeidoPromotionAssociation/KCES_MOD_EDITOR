@@ -1,4 +1,4 @@
-package main
+package internal
 
 import (
 	"bytes"
@@ -36,12 +36,12 @@ type App struct {
 func NewApp() *App {
 	return &App{
 		fileType:    &KCESService.FileTypeService{},
-		structured:  newStructuredFormats(),
+		structured:  NewStructuredFormats(),
 		startupFile: commandLineFile(os.Args[1:]),
 	}
 }
 
-func (a *App) setApplication(app *application.App) {
+func (a *App) SetApplication(app *application.App) {
 	a.app = app
 }
 

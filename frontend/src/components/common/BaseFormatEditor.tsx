@@ -3,12 +3,6 @@ import {Button, Collapse, ConfigProvider, Descriptions, Empty, message, Modal, R
 import {useTranslation} from "react-i18next";
 import {Window} from "@wailsio/runtime";
 import {FileInfo} from "../../../bindings/github.com/MeidoPromotionAssociation/MeidoSerialization/service/COM3D2/models";
-import {
-    NewStructuredDocument,
-    ReadTextFile,
-    SelectPathToSave,
-    WriteTextFile
-} from "../../../bindings/github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR/app";
 import {KCESFormatDef, selectPattern, AppTitle, AppTitleNoAuthor} from "../../utils/consts";
 import {formatServices, MaxConvertBytes} from "../../utils/formatServices";
 import {editorViewModeKey} from "../../utils/LocalStorageKeys";
@@ -16,6 +10,9 @@ import {getFileName} from "../../utils/utils";
 import {losslessParse, losslessStringify} from "../../utils/losslessJson";
 import {editingModelPath} from "../../utils/monacoSchemas";
 import MonacoJsonEditor from "./MonacoJsonEditor";
+import {
+    NewStructuredDocument, ReadTextFile, SelectPathToSave, WriteTextFile
+} from "../../../bindings/github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR/internal/app.ts";
 
 // 大文件警告阈值 20MB
 const LargeFileThreshold = 1024 * 1024 * 20;

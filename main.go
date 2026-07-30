@@ -4,6 +4,7 @@ import (
 	"embed"
 	"log"
 
+	"github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR/internal"
 	KCESService "github.com/MeidoPromotionAssociation/MeidoSerialization/service/KCES"
 	"github.com/wailsapp/wails/v3/pkg/application"
 	"github.com/wailsapp/wails/v3/pkg/events"
@@ -17,7 +18,7 @@ func init() {
 }
 
 func main() {
-	app := NewApp()
+	app := internal.NewApp()
 
 	wailsApp := application.New(application.Options{
 		Name:        "KCES_MOD_EDITOR",
@@ -58,7 +59,7 @@ func main() {
 			Handler: application.AssetFileServerFS(assets),
 		},
 	})
-	app.setApplication(wailsApp)
+	app.SetApplication(wailsApp)
 
 	window := wailsApp.Window.NewWithOptions(application.WebviewWindowOptions{
 		Title:            "KCES MOD EDITOR by 90135",

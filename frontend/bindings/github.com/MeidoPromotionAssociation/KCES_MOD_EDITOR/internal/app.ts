@@ -12,7 +12,10 @@ import { Call as $Call, CancellablePromise as $CancellablePromise, Create as $Cr
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: Unused imports
-import * as COM3D2$0 from "../MeidoSerialization/service/COM3D2/models.js";
+import * as COM3D2$0 from "../../MeidoSerialization/service/COM3D2/models.js";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore: Unused imports
+import * as application$0 from "../../../wailsapp/wails/v3/pkg/application/models.js";
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: Unused imports
@@ -22,7 +25,7 @@ import * as $models from "./models.js";
  * CheckLatestVersion 版本检查
  */
 export function CheckLatestVersion(): $CancellablePromise<$models.VersionCheckResult> {
-    return $Call.ByID(715214608).then(($result: any) => {
+    return $Call.ByID(681626834).then(($result: any) => {
         return $$createType0($result);
     });
 }
@@ -31,14 +34,14 @@ export function CheckLatestVersion(): $CancellablePromise<$models.VersionCheckRe
  * CompareVersions 版本号比较，返回 true 表示 localVersion 小于 latestVersion
  */
 export function CompareVersions(localVersion: string, latestVersion: string): $CancellablePromise<boolean> {
-    return $Call.ByID(3445743785, localVersion, latestVersion);
+    return $Call.ByID(657229071, localVersion, latestVersion);
 }
 
 /**
  * DetermineFileType 判断 KCES 文件类型；无法识别时 FileType 为 Unknown，前端可按扩展名回退
  */
 export function DetermineFileType(path: string): $CancellablePromise<COM3D2$0.FileInfo> {
-    return $Call.ByID(1944245856, path).then(($result: any) => {
+    return $Call.ByID(3447304086, path).then(($result: any) => {
         return $$createType1($result);
     });
 }
@@ -47,7 +50,7 @@ export function DetermineFileType(path: string): $CancellablePromise<COM3D2$0.Fi
  * GetAppVersion 获取应用版本
  */
 export function GetAppVersion(): $CancellablePromise<string> {
-    return $Call.ByID(1780012486);
+    return $Call.ByID(1891841056);
 }
 
 /**
@@ -58,7 +61,7 @@ export function GetAppVersion(): $CancellablePromise<string> {
  * 并附带认证状态（序列化/源码语义/游戏实测三项独立认证及 AI/人工审核主体）
  */
 export function GetEditingSchemas(locale: string): $CancellablePromise<{ [_ in string]?: string }> {
-    return $Call.ByID(2842717167, locale).then(($result: any) => {
+    return $Call.ByID(1928805721, locale).then(($result: any) => {
         return $$createType2($result);
     });
 }
@@ -67,14 +70,14 @@ export function GetEditingSchemas(locale: string): $CancellablePromise<{ [_ in s
  * GetFileSize 获取文件大小
  */
 export function GetFileSize(path: string): $CancellablePromise<number> {
-    return $Call.ByID(309896144, path);
+    return $Call.ByID(1399140802, path);
 }
 
 /**
  * NewStructuredDocument 返回一个格式的合法空文档 JSON 文本，用于新建文件（另存为保存）
  */
 export function NewStructuredDocument(formatKey: string): $CancellablePromise<string> {
-    return $Call.ByID(1089933863, formatKey);
+    return $Call.ByID(3076821661, formatKey);
 }
 
 /**
@@ -82,21 +85,21 @@ export function NewStructuredDocument(formatKey: string): $CancellablePromise<st
  * 走字符串通道以保留 uint64 等大整数的精度（前端用 lossless 解析）
  */
 export function ReadStructuredFile(formatKey: string, path: string): $CancellablePromise<string> {
-    return $Call.ByID(1457070024, formatKey, path);
+    return $Call.ByID(617754950, formatKey, path);
 }
 
 /**
  * ReadTextFile 读取 UTF-8 文本文件（用于编辑 JSON），自动去除 BOM
  */
 export function ReadTextFile(path: string): $CancellablePromise<string> {
-    return $Call.ByID(3057512208, path);
+    return $Call.ByID(4291257694, path);
 }
 
 /**
  * SelectDirectory 选择一个文件夹，返回用户选择的路径，用户取消时返回空字符串
  */
 export function SelectDirectory(title: string): $CancellablePromise<string> {
-    return $Call.ByID(1735672136, title);
+    return $Call.ByID(2605628586, title);
 }
 
 /**
@@ -104,35 +107,39 @@ export function SelectDirectory(title: string): $CancellablePromise<string> {
  * filetype 形如 "*.menuassets;*.menuassets.json"
  */
 export function SelectFile(filetype: string, fileDisplayName: string): $CancellablePromise<string> {
-    return $Call.ByID(2427571203, filetype, fileDisplayName);
+    return $Call.ByID(2533574405, filetype, fileDisplayName);
 }
 
 /**
  * SelectPathToSave 选择一个路径保存文件，返回用户选择的路径，用户取消时返回空字符串
  */
 export function SelectPathToSave(filetype: string, fileDisplayName: string): $CancellablePromise<string> {
-    return $Call.ByID(2443458822, filetype, fileDisplayName);
+    return $Call.ByID(3286775384, filetype, fileDisplayName);
+}
+
+export function SetApplication(app: application$0.App | null): $CancellablePromise<void> {
+    return $Call.ByID(724352193, app);
 }
 
 /**
  * StartupFile 返回通过文件关联传入的文件路径
  */
 export function StartupFile(): $CancellablePromise<string> {
-    return $Call.ByID(461733892);
+    return $Call.ByID(329404922);
 }
 
 /**
  * WriteStructuredFile 将编辑 JSON 文本解码为具体结构并写入原生文件
  */
 export function WriteStructuredFile(formatKey: string, path: string, jsonText: string): $CancellablePromise<void> {
-    return $Call.ByID(3002047785, formatKey, path, jsonText);
+    return $Call.ByID(526224575, formatKey, path, jsonText);
 }
 
 /**
  * WriteTextFile 写入 UTF-8 文本文件（用于编辑 JSON）
  */
 export function WriteTextFile(path: string, content: string): $CancellablePromise<void> {
-    return $Call.ByID(3855154125, path, content);
+    return $Call.ByID(2693203579, path, content);
 }
 
 // Private type creation functions

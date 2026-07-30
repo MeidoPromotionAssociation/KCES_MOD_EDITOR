@@ -1,4 +1,4 @@
-import {GetAppVersion} from "../../bindings/github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR/app";
+import {GetAppVersion} from "../../bindings/github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR/internal/app.ts";
 
 export const AppVersion = await GetAppVersion();
 

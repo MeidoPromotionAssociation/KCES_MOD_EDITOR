@@ -12,7 +12,7 @@ import useFileHandlers from "./hooks/fileHandler";
 import {DisclaimerAgreedKey} from "./utils/LocalStorageKeys";
 import {KCESFormats} from "./utils/consts";
 import {registerEditingSchemas} from "./utils/monacoSchemas";
-import {StartupFile} from "../bindings/github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR/app";
+import {StartupFile} from "../bindings/github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR/internal/app.ts";
 
 const App: React.FC = () => {
     const isDarkMode = useDarkMode();

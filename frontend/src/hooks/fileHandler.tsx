@@ -2,14 +2,13 @@ import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router-dom";
 import {message} from "antd";
 import React, {useState} from "react";
-import {
-    DetermineFileType,
-    GetFileSize
-} from "../../bindings/github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR/app";
-import {FileInfo} from "../../bindings/github.com/MeidoPromotionAssociation/MeidoSerialization/service/COM3D2/models";
-import {SelectFile} from "../../bindings/github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR/app";
 import {formatByFileType, formatByPath} from "../utils/consts";
 import {FileTypeStrictModeKey} from "../utils/LocalStorageKeys";
+import {
+    DetermineFileType, GetFileSize,
+    SelectFile
+} from "../../bindings/github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR/internal/app.ts";
+import {FileInfo} from "../../bindings/github.com/MeidoPromotionAssociation/MeidoSerialization/service/COM3D2";
 
 /**
  * useFileHandlers 文件选择、打开分发与保存的统一入口
