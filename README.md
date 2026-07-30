@@ -342,7 +342,7 @@ In case of any discrepancy between the translated versions, the Simplified Chine
 
 ## License
 
-BSD-3-Clause
+[BSD-3-Clause](https://github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR/blob/main/LICENSE)
 
 <br>
 
@@ -355,4 +355,4 @@ BSD-3-Clause
 - [Ant Design](https://ant.design/)
 - [Monaco Editor](https://microsoft.github.io/monaco-editor/)
 - [ImageMagick](https://imagemagick.org/) by ImageMagick Studio LLC
-- [MeidoSerialization](https://github.com/MeidoPromotionAssociation/MeidoSerialization
+- [MeidoSerialization](https://github.com/MeidoPromotionAssociation/MeidoSerialization)
