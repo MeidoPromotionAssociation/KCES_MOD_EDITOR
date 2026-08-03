@@ -117,6 +117,8 @@
     "update_settings": "업데이트 설정",
     "file_type_strict_mode": "파일 형식 판별 엄격 모드",
     "file_type_strict_mode_tip": "활성화하면 형식 판별에 실패했을 때 확장자 기반 추측을 하지 않습니다",
+    "recalculate_lookup_hash": "저장 시 ID / GUID 재계산",
+    "recalculate_lookup_hash_tip": "대상은 .menuassets / .materialassets / .model 파일뿐입니다. ID는 파일 이름의 해시값으로, 게임이 부품을 찾을 때 사용하고 메뉴 간 참조(parentId 등)에도 쓰이므로 파일 이름을 변경한 후에는 재계산이 필요합니다. GUID는 현재 KCES2 코드에서 사용되지 않으며, HairMake 내보내기 GUID가 없는 메뉴는 저장할 때마다 무작위 값으로 재계산됩니다. 끄면 편집 데이터의 값을 그대로 기록합니다. 기본값은 켜짐입니다.",
     "theme_mode": "테마",
     "theme_mode_tip": "인터페이스 색상 선택: 시스템 따르기, 라이트, 다크",
     "theme_system": "시스템 따르기",

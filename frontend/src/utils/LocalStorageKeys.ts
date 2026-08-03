@@ -16,6 +16,8 @@ export const ThemeModeKey = "ThemeMode"; // 存储主题模式（system / light 
 
 export const ThemeColorKey = "ThemeColor"; // 存储自定义主题色（hex，空表示默认色）
 
+export const RecalculateLookupHashKey = "RecalculateLookupHash"; // 存储保存时是否重算 ID/GUID 查找字段（默认重算）
+
 // 每个格式编辑器的视图模式键统一由此函数生成
 export function editorViewModeKey(formatKey: string): string {
     return `${formatKey}EditorViewMode`;

@@ -14,6 +14,7 @@ import {
     TranslationOutlined
 } from "@ant-design/icons";
 import {checkForUpdatesWithMessage} from "../utils/CheckUpdate";
+import {setRecalculateLookupHash, shouldRecalculateLookupHash} from "../utils/lookupHashSetting";
 import {AllSupportedFileTypes, SettingCheckUpdateKey} from "../utils/consts";
 import {NewVersionAvailableKey} from "../utils/LocalStorageKeys";
 
@@ -28,6 +29,13 @@ const SettingsPage: React.FC = () => {
         const saved = localStorage.getItem(SettingCheckUpdateKey);
         return saved ? JSON.parse(saved) : true;
     });
+
+    const [recalculateHash, setRecalculateHashState] = useState(shouldRecalculateLookupHash);
+
+    const handleRecalculateHashChange = (checked: boolean) => {
+        setRecalculateHashState(checked);
+        setRecalculateLookupHash(checked);
+    };
 
     const handleUpdateCheck = (checked: boolean) => {
         setCheckUpdates(checked);
@@ -97,6 +105,13 @@ const SettingsPage: React.FC = () => {
                                         tooltip: t('SettingsPage.file_type_strict_mode_tip'),
                                         checked: strictMode,
                                         onChange: updateStrictMode,
+                                        type: 'switch'
+                                    },
+                                    {
+                                        title: t('SettingsPage.recalculate_lookup_hash'),
+                                        tooltip: t('SettingsPage.recalculate_lookup_hash_tip'),
+                                        checked: recalculateHash,
+                                        onChange: handleRecalculateHashChange,
                                         type: 'switch'
                                     },
                                     {

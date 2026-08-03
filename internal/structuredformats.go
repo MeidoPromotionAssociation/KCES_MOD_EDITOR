@@ -3,6 +3,8 @@ package internal
 import (
 	"encoding/json"
 	"fmt"
+	"os"
+	"path/filepath"
 	"strings"
 
 	serializationCOM3D2 "github.com/MeidoPromotionAssociation/MeidoSerialization/serialization/COM3D2"
@@ -14,12 +16,16 @@ import (
 // 结构体在 Go 侧与 JSON 文本互转，避免 uint64 等大整数经前端 JSON.parse 丢失精度
 type structuredFormat struct {
 	read  func(path string) (any, error)
-	write func(path string, jsonText []byte) error
+	write func(path string, jsonText []byte, recalculateLookupHash bool) error
+	// encode 编辑 JSON → 原生字节，仅提供 ID/GUID 重算选项的格式设置
+	// （menuassets/materialassets/model），供大文件直接转换在写出前检查大小
+	encode func(path string, jsonText []byte, recalculateLookupHash bool) ([]byte, error)
 }
 
-// decodeInto 将编辑 JSON 严格解码到具体结构后执行写入
-func decodeInto[T any](write func(path string, value *T) error) func(string, []byte) error {
-	return func(path string, jsonText []byte) error {
+// decodeInto 将编辑 JSON 严格解码到具体结构后执行写入；
+// 这些格式没有 ID/GUID 等查找字段，忽略 recalculateLookupHash
+func decodeInto[T any](write func(path string, value *T) error) func(string, []byte, bool) error {
+	return func(path string, jsonText []byte, _ bool) error {
 		var value T
 		decoder := json.NewDecoder(strings.NewReader(string(jsonText)))
 		decoder.UseNumber()
@@ -27,6 +33,36 @@ func decodeInto[T any](write func(path string, value *T) error) func(string, []b
 			return fmt.Errorf("parse editing JSON: %w", err)
 		}
 		return write(path, &value)
+	}
+}
+
+// encodeWithLookupOptions 将编辑 JSON 解码后按 ID/GUID 重算选项编码为原生字节。
+// 与 MeidoSerialization service 层的写入行为一致：库的 service 写死 RecalculateHash: true，
+// 这里改为由调用方决定；fileNameFromPath 的单对象格式（.model）把目标文件名写入选项
+func encodeWithLookupOptions[T any](encode func(*T, *serializationKCES.LookupHashOptions) ([]byte, error), fileNameFromPath bool) func(string, []byte, bool) ([]byte, error) {
+	return func(path string, jsonText []byte, recalculateLookupHash bool) ([]byte, error) {
+		var value T
+		decoder := json.NewDecoder(strings.NewReader(string(jsonText)))
+		decoder.UseNumber()
+		if err := decoder.Decode(&value); err != nil {
+			return nil, fmt.Errorf("parse editing JSON: %w", err)
+		}
+		options := &serializationKCES.LookupHashOptions{RecalculateHash: recalculateLookupHash}
+		if fileNameFromPath {
+			options.FileName = filepath.Base(path)
+		}
+		return encode(&value, options)
+	}
+}
+
+// writeEncoded 把 encode 结果直接写入目标文件
+func writeEncoded(encode func(string, []byte, bool) ([]byte, error)) func(string, []byte, bool) error {
+	return func(path string, jsonText []byte, recalculateLookupHash bool) error {
+		encoded, err := encode(path, jsonText, recalculateLookupHash)
+		if err != nil {
+			return err
+		}
+		return os.WriteFile(path, encoded, 0644)
 	}
 }
 
@@ -64,23 +100,31 @@ func NewStructuredFormats() map[string]structuredFormat {
 		return strings.HasSuffix(lower, serializationKCES.KCESPersetExtension)
 	}
 
+	// 三个含名称派生查找字段（ID/GUID）的格式绕过库 service（其写死重算），由编码选项决定是否重算
+	menuAssetsEncode := encodeWithLookupOptions(serializationKCES.EncodeMenuAssetsWithOptions, false)
+	materialAssetsEncode := encodeWithLookupOptions(serializationKCES.EncodeMaterialAssetsWithOptions, false)
+	modelEncode := encodeWithLookupOptions(serializationKCES.EncodeModelWithOptions, true)
+
 	return map[string]structuredFormat{
 		// 服装部件 / Parts
 		"menuassets": {
-			read:  func(p string) (any, error) { return menu.ReadMenuAssetsFile(p) },
-			write: decodeInto(menu.WriteMenuAssetsFile),
+			read:   func(p string) (any, error) { return menu.ReadMenuAssetsFile(p) },
+			write:  writeEncoded(menuAssetsEncode),
+			encode: menuAssetsEncode,
 		},
 		"materialassets": {
-			read:  func(p string) (any, error) { return mat.ReadMaterialAssetsFile(p) },
-			write: decodeInto(mat.WriteMaterialAssetsFile),
+			read:   func(p string) (any, error) { return mat.ReadMaterialAssetsFile(p) },
+			write:  writeEncoded(materialAssetsEncode),
+			encode: materialAssetsEncode,
 		},
 		"pmatassets": {
 			read:  func(p string) (any, error) { return pmat.ReadPriorityMaterialAssetsFile(p) },
 			write: decodeInto(pmat.WritePriorityMaterialAssetsFile),
 		},
 		"model": {
-			read:  func(p string) (any, error) { return model.ReadModelFile(p) },
-			write: decodeInto(model.WriteModelFile),
+			read:   func(p string) (any, error) { return model.ReadModelFile(p) },
+			write:  writeEncoded(modelEncode),
+			encode: modelEncode,
 		},
 		// 物理 / Physics
 		"dbconf": {
@@ -135,11 +179,11 @@ func NewStructuredFormats() map[string]structuredFormat {
 				}
 				return preset.ReadPresetFile(p)
 			},
-			write: func(p string, jsonText []byte) error {
+			write: func(p string, jsonText []byte, recalculateLookupHash bool) error {
 				if isPerset(p) {
-					return decodeInto(perset.WritePersetFile)(p, jsonText)
+					return decodeInto(perset.WritePersetFile)(p, jsonText, recalculateLookupHash)
 				}
-				return decodeInto(preset.WritePresetFile)(p, jsonText)
+				return decodeInto(preset.WritePresetFile)(p, jsonText, recalculateLookupHash)
 			},
 		},
 		"sad": {

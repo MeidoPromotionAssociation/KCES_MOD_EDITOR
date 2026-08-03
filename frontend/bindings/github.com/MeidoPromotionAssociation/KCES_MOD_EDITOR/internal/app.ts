@@ -38,6 +38,14 @@ export function CompareVersions(localVersion: string, latestVersion: string): $C
 }
 
 /**
+ * ConvertStructuredJsonToNative 将磁盘上的编辑 JSON 文件直接转换为原生文件（大文件直接转换用）。
+ * 仅支持提供 ID/GUID 重算选项的格式（menuassets/materialassets/model），其余格式仍走 MeidoSerialization 的转换服务
+ */
+export function ConvertStructuredJsonToNative(formatKey: string, inputPath: string, outputPath: string, maxOutputBytes: number, recalculateLookupHash: boolean): $CancellablePromise<void> {
+    return $Call.ByID(1935817749, formatKey, inputPath, outputPath, maxOutputBytes, recalculateLookupHash);
+}
+
+/**
  * DetermineFileType 判断 KCES 文件类型；无法识别时 FileType 为 Unknown，前端可按扩展名回退
  */
 export function DetermineFileType(path: string): $CancellablePromise<COM3D2$0.FileInfo> {
@@ -129,10 +137,11 @@ export function StartupFile(): $CancellablePromise<string> {
 }
 
 /**
- * WriteStructuredFile 将编辑 JSON 文本解码为具体结构并写入原生文件
+ * WriteStructuredFile 将编辑 JSON 文本解码为具体结构并写入原生文件；
+ * recalculateLookupHash 控制 .menuassets/.materialassets/.model 保存时是否重算 ID/GUID 查找字段，其他格式忽略该参数
  */
-export function WriteStructuredFile(formatKey: string, path: string, jsonText: string): $CancellablePromise<void> {
-    return $Call.ByID(526224575, formatKey, path, jsonText);
+export function WriteStructuredFile(formatKey: string, path: string, jsonText: string, recalculateLookupHash: boolean): $CancellablePromise<void> {
+    return $Call.ByID(526224575, formatKey, path, jsonText, recalculateLookupHash);
 }
 
 /**

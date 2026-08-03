@@ -3,7 +3,7 @@ module github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR
 go 1.26.5
 
 require (
-	github.com/MeidoPromotionAssociation/MeidoSerialization v1.7.1-0.20260730060713-fe28090d95ad
+	github.com/MeidoPromotionAssociation/MeidoSerialization v1.7.1-0.20260802164142-e5ef5ee27afe
 	github.com/wailsapp/wails/v3 v3.0.0-alpha2.119
 )
 
@@ -13,6 +13,7 @@ require (
 	github.com/emmansun/base64 v0.10.0 // indirect
 	github.com/go-ole/go-ole v1.3.0 // indirect
 	github.com/godbus/dbus/v5 v5.2.2 // indirect
+	github.com/google/uuid v1.6.0 // indirect
 	github.com/jchv/go-winloader v0.0.0-20250406163304-c1995be93bd1 // indirect
 	github.com/mattn/go-colorable v0.1.15 // indirect
 	github.com/mattn/go-isatty v0.0.24 // indirect

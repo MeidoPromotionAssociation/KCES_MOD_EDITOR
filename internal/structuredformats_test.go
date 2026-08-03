@@ -88,7 +88,8 @@ func TestStructuredRoundTrip(t *testing.T) {
 			}
 
 			out := filepath.Join(workDir, "rt_"+filepath.Base(sample))
-			if err := format.write(out, jsonText); err != nil {
+			// 关闭 ID/GUID 重算：menuassets 缺少 HairMake 导出 GUID 时重算为随机 UUID，无法字节级往返
+			if err := format.write(out, jsonText, false); err != nil {
 				t.Fatalf("write: %v", err)
 			}
 
@@ -147,7 +148,7 @@ func TestNewDocumentRoundTrip(t *testing.T) {
 				name = suffix
 			}
 			out := filepath.Join(workDir, name)
-			if err := format.write(out, jsonText); err != nil {
+			if err := format.write(out, jsonText, true); err != nil {
 				t.Fatalf("write new document: %v", err)
 			}
 

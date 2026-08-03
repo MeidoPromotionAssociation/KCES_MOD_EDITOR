@@ -178,13 +178,45 @@ func (a *App) ReadStructuredFile(formatKey string, path string) (string, error) 
 	return string(data), nil
 }
 
-// WriteStructuredFile 将编辑 JSON 文本解码为具体结构并写入原生文件
-func (a *App) WriteStructuredFile(formatKey string, path string, jsonText string) error {
+// WriteStructuredFile 将编辑 JSON 文本解码为具体结构并写入原生文件；
+// recalculateLookupHash 控制 .menuassets/.materialassets/.model 保存时是否重算 ID/GUID 查找字段，其他格式忽略该参数
+func (a *App) WriteStructuredFile(formatKey string, path string, jsonText string, recalculateLookupHash bool) error {
 	format, ok := a.structured[formatKey]
 	if !ok {
 		return fmt.Errorf("unknown format %q", formatKey)
 	}
-	return format.write(path, []byte(jsonText))
+	return format.write(path, []byte(jsonText), recalculateLookupHash)
+}
+
+// ConvertStructuredJsonToNative 将磁盘上的编辑 JSON 文件直接转换为原生文件（大文件直接转换用）。
+// 仅支持提供 ID/GUID 重算选项的格式（menuassets/materialassets/model），其余格式仍走 MeidoSerialization 的转换服务
+func (a *App) ConvertStructuredJsonToNative(formatKey string, inputPath string, outputPath string, maxOutputBytes int64, recalculateLookupHash bool) error {
+	format, ok := a.structured[formatKey]
+	if !ok {
+		return fmt.Errorf("unknown format %q", formatKey)
+	}
+	if format.encode == nil {
+		return fmt.Errorf("format %q does not support conversion with lookup-hash options", formatKey)
+	}
+	if maxOutputBytes <= 0 {
+		return fmt.Errorf("positive conversion output limit is required")
+	}
+	data, err := os.ReadFile(inputPath)
+	if err != nil {
+		return fmt.Errorf("read editing JSON %q: %w", inputPath, err)
+	}
+	data = bytes.TrimPrefix(data, []byte{0xef, 0xbb, 0xbf})
+	encoded, err := format.encode(outputPath, data, recalculateLookupHash)
+	if err != nil {
+		return err
+	}
+	if int64(len(encoded)) > maxOutputBytes {
+		return fmt.Errorf("conversion output needs %d bytes but the limit is %d", len(encoded), maxOutputBytes)
+	}
+	if err := os.WriteFile(outputPath, encoded, 0644); err != nil {
+		return fmt.Errorf("write conversion output %q: %w", outputPath, err)
+	}
+	return nil
 }
 
 // NewStructuredDocument 返回一个格式的合法空文档 JSON 文本，用于新建文件（另存为保存）

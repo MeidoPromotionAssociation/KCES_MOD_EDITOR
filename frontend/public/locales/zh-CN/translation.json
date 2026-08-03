@@ -117,6 +117,8 @@
     "update_settings": "更新设置",
     "file_type_strict_mode": "文件类型判断严格模式",
     "file_type_strict_mode_tip": "开启后，文件类型识别失败时不再按扩展名回退猜测",
+    "recalculate_lookup_hash": "保存时重算 ID / GUID",
+    "recalculate_lookup_hash_tip": "仅影响 .menuassets / .materialassets / .model 文件。ID 是文件名的哈希值，游戏用它查找部件、菜单间也用它相互引用（如 parentId），文件改名后需要重算才能保持有效；GUID 目前在 KCES2 代码中没有任何使用处，且没有 HairMake 导出 GUID 的菜单每次保存会重算为随机值。关闭后按编辑数据中的原值写出。默认开启。",
     "theme_mode": "主题",
     "theme_mode_tip": "选择界面配色：跟随系统、浅色或深色",
     "theme_system": "跟随系统",

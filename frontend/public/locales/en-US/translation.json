@@ -117,6 +117,8 @@
     "update_settings": "Update Settings",
     "file_type_strict_mode": "Strict file type detection",
     "file_type_strict_mode_tip": "When enabled, no extension-based fallback is used when file type detection fails",
+    "recalculate_lookup_hash": "Recalculate ID / GUID on save",
+    "recalculate_lookup_hash_tip": "Only affects .menuassets / .materialassets / .model files. The ID is a hash of the file name; the game uses it to look up parts, and menus reference each other with it (e.g. parentId), so it must be recalculated after renaming a file. The GUID is currently not used anywhere in the KCES2 code, and menus without a HairMake exported GUID get a random value on every save. When disabled, the values in the editing data are written as-is. Enabled by default.",
     "theme_mode": "Theme",
     "theme_mode_tip": "Choose the interface color scheme: follow system, light, or dark",
     "theme_system": "System",

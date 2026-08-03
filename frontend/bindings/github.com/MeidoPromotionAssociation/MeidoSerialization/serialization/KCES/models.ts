@@ -102,7 +102,7 @@ export class BlendData {
  */
 export class ColorPreset {
     /**
-     * Key 0 的预设版本，当前 FixVersion 为 1004 / Preset version at Key 0, with a current FixVersion of 1004
+     * Key 0 的预设版本，KCES FixVersion 为 1004，KCES2 为 1005 / Preset version at Key 0, with FixVersion 1004 in KCES and 1005 in KCES2
      */
     "version": number;
 
@@ -137,6 +137,31 @@ export class ColorPreset {
     "instanceGuid": string | null;
 
     /**
+     * Key 7 的保存目录哈希，KCES2 新增 / Save-directory hash at Key 7, added by KCES2
+     */
+    "saveLocationHash": number;
+
+    /**
+     * Key 8 的创建时间 DateTime ticks，KCES2 新增 / Creation time as DateTime ticks at Key 8, added by KCES2
+     */
+    "creationTicks": number;
+
+    /**
+     * Key 9 的最后更新时间 DateTime ticks，KCES2 新增 / Last update time as DateTime ticks at Key 9, added by KCES2
+     */
+    "lastUpdateTicks": number;
+
+    /**
+     * Key 10 的可空元数据文本字典，KCES2 新增 / Nullable metadata text map at Key 10, added by KCES2
+     */
+    "metaTexts": { [_ in string]?: string | null };
+
+    /**
+     * 解码时记录的 6、7 或 11 槽线格式宽度，并非游戏成员 / Decoded 6-slot, 7-slot, or 11-slot wire width, not a game member
+     */
+    "indexedArrayWidth"?: number;
+
+    /**
      * 旧版六槽对象未保存 Key 6 的线格式标记，并非游戏成员 / Wire marker for a legacy six-slot object that did not store Key 6, not a game member
      */
     "legacyInstanceGuidOmitted"?: boolean;
@@ -164,6 +189,18 @@ export class ColorPreset {
         if (!("instanceGuid" in $$source)) {
             this["instanceGuid"] = null;
         }
+        if (!("saveLocationHash" in $$source)) {
+            this["saveLocationHash"] = 0;
+        }
+        if (!("creationTicks" in $$source)) {
+            this["creationTicks"] = 0;
+        }
+        if (!("lastUpdateTicks" in $$source)) {
+            this["lastUpdateTicks"] = 0;
+        }
+        if (!("metaTexts" in $$source)) {
+            this["metaTexts"] = {};
+        }
 
         Object.assign(this, $$source);
     }
@@ -173,9 +210,13 @@ export class ColorPreset {
      */
     static createFrom($$source: any = {}): ColorPreset {
         const $$createField5_0 = $$createType7;
+        const $$createField10_0 = $$createType8;
         let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
         if ("colorPackList" in $$parsedSource) {
             $$parsedSource["colorPackList"] = $$createField5_0($$parsedSource["colorPackList"]);
+        }
+        if ("metaTexts" in $$parsedSource) {
+            $$parsedSource["metaTexts"] = $$createField10_0($$parsedSource["metaTexts"]);
         }
         return new ColorPreset($$parsedSource as Partial<ColorPreset>);
     }
@@ -286,9 +327,9 @@ export class ColorPresetColorPack {
      */
     static createFrom($$source: any = {}): ColorPresetColorPack {
         const $$createField1_0 = $$createType0;
-        const $$createField5_0 = $$createType10;
-        const $$createField6_0 = $$createType13;
-        const $$createField9_0 = $$createType14;
+        const $$createField5_0 = $$createType11;
+        const $$createField6_0 = $$createType14;
+        const $$createField9_0 = $$createType15;
         let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
         if ("mpns" in $$parsedSource) {
             $$parsedSource["mpns"] = $$createField1_0($$parsedSource["mpns"]);
@@ -469,11 +510,11 @@ export class ColorPresetGradationColor {
      * Creates a new ColorPresetGradationColor instance from a string or object.
      */
     static createFrom($$source: any = {}): ColorPresetGradationColor {
-        const $$createField1_0 = $$createType16;
-        const $$createField2_0 = $$createType16;
-        const $$createField4_0 = $$createType18;
-        const $$createField5_0 = $$createType18;
-        const $$createField6_0 = $$createType18;
+        const $$createField1_0 = $$createType17;
+        const $$createField2_0 = $$createType17;
+        const $$createField4_0 = $$createType19;
+        const $$createField5_0 = $$createType19;
+        const $$createField6_0 = $$createType19;
         let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
         if ("baseColor" in $$parsedSource) {
             $$parsedSource["baseColor"] = $$createField1_0($$parsedSource["baseColor"]);
@@ -541,8 +582,8 @@ export class ColorPresetLayerFreeColor {
      * Creates a new ColorPresetLayerFreeColor instance from a string or object.
      */
     static createFrom($$source: any = {}): ColorPresetLayerFreeColor {
-        const $$createField1_0 = $$createType16;
-        const $$createField2_0 = $$createType16;
+        const $$createField1_0 = $$createType17;
+        const $$createField2_0 = $$createType17;
         let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
         if ("baseColor" in $$parsedSource) {
             $$parsedSource["baseColor"] = $$createField1_0($$parsedSource["baseColor"]);
@@ -684,7 +725,7 @@ export class Colvari {
      * Creates a new Colvari instance from a string or object.
      */
     static createFrom($$source: any = {}): Colvari {
-        const $$createField4_0 = $$createType21;
+        const $$createField4_0 = $$createType22;
         let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
         if ("colvariDatas" in $$parsedSource) {
             $$parsedSource["colvariDatas"] = $$createField4_0($$parsedSource["colvariDatas"]);
@@ -820,9 +861,9 @@ export class ColvariData {
      * Creates a new ColvariData instance from a string or object.
      */
     static createFrom($$source: any = {}): ColvariData {
-        const $$createField4_0 = $$createType24;
-        const $$createField7_0 = $$createType27;
-        const $$createField8_0 = $$createType29;
+        const $$createField4_0 = $$createType25;
+        const $$createField7_0 = $$createType28;
+        const $$createField8_0 = $$createType30;
         let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
         if ("maskData" in $$parsedSource) {
             $$parsedSource["maskData"] = $$createField4_0($$parsedSource["maskData"]);
@@ -870,7 +911,7 @@ export class Command {
      * Creates a new Command instance from a string or object.
      */
     static createFrom($$source: any = {}): Command {
-        const $$createField1_0 = $$createType14;
+        const $$createField1_0 = $$createType15;
         let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
         if ("args" in $$parsedSource) {
             $$parsedSource["args"] = $$createField1_0($$parsedSource["args"]);
@@ -945,11 +986,11 @@ export class ExpandedKCESPreset {
      * Creates a new ExpandedKCESPreset instance from a string or object.
      */
     static createFrom($$source: any = {}): ExpandedKCESPreset {
-        const $$createField3_0 = $$createType31;
+        const $$createField3_0 = $$createType32;
         const $$createField4_0 = $Create.ByteSlice;
-        const $$createField5_0 = $$createType32;
-        const $$createField6_0 = $$createType34;
-        const $$createField7_0 = $$createType35;
+        const $$createField5_0 = $$createType33;
+        const $$createField6_0 = $$createType35;
+        const $$createField7_0 = $$createType36;
         let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
         if ("containerDirectories" in $$parsedSource) {
             $$parsedSource["containerDirectories"] = $$createField3_0($$parsedSource["containerDirectories"]);
@@ -1016,9 +1057,9 @@ export class ExpandedKCESPresetCore {
      * Creates a new ExpandedKCESPresetCore instance from a string or object.
      */
     static createFrom($$source: any = {}): ExpandedKCESPresetCore {
-        const $$createField1_0 = $$createType37;
-        const $$createField2_0 = $$createType39;
-        const $$createField3_0 = $$createType41;
+        const $$createField1_0 = $$createType38;
+        const $$createField2_0 = $$createType40;
+        const $$createField3_0 = $$createType42;
         let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
         if ("propData" in $$parsedSource) {
             $$parsedSource["propData"] = $$createField1_0($$parsedSource["propData"]);
@@ -1124,7 +1165,7 @@ export class GradaColDef {
      * Creates a new GradaColDef instance from a string or object.
      */
     static createFrom($$source: any = {}): GradaColDef {
-        const $$createField2_0 = $$createType42;
+        const $$createField2_0 = $$createType43;
         const $$createField3_0 = $$createType4;
         let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
         if ("gradaRates" in $$parsedSource) {
@@ -1134,6 +1175,94 @@ export class GradaColDef {
             $$parsedSource["gradaRateRanges"] = $$createField3_0($$parsedSource["gradaRateRanges"]);
         }
         return new GradaColDef($$parsedSource as Partial<GradaColDef>);
+    }
+}
+
+/**
+ * HairMake 表示 KCES2 Menu 中的 HairMake 导出信息 / HairMake represents HairMake export information embedded in a KCES2 Menu
+ */
+export class HairMake {
+    /**
+     * 版本号，当前为 1001 / Version value, currently 1001
+     */
+    "version": number;
+
+    /**
+     * 导出 GUID / Exported GUID
+     */
+    "exportedGuid": string | null;
+
+    /**
+     * 导出 HairMake 构建版本 / Exported HairMake build version
+     */
+    "exportedHairBuildVersion": number;
+
+    /**
+     * 导出游戏版本 / Exported game version
+     */
+    "exportedHairGameVersion": number;
+
+    /**
+     * 继续编辑存档文件名 / Continue-editing save filename
+     */
+    "suspendedSaveFileName": string | null;
+
+    /**
+     * 原始菜单文件名 / Original menu filenames
+     */
+    "materialPerOriginalMenuFileName": (string | null)[];
+
+    /**
+     * 原始菜单版本 / Original menu versions
+     */
+    "materialPerOriginalMenuVersion": number[];
+
+    /**
+     * 解码时记录的线格式数组宽度，并非游戏成员 / Wire array width recorded during decoding, not a game member
+     */
+    "indexedArrayWidth"?: number;
+
+    /** Creates a new HairMake instance. */
+    constructor($$source: Partial<HairMake> = {}) {
+        if (!("version" in $$source)) {
+            this["version"] = 0;
+        }
+        if (!("exportedGuid" in $$source)) {
+            this["exportedGuid"] = null;
+        }
+        if (!("exportedHairBuildVersion" in $$source)) {
+            this["exportedHairBuildVersion"] = 0;
+        }
+        if (!("exportedHairGameVersion" in $$source)) {
+            this["exportedHairGameVersion"] = 0;
+        }
+        if (!("suspendedSaveFileName" in $$source)) {
+            this["suspendedSaveFileName"] = null;
+        }
+        if (!("materialPerOriginalMenuFileName" in $$source)) {
+            this["materialPerOriginalMenuFileName"] = [];
+        }
+        if (!("materialPerOriginalMenuVersion" in $$source)) {
+            this["materialPerOriginalMenuVersion"] = [];
+        }
+
+        Object.assign(this, $$source);
+    }
+
+    /**
+     * Creates a new HairMake instance from a string or object.
+     */
+    static createFrom($$source: any = {}): HairMake {
+        const $$createField5_0 = $$createType15;
+        const $$createField6_0 = $$createType0;
+        let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
+        if ("materialPerOriginalMenuFileName" in $$parsedSource) {
+            $$parsedSource["materialPerOriginalMenuFileName"] = $$createField5_0($$parsedSource["materialPerOriginalMenuFileName"]);
+        }
+        if ("materialPerOriginalMenuVersion" in $$parsedSource) {
+            $$parsedSource["materialPerOriginalMenuVersion"] = $$createField6_0($$parsedSource["materialPerOriginalMenuVersion"]);
+        }
+        return new HairMake($$parsedSource as Partial<HairMake>);
     }
 }
 
@@ -1168,7 +1297,7 @@ export class HitCheck {
      * Creates a new HitCheck instance from a string or object.
      */
     static createFrom($$source: any = {}): HitCheck {
-        const $$createField1_0 = $$createType44;
+        const $$createField1_0 = $$createType45;
         let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
         if ("entries" in $$parsedSource) {
             $$parsedSource["entries"] = $$createField1_0($$parsedSource["entries"]);
@@ -1336,8 +1465,8 @@ export class InfColData {
      * Creates a new InfColData instance from a string or object.
      */
     static createFrom($$source: any = {}): InfColData {
-        const $$createField4_0 = $$createType27;
-        const $$createField5_0 = $$createType29;
+        const $$createField4_0 = $$createType28;
+        const $$createField5_0 = $$createType30;
         let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
         if ("partColDefs" in $$parsedSource) {
             $$parsedSource["partColDefs"] = $$createField4_0($$parsedSource["partColDefs"]);
@@ -1452,9 +1581,9 @@ export class InfColorParam {
      * Creates a new InfColorParam instance from a string or object.
      */
     static createFrom($$source: any = {}): InfColorParam {
-        const $$createField5_0 = $$createType14;
-        const $$createField6_0 = $$createType27;
-        const $$createField7_0 = $$createType29;
+        const $$createField5_0 = $$createType15;
+        const $$createField6_0 = $$createType28;
+        const $$createField7_0 = $$createType30;
         const $$createField8_0 = $$createType4;
         let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
         if ("idTexName" in $$parsedSource) {
@@ -1601,8 +1730,8 @@ export class KCESPresetColorData {
      * Creates a new KCESPresetColorData instance from a string or object.
      */
     static createFrom($$source: any = {}): KCESPresetColorData {
-        const $$createField3_0 = $$createType46;
-        const $$createField4_0 = $$createType47;
+        const $$createField3_0 = $$createType47;
+        const $$createField4_0 = $$createType48;
         let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
         if ("legacyParts" in $$parsedSource) {
             $$parsedSource["legacyParts"] = $$createField3_0($$parsedSource["legacyParts"]);
@@ -1697,8 +1826,8 @@ export class KCESPresetEditBaseData {
      * Creates a new KCESPresetEditBaseData instance from a string or object.
      */
     static createFrom($$source: any = {}): KCESPresetEditBaseData {
-        const $$createField1_0 = $$createType49;
-        const $$createField2_0 = $$createType50;
+        const $$createField1_0 = $$createType50;
+        const $$createField2_0 = $$createType8;
         let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
         if ("colorPreset" in $$parsedSource) {
             $$parsedSource["colorPreset"] = $$createField1_0($$parsedSource["colorPreset"]);
@@ -1859,7 +1988,7 @@ export class KCESPresetGradationColorDef {
      * Creates a new KCESPresetGradationColorDef instance from a string or object.
      */
     static createFrom($$source: any = {}): KCESPresetGradationColorDef {
-        const $$createField2_0 = $$createType42;
+        const $$createField2_0 = $$createType43;
         const $$createField3_0 = $$createType4;
         const $$createField4_0 = $$createType53;
         let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
@@ -2393,7 +2522,7 @@ export class KCESPresetMeta {
      * Creates a new KCESPresetMeta instance from a string or object.
      */
     static createFrom($$source: any = {}): KCESPresetMeta {
-        const $$createField1_0 = $$createType50;
+        const $$createField1_0 = $$createType8;
         let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
         if ("metaData" in $$parsedSource) {
             $$parsedSource["metaData"] = $$createField1_0($$parsedSource["metaData"]);
@@ -3399,6 +3528,41 @@ export class KCESPresetTextureTransform {
 }
 
 /**
+ * KeywordProp 表示材质的 Shader keyword 开关 / KeywordProp represents a material Shader keyword switch
+ */
+export class KeywordProp {
+    /**
+     * 属性类型枚举值 / Property type enum value
+     */
+    "type": number;
+
+    /**
+     * 是否启用 / Whether the keyword is enabled
+     */
+    "value": boolean;
+
+    /** Creates a new KeywordProp instance. */
+    constructor($$source: Partial<KeywordProp> = {}) {
+        if (!("type" in $$source)) {
+            this["type"] = 0;
+        }
+        if (!("value" in $$source)) {
+            this["value"] = false;
+        }
+
+        Object.assign(this, $$source);
+    }
+
+    /**
+     * Creates a new KeywordProp instance from a string or object.
+     */
+    static createFrom($$source: any = {}): KeywordProp {
+        let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
+        return new KeywordProp($$parsedSource as Partial<KeywordProp>);
+    }
+}
+
+/**
  * MaidCapsuleCollider 表示一个绑定到骨骼路径的 Unity 胶囊碰撞体
  * MaidCapsuleCollider represents one Unity capsule collider bound to a bone path
  */
@@ -3603,7 +3767,7 @@ export class MaskParam {
      * Creates a new MaskParam instance from a string or object.
      */
     static createFrom($$source: any = {}): MaskParam {
-        const $$createField0_0 = $$createType24;
+        const $$createField0_0 = $$createType25;
         const $$createField2_0 = $$createType4;
         let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
         if ("maskData" in $$parsedSource) {
@@ -3619,11 +3783,11 @@ export class MaskParam {
 /**
  * Material 表示 KCES 材质数据
  * 对应 C# Parts.Material，继承自 AMessagePackSerializationVersionControlIntKey
- * MessagePack indexed array 依次保存版本、ID、文件名、着色器名和四类属性数组
+ * MessagePack indexed array 在 KCES 中保存版本、ID、文件名、着色器名和四类属性数组，KCES2 追加 keyword 与渲染队列
  * 
  * Material represents KCES material data
  * It matches C# Parts.Material derived from AMessagePackSerializationVersionControlIntKey
- * Its MessagePack indexed array stores the version, ID, filename, shader name, and four property arrays in order
+ * Its MessagePack indexed array stores the version, ID, filename, shader name, and four property arrays in KCES, then appends keywords and the render queue in KCES2
  */
 export class Material {
     /**
@@ -3632,7 +3796,7 @@ export class Material {
     "version": number;
 
     /**
-     * 材质 ID，通常为 fileName 去扩展名后小写的 FNV hash / Material ID, usually lowercase extensionless fileName FNV hash
+     * 材质文件名的 FNV-1a 64 位哈希，写入默认按当前大小写重算且可显式保留 / FNV-1a 64-bit hash of the material filename, recalculated with its current casing by default during encoding and explicitly preservable
      */
     "id": number;
 
@@ -3666,6 +3830,21 @@ export class Material {
      */
     "floatProps": (FloatProp | null)[];
 
+    /**
+     * 可空着色器关键字属性对象数组 / Array of nullable shader-keyword property objects
+     */
+    "keywordProps": (KeywordProp | null)[];
+
+    /**
+     * Unity 渲染队列 / Unity render queue
+     */
+    "renderQueue": number;
+
+    /**
+     * 解码时记录的线格式数组宽度，并非游戏成员 / Wire array width recorded during decoding, not a game member
+     */
+    "indexedArrayWidth"?: number;
+
     /** Creates a new Material instance. */
     constructor($$source: Partial<Material> = {}) {
         if (!("version" in $$source)) {
@@ -3692,6 +3871,12 @@ export class Material {
         if (!("floatProps" in $$source)) {
             this["floatProps"] = [];
         }
+        if (!("keywordProps" in $$source)) {
+            this["keywordProps"] = [];
+        }
+        if (!("renderQueue" in $$source)) {
+            this["renderQueue"] = 0;
+        }
 
         Object.assign(this, $$source);
     }
@@ -3704,6 +3889,7 @@ export class Material {
         const $$createField5_0 = $$createType103;
         const $$createField6_0 = $$createType106;
         const $$createField7_0 = $$createType109;
+        const $$createField8_0 = $$createType112;
         let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
         if ("textureProps" in $$parsedSource) {
             $$parsedSource["textureProps"] = $$createField4_0($$parsedSource["textureProps"]);
@@ -3716,6 +3902,9 @@ export class Material {
         }
         if ("floatProps" in $$parsedSource) {
             $$parsedSource["floatProps"] = $$createField7_0($$parsedSource["floatProps"]);
+        }
+        if ("keywordProps" in $$parsedSource) {
+            $$parsedSource["keywordProps"] = $$createField8_0($$parsedSource["keywordProps"]);
         }
         return new Material($$parsedSource as Partial<Material>);
     }
@@ -3756,7 +3945,7 @@ export class MaterialAssets {
      * Creates a new MaterialAssets instance from a string or object.
      */
     static createFrom($$source: any = {}): MaterialAssets {
-        const $$createField1_0 = $$createType112;
+        const $$createField1_0 = $$createType115;
         let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
         if ("assetArray" in $$parsedSource) {
             $$parsedSource["assetArray"] = $$createField1_0($$parsedSource["assetArray"]);
@@ -3768,10 +3957,10 @@ export class MaterialAssets {
 /**
  * Menu 表示 Parts.Menu 的菜单数据
  * 对应 C# Parts.Menu，继承自 AMessagePackSerializationVersionControlIntKey
- * MessagePack indexed array 包含 Key(0) 至 Key(30) 的 31 个槽位，Key(24) 在 C# 中没有成员
+ * MessagePack indexed array 在 KCES 中包含 Key(0) 至 Key(30)，KCES2 在 Key(31) 追加 HairMake，Key(24) 在 C# 中没有成员
  * Menu represents menu data from Parts.Menu
  * It matches C# Parts.Menu derived from AMessagePackSerializationVersionControlIntKey
- * Its MessagePack indexed array contains 31 slots from Key(0) through Key(30), with no C# member at Key(24)
+ * Its MessagePack indexed array contains Key(0) through Key(30) in KCES and appends HairMake at Key(31) in KCES2, with no C# member at Key(24)
  */
 export class Menu {
     /**
@@ -3780,12 +3969,12 @@ export class Menu {
     "version": number;
 
     /**
-     * 全局唯一标识 / Global unique identifier
+     * 来源 GUID 字符串的大小写无关 FNV-1a 64 位哈希，写入默认重算，来源为 HairMake.ExportedGUID 或缺少该来源时新生成的 UUID v4，可显式保留 / Case-insensitive FNV-1a 64-bit hash of the source GUID string, recalculated by default during encoding from HairMake.ExportedGUID or from a freshly generated UUID v4 when that source is absent, and explicitly preservable
      */
     "guid": number;
 
     /**
-     * 菜单 ID / Menu ID
+     * Menu 文件名的大小写无关 FNV-1a 64 位哈希，写入默认重算且可显式保留 / Case-insensitive FNV-1a 64-bit hash of the menu filename, recalculated by default during encoding and explicitly preservable
      */
     "id": number;
 
@@ -3924,6 +4113,16 @@ export class Menu {
      */
     "skirt_phys": number;
 
+    /**
+     * KCES2 HairMake 导出信息 / KCES2 HairMake export information
+     */
+    "hairMake": HairMake | null;
+
+    /**
+     * 解码时记录的线格式数组宽度，并非游戏成员 / Wire array width recorded during decoding, not a game member
+     */
+    "indexedArrayWidth"?: number;
+
     /** Creates a new Menu instance. */
     constructor($$source: Partial<Menu> = {}) {
         if (!("version" in $$source)) {
@@ -4016,6 +4215,9 @@ export class Menu {
         if (!("skirt_phys" in $$source)) {
             this["skirt_phys"] = 0;
         }
+        if (!("hairMake" in $$source)) {
+            this["hairMake"] = null;
+        }
 
         Object.assign(this, $$source);
     }
@@ -4024,10 +4226,11 @@ export class Menu {
      * Creates a new Menu instance from a string or object.
      */
     static createFrom($$source: any = {}): Menu {
-        const $$createField12_0 = $$createType115;
-        const $$createField16_0 = $$createType118;
-        const $$createField18_0 = $$createType120;
-        const $$createField21_0 = $$createType122;
+        const $$createField12_0 = $$createType118;
+        const $$createField16_0 = $$createType121;
+        const $$createField18_0 = $$createType123;
+        const $$createField21_0 = $$createType125;
+        const $$createField30_0 = $$createType127;
         let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
         if ("commandList" in $$parsedSource) {
             $$parsedSource["commandList"] = $$createField12_0($$parsedSource["commandList"]);
@@ -4040,6 +4243,9 @@ export class Menu {
         }
         if ("partsVer" in $$parsedSource) {
             $$parsedSource["partsVer"] = $$createField21_0($$parsedSource["partsVer"]);
+        }
+        if ("hairMake" in $$parsedSource) {
+            $$parsedSource["hairMake"] = $$createField30_0($$parsedSource["hairMake"]);
         }
         return new Menu($$parsedSource as Partial<Menu>);
     }
@@ -4080,7 +4286,7 @@ export class MenuAssets {
      * Creates a new MenuAssets instance from a string or object.
      */
     static createFrom($$source: any = {}): MenuAssets {
-        const $$createField1_0 = $$createType125;
+        const $$createField1_0 = $$createType130;
         let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
         if ("assetArray" in $$parsedSource) {
             $$parsedSource["assetArray"] = $$createField1_0($$parsedSource["assetArray"]);
@@ -4104,7 +4310,7 @@ export class Model {
     "version": number;
 
     /**
-     * 模型 ID / Model ID
+     * 模型文件名的 FNV-1a 64 位哈希，游戏导出器会先小写文件名，写入默认按当前值重算且可显式保留 / FNV-1a 64-bit hash of the model filename, which the game exporter lowercases before encoding and which is recalculated from the current value by default during encoding and explicitly preservable
      */
     "id": number;
 
@@ -4114,9 +4320,9 @@ export class Model {
     "fileName": string | null;
 
     /**
-     * 可空网格文件名，字段名沿用游戏 meshfileName 拼写 / Nullable mesh file name, keeping the game's meshfileName spelling
+     * 可空网格文件名 / Nullable mesh file name
      */
-    "meshfileName": string | null;
+    "meshFileName": string | null;
 
     /**
      * 可空模型名称 / Nullable model name
@@ -4153,6 +4359,11 @@ export class Model {
      */
     "shadowModeFlags": number;
 
+    /**
+     * 解码时记录的线格式数组宽度，并非游戏成员 / Wire array width recorded during decoding, not a game member
+     */
+    "indexedArrayWidth"?: number;
+
     /** Creates a new Model instance. */
     constructor($$source: Partial<Model> = {}) {
         if (!("version" in $$source)) {
@@ -4164,8 +4375,8 @@ export class Model {
         if (!("fileName" in $$source)) {
             this["fileName"] = null;
         }
-        if (!("meshfileName" in $$source)) {
-            this["meshfileName"] = null;
+        if (!("meshFileName" in $$source)) {
+            this["meshFileName"] = null;
         }
         if (!("modelName" in $$source)) {
             this["modelName"] = null;
@@ -4196,11 +4407,11 @@ export class Model {
      * Creates a new Model instance from a string or object.
      */
     static createFrom($$source: any = {}): Model {
-        const $$createField5_0 = $$createType128;
-        const $$createField6_0 = $$createType14;
-        const $$createField7_0 = $$createType14;
-        const $$createField8_0 = $$createType131;
-        const $$createField9_0 = $$createType133;
+        const $$createField5_0 = $$createType133;
+        const $$createField6_0 = $$createType15;
+        const $$createField7_0 = $$createType15;
+        const $$createField8_0 = $$createType136;
+        const $$createField9_0 = $$createType138;
         let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
         if ("transData" in $$parsedSource) {
             $$parsedSource["transData"] = $$createField5_0($$parsedSource["transData"]);
@@ -4452,11 +4663,11 @@ export class PreMulTexDatas {
      * Creates a new PreMulTexDatas instance from a string or object.
      */
     static createFrom($$source: any = {}): PreMulTexDatas {
-        const $$createField8_0 = $$createType135;
-        const $$createField9_0 = $$createType137;
-        const $$createField15_0 = $$createType24;
-        const $$createField16_0 = $$createType140;
-        const $$createField17_0 = $$createType142;
+        const $$createField8_0 = $$createType140;
+        const $$createField9_0 = $$createType142;
+        const $$createField15_0 = $$createType25;
+        const $$createField16_0 = $$createType145;
+        const $$createField17_0 = $$createType147;
         let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
         if ("maskParam" in $$parsedSource) {
             $$parsedSource["maskParam"] = $$createField8_0($$parsedSource["maskParam"]);
@@ -4591,7 +4802,7 @@ export class PriorityMaterialAssets {
      * Creates a new PriorityMaterialAssets instance from a string or object.
      */
     static createFrom($$source: any = {}): PriorityMaterialAssets {
-        const $$createField1_0 = $$createType145;
+        const $$createField1_0 = $$createType150;
         let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
         if ("assetArray" in $$parsedSource) {
             $$parsedSource["assetArray"] = $$createField1_0($$parsedSource["assetArray"]);
@@ -4746,9 +4957,9 @@ export class SavedAttachData {
      */
     static createFrom($$source: any = {}): SavedAttachData {
         const $$createField11_0 = $$createType0;
-        const $$createField12_0 = $$createType147;
-        const $$createField13_0 = $$createType147;
-        const $$createField14_0 = $$createType148;
+        const $$createField12_0 = $$createType152;
+        const $$createField13_0 = $$createType152;
+        const $$createField14_0 = $$createType153;
         let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
         if ("newAttachVertexIndices" in $$parsedSource) {
             $$parsedSource["newAttachVertexIndices"] = $$createField11_0($$parsedSource["newAttachVertexIndices"]);
@@ -4909,7 +5120,7 @@ export class SkinThickness {
      * Creates a new SkinThickness instance from a string or object.
      */
     static createFrom($$source: any = {}): SkinThickness {
-        const $$createField1_0 = $$createType151;
+        const $$createField1_0 = $$createType156;
         let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
         if ("groups" in $$parsedSource) {
             $$parsedSource["groups"] = $$createField1_0($$parsedSource["groups"]);
@@ -5085,7 +5296,7 @@ export class ThicknessGroup {
      * Creates a new ThicknessGroup instance from a string or object.
      */
     static createFrom($$source: any = {}): ThicknessGroup {
-        const $$createField4_0 = $$createType154;
+        const $$createField4_0 = $$createType159;
         let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
         if ("points" in $$parsedSource) {
             $$parsedSource["points"] = $$createField4_0($$parsedSource["points"]);
@@ -5133,7 +5344,7 @@ export class ThicknessPoint {
      * Creates a new ThicknessPoint instance from a string or object.
      */
     static createFrom($$source: any = {}): ThicknessPoint {
-        const $$createField2_0 = $$createType157;
+        const $$createField2_0 = $$createType162;
         let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
         if ("distanceParAngle" in $$parsedSource) {
             $$parsedSource["distanceParAngle"] = $$createField2_0($$parsedSource["distanceParAngle"]);
@@ -5155,9 +5366,9 @@ export class TransData {
     "name": string | null;
 
     /**
-     * 父骨骼索引，-1 表示根节点，字段名保留游戏 paretnNo 拼写 / Parent bone index, -1 means root, keeping the game's paretnNo spelling
+     * 父骨骼索引，-1 表示根节点 / Parent bone index, with -1 indicating a root node
      */
-    "paretnNo": number;
+    "parentNo": number;
 
     /**
      * 是否为缩放骨骼 / Whether this is a scale bone
@@ -5184,8 +5395,8 @@ export class TransData {
         if (!("name" in $$source)) {
             this["name"] = null;
         }
-        if (!("paretnNo" in $$source)) {
-            this["paretnNo"] = 0;
+        if (!("parentNo" in $$source)) {
+            this["parentNo"] = 0;
         }
         if (!("isSCL" in $$source)) {
             this["isSCL"] = false;
@@ -5291,7 +5502,7 @@ export class TransTexData {
         const $$createField1_0 = $$createType65;
         const $$createField3_0 = $$createType3;
         const $$createField4_0 = $$createType94;
-        const $$createField5_0 = $$createType139;
+        const $$createField5_0 = $$createType144;
         let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
         if ("pos" in $$parsedSource) {
             $$parsedSource["pos"] = $$createField0_0($$parsedSource["pos"]);
@@ -5585,49 +5796,49 @@ const $$createType4 = $Create.Array($$createType3);
 const $$createType5 = ColorPresetColorPack.createFrom;
 const $$createType6 = $Create.Nullable($$createType5);
 const $$createType7 = $Create.Array($$createType6);
-const $$createType8 = ColorPresetLayerFreeColor.createFrom;
-const $$createType9 = $Create.Nullable($$createType8);
-const $$createType10 = $Create.Array($$createType9);
-const $$createType11 = ColorPresetGradationColor.createFrom;
-const $$createType12 = $Create.Nullable($$createType11);
-const $$createType13 = $Create.Array($$createType12);
-const $$createType14 = $Create.Array($Create.Any);
-const $$createType15 = ColorPresetFreeColor.createFrom;
-const $$createType16 = $Create.Nullable($$createType15);
-const $$createType17 = ColorPresetControlSlider.createFrom;
-const $$createType18 = $Create.Nullable($$createType17);
-const $$createType19 = ColvariData.createFrom;
-const $$createType20 = $Create.Nullable($$createType19);
-const $$createType21 = $Create.Array($$createType20);
-const $$createType22 = MaskData.createFrom;
-const $$createType23 = $Create.Nullable($$createType22);
-const $$createType24 = $Create.Array($$createType23);
-const $$createType25 = PartColDef.createFrom;
-const $$createType26 = $Create.Nullable($$createType25);
-const $$createType27 = $Create.Array($$createType26);
-const $$createType28 = GradaColDef.createFrom;
-const $$createType29 = $Create.Nullable($$createType28);
-const $$createType30 = ct$0.VirtualDirectoryMetadata.createFrom;
-const $$createType31 = $Create.Map($Create.Any, $$createType30);
-const $$createType32 = ExpandedKCESPresetCore.createFrom;
-const $$createType33 = KCESPresetMeta.createFrom;
-const $$createType34 = $Create.Nullable($$createType33);
-const $$createType35 = $Create.Map($Create.Any, $Create.ByteSlice);
-const $$createType36 = KCESPresetPropertyList.createFrom;
-const $$createType37 = $Create.Nullable($$createType36);
-const $$createType38 = KCESPresetColorData.createFrom;
-const $$createType39 = $Create.Nullable($$createType38);
-const $$createType40 = KCESPresetBodyData.createFrom;
-const $$createType41 = $Create.Nullable($$createType40);
-const $$createType42 = $Create.Array($Create.Any);
-const $$createType43 = HitCheckEntry.createFrom;
-const $$createType44 = $Create.Array($$createType43);
-const $$createType45 = KCESPresetLegacyColor.createFrom;
-const $$createType46 = $Create.Array($$createType45);
-const $$createType47 = $Create.Array($Create.Any);
-const $$createType48 = KCESPresetEditColorPreset.createFrom;
-const $$createType49 = $Create.Nullable($$createType48);
-const $$createType50 = $Create.Map($Create.Any, $Create.Any);
+const $$createType8 = $Create.Map($Create.Any, $Create.Any);
+const $$createType9 = ColorPresetLayerFreeColor.createFrom;
+const $$createType10 = $Create.Nullable($$createType9);
+const $$createType11 = $Create.Array($$createType10);
+const $$createType12 = ColorPresetGradationColor.createFrom;
+const $$createType13 = $Create.Nullable($$createType12);
+const $$createType14 = $Create.Array($$createType13);
+const $$createType15 = $Create.Array($Create.Any);
+const $$createType16 = ColorPresetFreeColor.createFrom;
+const $$createType17 = $Create.Nullable($$createType16);
+const $$createType18 = ColorPresetControlSlider.createFrom;
+const $$createType19 = $Create.Nullable($$createType18);
+const $$createType20 = ColvariData.createFrom;
+const $$createType21 = $Create.Nullable($$createType20);
+const $$createType22 = $Create.Array($$createType21);
+const $$createType23 = MaskData.createFrom;
+const $$createType24 = $Create.Nullable($$createType23);
+const $$createType25 = $Create.Array($$createType24);
+const $$createType26 = PartColDef.createFrom;
+const $$createType27 = $Create.Nullable($$createType26);
+const $$createType28 = $Create.Array($$createType27);
+const $$createType29 = GradaColDef.createFrom;
+const $$createType30 = $Create.Nullable($$createType29);
+const $$createType31 = ct$0.VirtualDirectoryMetadata.createFrom;
+const $$createType32 = $Create.Map($Create.Any, $$createType31);
+const $$createType33 = ExpandedKCESPresetCore.createFrom;
+const $$createType34 = KCESPresetMeta.createFrom;
+const $$createType35 = $Create.Nullable($$createType34);
+const $$createType36 = $Create.Map($Create.Any, $Create.ByteSlice);
+const $$createType37 = KCESPresetPropertyList.createFrom;
+const $$createType38 = $Create.Nullable($$createType37);
+const $$createType39 = KCESPresetColorData.createFrom;
+const $$createType40 = $Create.Nullable($$createType39);
+const $$createType41 = KCESPresetBodyData.createFrom;
+const $$createType42 = $Create.Nullable($$createType41);
+const $$createType43 = $Create.Array($Create.Any);
+const $$createType44 = HitCheckEntry.createFrom;
+const $$createType45 = $Create.Array($$createType44);
+const $$createType46 = KCESPresetLegacyColor.createFrom;
+const $$createType47 = $Create.Array($$createType46);
+const $$createType48 = $Create.Array($Create.Any);
+const $$createType49 = KCESPresetEditColorPreset.createFrom;
+const $$createType50 = $Create.Nullable($$createType49);
 const $$createType51 = ColorPreset.createFrom;
 const $$createType52 = $Create.Nullable($$createType51);
 const $$createType53 = KCESPresetInfinityPartsColor.createFrom;
@@ -5687,51 +5898,56 @@ const $$createType106 = $Create.Array($$createType105);
 const $$createType107 = FloatProp.createFrom;
 const $$createType108 = $Create.Nullable($$createType107);
 const $$createType109 = $Create.Array($$createType108);
-const $$createType110 = Material.createFrom;
+const $$createType110 = KeywordProp.createFrom;
 const $$createType111 = $Create.Nullable($$createType110);
 const $$createType112 = $Create.Array($$createType111);
-const $$createType113 = Command.createFrom;
+const $$createType113 = Material.createFrom;
 const $$createType114 = $Create.Nullable($$createType113);
 const $$createType115 = $Create.Array($$createType114);
-const $$createType116 = PreMulTexDatas.createFrom;
+const $$createType116 = Command.createFrom;
 const $$createType117 = $Create.Nullable($$createType116);
-const $$createType118 = $Create.Map($Create.Any, $$createType117);
-const $$createType119 = Colvari.createFrom;
+const $$createType118 = $Create.Array($$createType117);
+const $$createType119 = PreMulTexDatas.createFrom;
 const $$createType120 = $Create.Nullable($$createType119);
-const $$createType121 = TupleStringInt.createFrom;
-const $$createType122 = $Create.Nullable($$createType121);
-const $$createType123 = Menu.createFrom;
-const $$createType124 = $Create.Nullable($$createType123);
-const $$createType125 = $Create.Array($$createType124);
-const $$createType126 = TransData.createFrom;
+const $$createType121 = $Create.Map($Create.Any, $$createType120);
+const $$createType122 = Colvari.createFrom;
+const $$createType123 = $Create.Nullable($$createType122);
+const $$createType124 = TupleStringInt.createFrom;
+const $$createType125 = $Create.Nullable($$createType124);
+const $$createType126 = HairMake.createFrom;
 const $$createType127 = $Create.Nullable($$createType126);
-const $$createType128 = $Create.Array($$createType127);
-const $$createType129 = BlendData.createFrom;
-const $$createType130 = $Create.Nullable($$createType129);
-const $$createType131 = $Create.Array($$createType130);
-const $$createType132 = SkinThickness.createFrom;
-const $$createType133 = $Create.Nullable($$createType132);
-const $$createType134 = MaskParam.createFrom;
+const $$createType128 = Menu.createFrom;
+const $$createType129 = $Create.Nullable($$createType128);
+const $$createType130 = $Create.Array($$createType129);
+const $$createType131 = TransData.createFrom;
+const $$createType132 = $Create.Nullable($$createType131);
+const $$createType133 = $Create.Array($$createType132);
+const $$createType134 = BlendData.createFrom;
 const $$createType135 = $Create.Nullable($$createType134);
-const $$createType136 = InfColorParam.createFrom;
-const $$createType137 = $Create.Nullable($$createType136);
-const $$createType138 = TransTexData.createFrom;
-const $$createType139 = $Create.Nullable($$createType138);
-const $$createType140 = $Create.Array($$createType139);
-const $$createType141 = InfColData.createFrom;
+const $$createType136 = $Create.Array($$createType135);
+const $$createType137 = SkinThickness.createFrom;
+const $$createType138 = $Create.Nullable($$createType137);
+const $$createType139 = MaskParam.createFrom;
+const $$createType140 = $Create.Nullable($$createType139);
+const $$createType141 = InfColorParam.createFrom;
 const $$createType142 = $Create.Nullable($$createType141);
-const $$createType143 = PriorityMaterial.createFrom;
+const $$createType143 = TransTexData.createFrom;
 const $$createType144 = $Create.Nullable($$createType143);
 const $$createType145 = $Create.Array($$createType144);
-const $$createType146 = SavedAttachPosRotScale.createFrom;
+const $$createType146 = InfColData.createFrom;
 const $$createType147 = $Create.Nullable($$createType146);
-const $$createType148 = $Create.Map($Create.Any, $$createType146);
-const $$createType149 = ThicknessGroup.createFrom;
-const $$createType150 = $Create.Nullable($$createType149);
-const $$createType151 = $Create.Map($Create.Any, $$createType150);
-const $$createType152 = ThicknessPoint.createFrom;
-const $$createType153 = $Create.Nullable($$createType152);
-const $$createType154 = $Create.Array($$createType153);
-const $$createType155 = ThicknessDefPerAngle.createFrom;
-const $$createType156 = $Create.Nullable($$createType155);
-const $$createType157 = $Create.Array($$createType156);
+const $$createType148 = PriorityMaterial.createFrom;
+const $$createType149 = $Create.Nullable($$createType148);
+const $$createType150 = $Create.Array($$createType149);
+const $$createType151 = SavedAttachPosRotScale.createFrom;
+const $$createType152 = $Create.Nullable($$createType151);
+const $$createType153 = $Create.Map($Create.Any, $$createType151);
+const $$createType154 = ThicknessGroup.createFrom;
+const $$createType155 = $Create.Nullable($$createType154);
+const $$createType156 = $Create.Map($Create.Any, $$createType155);
+const $$createType157 = ThicknessPoint.createFrom;
+const $$createType158 = $Create.Nullable($$createType157);
+const $$createType159 = $Create.Array($$createType158);
+const $$createType160 = ThicknessDefPerAngle.createFrom;
+const $$createType161 = $Create.Nullable($$createType160);
+const $$createType162 = $Create.Array($$createType161);

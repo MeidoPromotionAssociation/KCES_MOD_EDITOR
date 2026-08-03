@@ -28,9 +28,11 @@ import {
     UndressPartsDataService,
 } from "../../bindings/github.com/MeidoPromotionAssociation/MeidoSerialization/service/KCES";
 import {
+    ConvertStructuredJsonToNative,
     ReadStructuredFile,
     WriteStructuredFile
 } from "../../bindings/github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR/internal/app.ts";
+import {shouldRecalculateLookupHash} from "./lookupHashSetting";
 
 
 /**
@@ -65,21 +67,23 @@ function isPersetPath(path: string): boolean {
 function structured(formatKey: string): Pick<FormatService, "read" | "write"> {
     return {
         read: (path) => ReadStructuredFile(formatKey, path),
-        write: (path, jsonText) => WriteStructuredFile(formatKey, path, jsonText),
+        write: (path, jsonText) => WriteStructuredFile(formatKey, path, jsonText, shouldRecalculateLookupHash()),
     };
 }
 
 export const formatServices: Record<string, FormatService> = {
     // 服装部件 / Parts
+    // menuassets/materialassets/model 的 JSON → 原生转换走 App 通道，
+    // 以便应用"保存时重算 ID/GUID"设置（库自身的转换服务固定重算）
     menuassets: {
         ...structured("menuassets"),
         toJson: (input, output, max) => MenuAssetsService.ConvertMenuAssetsToJson(input, output, max),
-        toNative: (input, output, max) => MenuAssetsService.ConvertJsonToMenuAssets(input, output, max),
+        toNative: (input, output, max) => ConvertStructuredJsonToNative("menuassets", input, output, max, shouldRecalculateLookupHash()),
     },
     materialassets: {
         ...structured("materialassets"),
         toJson: (input, output, max) => MaterialAssetsService.ConvertMaterialAssetsToJson(input, output, max),
-        toNative: (input, output, max) => MaterialAssetsService.ConvertJsonToMaterialAssets(input, output, max),
+        toNative: (input, output, max) => ConvertStructuredJsonToNative("materialassets", input, output, max, shouldRecalculateLookupHash()),
     },
     pmatassets: {
         ...structured("pmatassets"),
@@ -89,7 +93,7 @@ export const formatServices: Record<string, FormatService> = {
     model: {
         ...structured("model"),
         toJson: (input, output, max) => ModelService.ConvertModelToJson(input, output, max),
-        toNative: (input, output, max) => ModelService.ConvertJsonToModel(input, output, max),
+        toNative: (input, output, max) => ConvertStructuredJsonToNative("model", input, output, max, shouldRecalculateLookupHash()),
     },
     // 物理 / Physics
     dbconf: {

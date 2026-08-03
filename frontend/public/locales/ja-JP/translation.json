@@ -117,6 +117,8 @@
     "update_settings": "更新設定",
     "file_type_strict_mode": "ファイル形式判定の厳格モード",
     "file_type_strict_mode_tip": "有効にすると、形式判定に失敗した場合に拡張子による推測を行いません",
+    "recalculate_lookup_hash": "保存時に ID / GUID を再計算",
+    "recalculate_lookup_hash_tip": "対象は .menuassets / .materialassets / .model のみ。ID はファイル名のハッシュ値で、ゲームがパーツの検索に使用し、メニュー間の参照（parentId など）にも使われるため、ファイル名を変更した後は再計算が必要です。GUID は現在 KCES2 のコードでは使用されておらず、HairMake のエクスポート GUID がないメニューは保存のたびにランダムな値で再計算されます。オフにすると編集データの値をそのまま書き出します。デフォルトはオンです。",
     "theme_mode": "テーマ",
     "theme_mode_tip": "画面の配色を選択：システムに従う、ライト、ダーク",
     "theme_system": "システムに従う",
