@@ -1,0 +1,54 @@
+name: Auto Build
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+
+      - name: Set up Go
+        uses: actions/setup-go@v7
+        with:
+          go-version-file: 'go.mod'
+          cache: true
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      # Linux 构建为 CGO 构建，需要 GTK 与 WebKitGTK 开发库
+      - name: Install Linux Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.1-dev pkg-config
+
+      # 安装与 go.mod 一致版本的 wails3 CLI
+      - name: Install Wails CLI
+        run: go install github.com/wailsapp/wails/v3/cmd/wails3@$(go list -m -f '{{.Version}}' github.com/wailsapp/wails/v3)
+
+      - name: Build Linux Binary
+        run: wails3 task linux:build
+
+      # Windows 构建 CGO_ENABLED=0，可直接在 Linux 上交叉编译
+      - name: Build Windows Binary
+        run: wails3 task windows:build
+
+      - name: Upload Linux Artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: linux-amd64
+          path: bin/kces-mod-editor
+
+      - name: Upload Windows Artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: windows-amd64
+          path: bin/kces-mod-editor.exe
