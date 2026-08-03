@@ -1,0 +1,5 @@
+# wails3 generate icons 必定输出 macOS 图标（build/darwin/icon.icns），无法跳过；
+# 本项目不打包 macOS，仅保留此目录防止 CI 全新环境下图标生成失败
+
+# The `wails3 generate icons` command will always output macOS icons (build/darwin/icon.icns) and cannot be skipped;
+# This project does not package for macOS; it only keeps this directory to prevent icon generation failures in a fresh CI environment.

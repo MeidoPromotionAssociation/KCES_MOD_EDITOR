@@ -39,6 +39,7 @@ frontend/node_modules
 .wails-dev.*.log
 build/linux/appimage/build
 build/windows/nsis/MicrosoftEdgeWebview2Setup.exe
+build/darwin/icon.icns
 KCES_MOD_EDITOR.exe
 /game
 /testdata
