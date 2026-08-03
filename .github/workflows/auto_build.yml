@@ -24,11 +24,11 @@ jobs:
       - name: Install pnpm
         run: npm install -g pnpm
 
-      # Linux 构建为 CGO 构建，需要 GTK 与 WebKitGTK 开发库
+      # Linux 构建为 CGO 构建；wails3 alpha2.119 默认使用 GTK4 + WebKitGTK 6.0（gtk3 为 opt-in build tag）
       - name: Install Linux Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.1-dev pkg-config
+          sudo apt-get install -y libgtk-4-dev libwebkitgtk-6.0-dev libsoup-3.0-dev libx11-dev pkg-config
 
       # 安装与 go.mod 一致版本的 wails3 CLI
       - name: Install Wails CLI
