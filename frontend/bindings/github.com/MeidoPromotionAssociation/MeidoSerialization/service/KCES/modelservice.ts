@@ -15,11 +15,31 @@ import { Call as $Call, CancellablePromise as $CancellablePromise, Create as $Cr
 import * as KCES$0 from "../../serialization/KCES/models.js";
 
 /**
+ * ConvertGLTFToModel 将 glTF 或 GLB 转换为 .model 与 .mmesh 文件并写入输出目录
+ * 文件名优先取自导出时保存的 kcesModel extras，否则从输入文件名小写派生
+ * ConvertGLTFToModel converts glTF or GLB into .model and .mmesh files written to the output directory
+ * File names prefer the kcesModel extras saved during export and otherwise derive from the lowercased input file name
+ */
+export function ConvertGLTFToModel(inputPath: string, outputDir: string, maxOutputBytes: number): $CancellablePromise<void> {
+    return $Call.ByID(3864648038, inputPath, outputDir, maxOutputBytes);
+}
+
+/**
  * ConvertJsonToModel 将编辑 JSON 转换为 KCES .model 文件
  * ConvertJsonToModel converts editing JSON to a KCES .model file
  */
 export function ConvertJsonToModel(inputPath: string, outputPath: string, maxOutputBytes: number): $CancellablePromise<void> {
     return $Call.ByID(3648374955, inputPath, outputPath, maxOutputBytes);
+}
+
+/**
+ * ConvertModelToGLTF 将 .model 与其引用的 .mmesh 导出为带骨架、蒙皮、变形目标和材质名的完整 glTF 或 GLB
+ * KCES 专有字段保存在文档 extras 的 kcesModel 键下，供反向转换无损还原
+ * ConvertModelToGLTF exports a .model and its referenced .mmesh to complete glTF or GLB with the skeleton, skin, morph targets, and material names
+ * KCES-specific fields are stored under the kcesModel key in document extras so the reverse conversion can restore them losslessly
+ */
+export function ConvertModelToGLTF(inputPath: string, outputPath: string, format: string, maxOutputBytes: number): $CancellablePromise<void> {
+    return $Call.ByID(3383278362, inputPath, outputPath, format, maxOutputBytes);
 }
 
 /**

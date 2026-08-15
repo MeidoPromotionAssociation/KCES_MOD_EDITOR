@@ -90,54 +90,6 @@ export class Keyframe {
 }
 
 /**
- * Nei 表示解密后的 .nei CSV 表格数据
- * Nei represents decrypted .nei CSV table data
- */
-export class Nei {
-    /**
-     * CSV 的行数 / Number of CSV rows
-     */
-    "Rows": number;
-
-    /**
-     * CSV 的列数 / Number of CSV columns
-     */
-    "Cols": number;
-
-    /**
-     * CSV 的数据 [行][列] / CSV cell data indexed as [row][column]
-     */
-    "Data": string[][];
-
-    /** Creates a new Nei instance. */
-    constructor($$source: Partial<Nei> = {}) {
-        if (!("Rows" in $$source)) {
-            this["Rows"] = 0;
-        }
-        if (!("Cols" in $$source)) {
-            this["Cols"] = 0;
-        }
-        if (!("Data" in $$source)) {
-            this["Data"] = [];
-        }
-
-        Object.assign(this, $$source);
-    }
-
-    /**
-     * Creates a new Nei instance from a string or object.
-     */
-    static createFrom($$source: any = {}): Nei {
-        const $$createField2_0 = $$createType3;
-        let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
-        if ("Data" in $$parsedSource) {
-            $$parsedSource["Data"] = $$createField2_0($$parsedSource["Data"]);
-        }
-        return new Nei($$parsedSource as Partial<Nei>);
-    }
-}
-
-/**
  * PanierRadiusGroup 存储骨骼特定的半径信息
  * PanierRadiusGroup stores bone-specific radius information
  */
@@ -176,7 +128,7 @@ export class PanierRadiusGroup {
      * Creates a new PanierRadiusGroup instance from a string or object.
      */
     static createFrom($$source: any = {}): PanierRadiusGroup {
-        const $$createField2_0 = $$createType4;
+        const $$createField2_0 = $$createType2;
         let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
         if ("Curve" in $$parsedSource) {
             $$parsedSource["Curve"] = $$createField2_0($$parsedSource["Curve"]);
@@ -352,12 +304,12 @@ export class Psk {
      * Creates a new Psk instance from a string or object.
      */
     static createFrom($$source: any = {}): Psk {
-        const $$createField3_0 = $$createType4;
-        const $$createField4_0 = $$createType6;
-        const $$createField6_0 = $$createType4;
-        const $$createField15_0 = $$createType4;
-        const $$createField16_0 = $$createType7;
-        const $$createField17_0 = $$createType4;
+        const $$createField3_0 = $$createType2;
+        const $$createField4_0 = $$createType4;
+        const $$createField6_0 = $$createType2;
+        const $$createField15_0 = $$createType2;
+        const $$createField16_0 = $$createType5;
+        const $$createField17_0 = $$createType2;
         let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
         if ("PanierRadiusDistrib" in $$parsedSource) {
             $$parsedSource["PanierRadiusDistrib"] = $$createField3_0($$parsedSource["PanierRadiusDistrib"]);
@@ -428,9 +380,7 @@ export class Vector3 {
 // Private type creation functions
 const $$createType0 = Keyframe.createFrom;
 const $$createType1 = $Create.Array($$createType0);
-const $$createType2 = $Create.Array($Create.Any);
-const $$createType3 = $Create.Array($$createType2);
-const $$createType4 = AnimationCurve.createFrom;
-const $$createType5 = PanierRadiusGroup.createFrom;
-const $$createType6 = $Create.Array($$createType5);
-const $$createType7 = Vector3.createFrom;
+const $$createType2 = AnimationCurve.createFrom;
+const $$createType3 = PanierRadiusGroup.createFrom;
+const $$createType4 = $Create.Array($$createType3);
+const $$createType5 = Vector3.createFrom;

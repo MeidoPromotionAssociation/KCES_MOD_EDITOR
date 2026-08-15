@@ -12,7 +12,10 @@ import { Call as $Call, CancellablePromise as $CancellablePromise, Create as $Cr
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: Unused imports
-import * as COM3D2$0 from "../../serialization/COM3D2/models.js";
+import * as KCES$0 from "../../serialization/KCES/models.js";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore: Unused imports
+import * as nei$0 from "../../serialization/common/nei/models.js";
 
 /**
  * ConvertCSVToNei 将 CSV 转换为 .nei 文件
@@ -34,7 +37,7 @@ export function ConvertNeiToCSV(inputPath: string, outputPath: string): $Cancell
  * ReadNeiFile 读取并解码 .nei 文件
  * ReadNeiFile reads and decodes a .nei file
  */
-export function ReadNeiFile(path: string): $CancellablePromise<COM3D2$0.Nei | null> {
+export function ReadNeiFile(path: string): $CancellablePromise<KCES$0.Nei | null> {
     return $Call.ByID(4198611759, path).then(($result: any) => {
         return $$createType1($result);
     });
@@ -44,10 +47,10 @@ export function ReadNeiFile(path: string): $CancellablePromise<COM3D2$0.Nei | nu
  * WriteNeiFile 编码并写入 .nei 文件
  * WriteNeiFile encodes and writes a .nei file
  */
-export function WriteNeiFile(path: string, value: COM3D2$0.Nei | null): $CancellablePromise<void> {
+export function WriteNeiFile(path: string, value: KCES$0.Nei | null): $CancellablePromise<void> {
     return $Call.ByID(3897102556, path, value);
 }
 
 // Private type creation functions
-const $$createType0 = COM3D2$0.Nei.createFrom;
+const $$createType0 = nei$0.Table.createFrom;
 const $$createType1 = $Create.Nullable($$createType0);

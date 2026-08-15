@@ -11,6 +11,9 @@ import * as json$0 from "../../../../../encoding/json/models.js";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: Unused imports
 import * as ct$0 from "./ct/models.js";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore: Unused imports
+import * as nei$0 from "../common/nei/models.js";
 
 /**
  * BlendData 对应游戏 BlendData，保存模型 morph 顶点差分
@@ -4431,6 +4434,16 @@ export class Model {
         return new Model($$parsedSource as Partial<Model>);
     }
 }
+
+/**
+ * Nei 表示解密后的 .nei CSV 表格数据 / Nei represents decrypted .nei CSV table data
+ */
+export const Nei = nei$0.Table;
+
+/**
+ * Nei 表示解密后的 .nei CSV 表格数据 / Nei represents decrypted .nei CSV table data
+ */
+export type Nei = nei$0.Table;
 
 /**
  * PartColDef 对应 InfinityColorTexMgr2.PartColDef，描述 ID 贴图的一个部位颜色

@@ -61,6 +61,7 @@ export {
     Menu,
     MenuAssets,
     Model,
+    Nei,
     PartColDef,
     PreMulTexDatas,
     PriorityMaterial,
