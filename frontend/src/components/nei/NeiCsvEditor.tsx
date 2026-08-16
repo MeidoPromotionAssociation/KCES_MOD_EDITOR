@@ -63,7 +63,7 @@ const NeiCsvEditor: React.FC<{
             <Editor
                 beforeMount={(monacoInstance) => setupCsvMonaco(monacoInstance)}
                 language="csv"
-                theme={isDarkMode ? "vs-dark" : "vs"}
+                theme={isDarkMode ? "csvTheme-dark" : "csvTheme"}
                 value={csvValue}
                 onChange={handleEditorChange}
                 options={{
