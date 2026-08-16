@@ -158,7 +158,18 @@
   "NeiEditor": {
     "export_csv": "Export as CSV",
     "import_csv": "Convert CSV to NEI",
-    "export_csv_need_nei": "Only native .nei files can be exported as CSV"
+    "export_csv_need_nei": "Only native .nei files can be exported as CSV",
+    "table_mode": "Table Edit",
+    "csv_editor_mode": "Raw Edit",
+    "add_row": "Add Row",
+    "add_column": "Add Column",
+    "delete_row": "Delete this row",
+    "delete_column": "Delete this column",
+    "column": "Column",
+    "table_size_colon": "Table size: ",
+    "text_encoding": "Cell Encoding",
+    "text_encoding_tip": "Character encoding of cell text. KCES reads cells through crc.dll's DLL_CSV_GetCellAsWideString and actually uses UTF-8, while COM3D2 uses Shift-JIS (CP932). The encoding is detected from cell content when reading, and ASCII-only tables carry no evidence so they are reported as Shift-JIS. An empty value writes as Shift-JIS.",
+    "text_encoding_not_utf8": "Not UTF-8. KCES .nei files should be written as UTF-8, otherwise the game reads Japanese text as garbage. Shift-JIS on an ASCII-only table is expected, but switch to UTF-8 once the table contains non-ASCII text."
   },
   "PartsEditor": {
     "search_placeholder": "Search file name…",

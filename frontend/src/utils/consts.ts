@@ -26,11 +26,13 @@ export type KCESFormatGroup = "parts" | "physics" | "character" | "data";
  * - key: 内部标识，同时用于路由（`/${key}-editor`）、i18n（`EditorNavBar.${key}`）与视图模式存储
  * - fileType: 后端 DetermineFileType 返回的 FileType 名称
  * - suffixes: 原生文件后缀（小写），用于扩展名回退与保存校验
+ * - altSuffixes: 同一编辑器可直接读写的其他明文后缀（如 .nei 的 .csv），没有 `.json` 编辑变体
  */
 export interface KCESFormatDef {
     key: string;
     fileType: string;
     suffixes: string[];
+    altSuffixes?: string[];
     group: KCESFormatGroup;
 }
 
@@ -63,7 +65,7 @@ export const KCESFormats: KCESFormatDef[] = [
     {key: "undressdat", fileType: "undressdat", suffixes: [".undressdat"], group: "data"},
     {key: "undresspdat", fileType: "undresspdat", suffixes: [".undresspdat"], group: "data"},
     {key: "psk", fileType: "psk", suffixes: [".psk"], group: "data"},
-    {key: "nei", fileType: "nei", suffixes: [".nei"], group: "data"},
+    {key: "nei", fileType: "nei", suffixes: [".nei"], altSuffixes: [".csv"], group: "data"},
 ];
 
 export const KCESFormatGroups: KCESFormatGroup[] = ["parts", "physics", "character", "data"];
@@ -80,7 +82,7 @@ export function formatByFileType(fileType: string): KCESFormatDef | undefined {
 
 /**
  * 按文件路径的扩展名回退匹配格式（用于类型识别失败时）
- * 支持原生后缀与 `.json` 编辑后缀，`.ikcol.bytes` 优先于 `.bytes`
+ * 支持原生后缀、`.json` 编辑后缀与 altSuffixes（如 .csv），`.ikcol.bytes` 优先于 `.bytes`
  */
 export function formatByPath(path: string): KCESFormatDef | undefined {
     let lower = path.toLowerCase().replace(/\\/g, "/");
@@ -88,8 +90,12 @@ export function formatByPath(path: string): KCESFormatDef | undefined {
     if (lower.endsWith(".json")) {
         lower = lower.slice(0, -".json".length);
     }
-    if (lower.endsWith(".csv")) {
-        return formatByKey("nei");
+    for (const format of KCESFormats) {
+        for (const suffix of format.altSuffixes ?? []) {
+            if (lower.endsWith(suffix)) {
+                return format;
+            }
+        }
     }
     if (lower.endsWith(".ikcol.bytes")) {
         return formatByKey("ikcolbytes");
@@ -115,10 +121,17 @@ export function selectPattern(format: KCESFormatDef): string {
         patterns.push(`${prefix}${suffix}`);
         patterns.push(`${prefix}${suffix}.json`);
     }
-    if (format.key === "nei") {
-        patterns.push("*.csv");
+    // altSuffixes 是明文格式，没有 `.json` 编辑变体
+    for (const suffix of format.altSuffixes ?? []) {
+        patterns.push(`*${suffix}`);
     }
     return patterns.join(";");
+}
+
+/** 判断路径是否命中某格式的 altSuffixes（例如 .nei 编辑器的 .csv） */
+export function isAltSuffixPath(path: string, format: KCESFormatDef): boolean {
+    const lower = path.toLowerCase();
+    return (format.altSuffixes ?? []).some((suffix) => lower.endsWith(suffix));
 }
 
 // 支持的所有文件类型，用分号分隔

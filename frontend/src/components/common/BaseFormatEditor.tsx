@@ -4,7 +4,7 @@ import {appMessage as message} from "../../utils/feedback";
 import {useTranslation} from "react-i18next";
 import {Window} from "@wailsio/runtime";
 import {FileInfo} from "../../../bindings/github.com/MeidoPromotionAssociation/MeidoSerialization/service/COM3D2/models";
-import {KCESFormatDef, selectPattern, AppTitle, AppTitleNoAuthor} from "../../utils/consts";
+import {KCESFormatDef, selectPattern, AppTitle, AppTitleNoAuthor, isAltSuffixPath} from "../../utils/consts";
 import {formatServices, MaxConvertBytes} from "../../utils/formatServices";
 import {editorViewModeKey} from "../../utils/LocalStorageKeys";
 import {getFileName} from "../../utils/utils";
@@ -30,8 +30,13 @@ export interface BaseFormatEditorProps {
     format: KCESFormatDef;
     /** 样式1（结构化表单）渲染器；未提供时只有 JSON 视图 */
     renderStyle1?: (data: any, setData: (value: any) => void) => React.ReactNode;
+    /** 样式2 渲染器；未提供时使用通用的 Monaco JSON 编辑器（如 .nei 用 CSV 文本编辑器代替） */
+    renderStyle2?: (data: any, setData: (value: any) => void) => React.ReactNode;
+    /** 视图切换按钮文案，未提供时用通用的“样式1 / 样式2” */
+    style1Label?: string;
+    style2Label?: string;
     /** 顶部附加信息渲染器（文件头等） */
-    renderHeader?: (data: any) => React.ReactNode;
+    renderHeader?: (data: any, setData: (value: any) => void) => React.ReactNode;
 }
 
 /** 保存路径规范化结果 */
@@ -46,6 +51,10 @@ function normalizeSavePath(path: string, format: KCESFormatDef): { path: string;
         if (lower.endsWith(suffix)) {
             return {path, isJson: false};
         }
+    }
+    // altSuffixes（如 .nei 的 .csv）也按原生写出，由后端按扩展名选择编码方式
+    if (isAltSuffixPath(path, format)) {
+        return {path, isJson: false};
     }
     const primary = format.suffixes[0];
     if (lower.endsWith(".json")) {
@@ -326,7 +335,7 @@ const BaseFormatEditor = forwardRef<FormatEditorRef, BaseFormatEditorProps>((pro
                     />
                 )}
 
-                {props.renderHeader && data !== null && props.renderHeader(data)}
+                {props.renderHeader && data !== null && props.renderHeader(data, setData)}
 
                 <div style={{marginBottom: 8, marginTop: 8}}>
                     <Radio.Group
@@ -337,8 +346,8 @@ const BaseFormatEditor = forwardRef<FormatEditorRef, BaseFormatEditorProps>((pro
                             localStorage.setItem(editorViewModeKey(format.key), e.target.value.toString());
                         }}
                         options={[
-                            {label: t('Common.style1'), value: 1, disabled: !hasStyle1},
-                            {label: t('Common.style2'), value: 2},
+                            {label: props.style1Label ?? t('Common.style1'), value: 1, disabled: !hasStyle1},
+                            {label: props.style2Label ?? t('Common.style2'), value: 2},
                         ]}
                         optionType="button"
                         buttonStyle="solid"
@@ -353,9 +362,9 @@ const BaseFormatEditor = forwardRef<FormatEditorRef, BaseFormatEditorProps>((pro
                 ) : (
                     <>
                         {viewMode === 1 && hasStyle1 && props.renderStyle1!(data, setData)}
-                        {viewMode === 2 && (
-                            <MonacoJsonEditor data={data} setData={setData} path={editingModelPath(format.key)}/>
-                        )}
+                        {viewMode === 2 && (props.renderStyle2
+                            ? props.renderStyle2(data, setData)
+                            : <MonacoJsonEditor data={data} setData={setData} path={editingModelPath(format.key)}/>)}
                     </>
                 )}
             </ConfigProvider>

@@ -158,7 +158,18 @@
   "NeiEditor": {
     "export_csv": "导出为 CSV",
     "import_csv": "CSV 转换为 NEI",
-    "export_csv_need_nei": "只有原生 .nei 文件可以导出为 CSV"
+    "export_csv_need_nei": "只有原生 .nei 文件可以导出为 CSV",
+    "table_mode": "表格编辑",
+    "csv_editor_mode": "直接编辑",
+    "add_row": "添加行",
+    "add_column": "添加列",
+    "delete_row": "删除此行",
+    "delete_column": "删除此列",
+    "column": "列",
+    "table_size_colon": "表格规模：",
+    "text_encoding": "单元格编码",
+    "text_encoding_tip": "单元格文本的字符编码。KCES 通过 crc.dll 的 DLL_CSV_GetCellAsWideString 读取，实际使用 UTF-8；COM3D2 用 Shift-JIS（CP932）。读取时按单元格内容探测，纯 ASCII 的表格无法区分而报告为 Shift-JIS。留空写出时等同 Shift-JIS。",
+    "text_encoding_not_utf8": "当前不是 UTF-8。KCES 的 .nei 应写出 UTF-8，否则游戏会把日文读成乱码；纯 ASCII 表格被探测为 Shift-JIS 属正常，含非 ASCII 文本时请改为 UTF-8。"
   },
   "PartsEditor": {
     "search_placeholder": "搜索文件名…",

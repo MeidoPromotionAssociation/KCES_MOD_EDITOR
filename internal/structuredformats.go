@@ -3,6 +3,7 @@ package internal
 import (
 	"encoding/json"
 	"fmt"
+	"math"
 	"os"
 	"path/filepath"
 	"strings"
@@ -10,6 +11,7 @@ import (
 	serializationCOM3D2 "github.com/MeidoPromotionAssociation/MeidoSerialization/serialization/COM3D2"
 	serializationKCES "github.com/MeidoPromotionAssociation/MeidoSerialization/serialization/KCES"
 	KCESService "github.com/MeidoPromotionAssociation/MeidoSerialization/service/KCES"
+	"github.com/MeidoPromotionAssociation/MeidoSerialization/tools"
 )
 
 // structuredFormat 一个格式的结构化读写桥接：
@@ -216,10 +218,80 @@ func NewStructuredFormats() map[string]structuredFormat {
 			write: decodeInto(psk.WritePskFile),
 		},
 		"nei": {
-			read:  func(p string) (any, error) { return nei.ReadNeiFile(p) },
-			write: decodeInto(nei.WriteNeiFile),
+			// .nei 就是加密的 CSV，编辑器允许直接打开/另存为明文 .csv
+			read: func(p string) (any, error) {
+				if isCsvPath(p) {
+					return readNeiFromCSV(p)
+				}
+				return nei.ReadNeiFile(p)
+			},
+			write: decodeInto(func(p string, value *serializationKCES.Nei) error {
+				if isCsvPath(p) {
+					return writeNeiAsCSV(p, value)
+				}
+				return nei.WriteNeiFile(p, value)
+			}),
 		},
 	}
+}
+
+// isCsvPath 判断路径是否为明文 CSV
+func isCsvPath(path string) bool {
+	return strings.HasSuffix(strings.ToLower(path), ".csv")
+}
+
+// readNeiFromCSV 读取明文 CSV 并构造 Nei 表格
+// 与 MeidoSerialization 的 NeiService.ConvertCSVToNei 行为一致：跳过 UTF-8 BOM、短行补空串对齐到最宽列，
+// 并固定使用 UTF-8（KCES 的 crc.dll 按 UTF-8 解码单元格）
+func readNeiFromCSV(path string) (*serializationKCES.Nei, error) {
+	file, err := os.Open(path)
+	if err != nil {
+		return nil, fmt.Errorf("open CSV file %q: %w", path, err)
+	}
+	records, readErr := tools.NewCSVReaderSkipUTF8BOM(file, 0).ReadAll()
+	closeErr := file.Close()
+	if readErr != nil {
+		return nil, fmt.Errorf("read CSV file %q: %w", path, readErr)
+	}
+	if closeErr != nil {
+		return nil, fmt.Errorf("close CSV file %q: %w", path, closeErr)
+	}
+	if uint64(len(records)) > math.MaxUint32 {
+		return nil, fmt.Errorf("CSV row count %d exceeds Uint32", uint64(len(records)))
+	}
+	var maxCols uint32
+	for _, record := range records {
+		if uint64(len(record)) > math.MaxUint32 {
+			return nil, fmt.Errorf("CSV column count %d exceeds Uint32", uint64(len(record)))
+		}
+		if cols := uint32(len(record)); cols > maxCols {
+			maxCols = cols
+		}
+	}
+	data := make([][]string, len(records))
+	for index, record := range records {
+		row := make([]string, maxCols)
+		copy(row, record)
+		data[index] = row
+	}
+	return serializationKCES.NewNei(uint32(len(records)), maxCols, data), nil
+}
+
+// writeNeiAsCSV 将表格写出为明文 CSV（带 UTF-8 BOM，与库的 ConvertNeiToCSV 一致）
+func writeNeiAsCSV(path string, value *serializationKCES.Nei) error {
+	file, err := os.Create(path)
+	if err != nil {
+		return fmt.Errorf("create CSV file %q: %w", path, err)
+	}
+	writeErr := tools.WriteCSVWithUTF8BOM(file, value.Data)
+	closeErr := file.Close()
+	if writeErr != nil {
+		return fmt.Errorf("write CSV file %q: %w", path, writeErr)
+	}
+	if closeErr != nil {
+		return fmt.Errorf("close CSV file %q: %w", path, closeErr)
+	}
+	return nil
 }
 
 // 确保引用不被裁剪（COM3D2 结构用于 psk/nei 泛型实例化推导）

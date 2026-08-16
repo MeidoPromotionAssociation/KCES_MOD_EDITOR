@@ -158,7 +158,18 @@
   "NeiEditor": {
     "export_csv": "CSV としてエクスポート",
     "import_csv": "CSV を NEI に変換",
-    "export_csv_need_nei": "ネイティブの .nei ファイルのみ CSV にエクスポートできます"
+    "export_csv_need_nei": "ネイティブの .nei ファイルのみ CSV にエクスポートできます",
+    "table_mode": "テーブル編集",
+    "csv_editor_mode": "Raw編集",
+    "add_row": "行の追加",
+    "add_column": "列の追加",
+    "delete_row": "この行を削除",
+    "delete_column": "この列を削除",
+    "column": "列",
+    "table_size_colon": "テーブルのサイズ：",
+    "text_encoding": "セルの文字コード",
+    "text_encoding_tip": "セルテキストの文字コードです。KCES は crc.dll の DLL_CSV_GetCellAsWideString で読み込むため実際は UTF-8、COM3D2 は Shift-JIS（CP932）です。読み込み時はセルの内容から判定し、ASCII のみの表は判別できないため Shift-JIS として報告されます。空欄のまま書き出すと Shift-JIS と同じ扱いになります。",
+    "text_encoding_not_utf8": "現在 UTF-8 ではありません。KCES の .nei は UTF-8 で書き出す必要があり、そうしないとゲーム内で日本語が文字化けします。ASCII のみの表が Shift-JIS と判定されるのは正常ですが、非 ASCII の文字を含む場合は UTF-8 に変更してください。"
   },
   "PartsEditor": {
     "search_placeholder": "ファイル名を検索…",

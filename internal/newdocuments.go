@@ -306,11 +306,8 @@ func newStructuredDocument(formatKey string) (any, error) {
 			Version:   24301,
 		}, nil
 	case "nei":
-		return &serializationCOM3D2.Nei{
-			Rows: 1,
-			Cols: 1,
-			Data: [][]string{{""}},
-		}, nil
+		// KCES 通过 crc.dll 解码单元格，新表格必须写出 UTF-8，否则游戏把日文读成乱码
+		return serializationKCES.NewNei(1, 1, [][]string{{""}}), nil
 	default:
 		// preset 等 VirtualDirectory 类格式没有有意义的空文档
 		return nil, fmt.Errorf("format %q does not support creating a new document", formatKey)

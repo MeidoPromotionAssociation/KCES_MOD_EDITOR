@@ -2,7 +2,7 @@ import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router-dom";
 import {appMessage as message} from "../utils/feedback";
 import React, {useState} from "react";
-import {formatByFileType, formatByPath} from "../utils/consts";
+import {formatByFileType, formatByPath, isAltSuffixPath} from "../utils/consts";
 import {FileTypeStrictModeKey} from "../utils/LocalStorageKeys";
 import {
     DetermineFileType, GetFileSize,
@@ -119,7 +119,12 @@ const useFileHandlers = () => {
         fileInfo.Path = filePath;
         fileInfo.Game = "KCES";
         fileInfo.FileType = format.fileType;
-        fileInfo.StorageFormat = filePath.toLowerCase().endsWith(".json") ? "json" : "binary";
+        // altSuffixes（.nei 编辑器的 .csv）是明文表格，不是二进制
+        fileInfo.StorageFormat = filePath.toLowerCase().endsWith(".json")
+            ? "json"
+            : isAltSuffixPath(filePath, format)
+                ? "csv"
+                : "binary";
 
         try {
             fileInfo.Size = await GetFileSize(filePath);
