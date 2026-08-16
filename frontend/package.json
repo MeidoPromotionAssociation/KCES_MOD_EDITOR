@@ -10,27 +10,27 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@ant-design/icons": "^6.1.1",
+    "@ant-design/icons": "^6.3.2",
     "@monaco-editor/react": "^4.7.0",
     "@wailsio/runtime": "latest",
-    "antd": "^6.5.1",
-    "dayjs": "^1.11.13",
-    "i18next": "^26.0.5",
+    "antd": "^6.6.0",
+    "dayjs": "^1.11.21",
+    "i18next": "^26.3.6",
     "i18next-browser-languagedetector": "^8.2.1",
-    "i18next-http-backend": "^3.0.4",
-    "lossless-json": "^4.3.0",
-    "monaco-editor": "^0.55.1",
+    "i18next-http-backend": "^4.0.1",
+    "lossless-json": "^4.3.1",
+    "monaco-editor": "^0.56.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "react-i18next": "^17.0.4",
-    "react-router-dom": "7.14.1"
+    "react-i18next": "^17.0.11",
+    "react-router-dom": "7.18.2"
   },
   "devDependencies": {
-    "@types/react": "^19.2.17",
-    "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^6.0.4",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "@vitejs/plugin-react": "^6.0.5",
     "typescript": "^7.0.2",
-    "vite": "^8.1.5"
+    "vite": "^8.2.1"
   },
   "packageManager": "pnpm@11.20.0+sha512.9a6f330a95b66446ea088faf1521405a8a01f07fde7124cc9958dfed52d4bb436737e65b08f85f37b46fcba375092558ac51262b816844b22f63406ed166bfee"
 }

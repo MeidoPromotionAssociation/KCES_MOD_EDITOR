@@ -1,6 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore monaco 0.55 的 contribution 导出未带类型声明（见 monacoSetup）
-import {jsonDefaults} from "monaco-editor/esm/vs/language/json/monaco.contribution.js";
+import {jsonDefaults} from "monaco-editor/languages/features/json/register";
 import i18next from "i18next";
 import {GetEditingSchemas} from "../../bindings/github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR/internal/app.ts";
 
