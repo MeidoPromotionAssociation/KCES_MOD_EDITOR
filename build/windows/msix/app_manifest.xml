@@ -8,15 +8,15 @@
   IgnorableNamespaces="uap3">
   
   <Identity 
-    Name="Github.MeidoPromotionAssociation.KCES_MOD_EDITOR.kcesmodeditor"
+    Name="Github.MeidoPromotionAssociation.kcesmodeditor"
     Publisher="CN=MEIDO Promotion Association"
-    Version="0.1.0.0" 
+    Version="0.0.0"
     ProcessorArchitecture="x64" />
   
   <Properties>
-    <DisplayName>My Product</DisplayName>
+    <DisplayName>KCES MOD EDITOR</DisplayName>
     <PublisherDisplayName>MEIDO Promotion Association</PublisherDisplayName>
-    <Description>A KCES_MOD_EDITOR application</Description>
+    <Description>All-in-one mod editor for KCES</Description>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   
@@ -31,8 +31,8 @@
   <Applications>
     <Application Id="Github.MeidoPromotionAssociation.KCES_MOD_EDITOR.kcesmodeditor" Executable="kces_mod_editor.exe" EntryPoint="Windows.FullTrustApplication">
       <uap:VisualElements
-        DisplayName="My Product"
-        Description="A KCES_MOD_EDITOR application"
+        DisplayName="KCES MOD EDITOR"
+        Description="All-in-one mod editor for KCES"
         BackgroundColor="transparent"
         Square150x150Logo="Assets\Square150x150Logo.png"
         Square44x44Logo="Assets\Square44x44Logo.png">

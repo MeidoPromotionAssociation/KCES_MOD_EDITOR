@@ -39,6 +39,13 @@ tasks:
           DEV:
             ref: .DEV
       - task: generate:dotdesktop
+      # linux/desktop 与 nfpm/nfpm.yaml 由它从 build/config.yml 生成，
+      # 上游不把它挂在构建上，导致删掉就构建失败、改了 config.yml 也不生效
+      - task: common:update:build-assets
+      # Linux 构建本身不消费图标产物（AppImage 直接用 build/appicon.png），
+      # 挂在这里是为了让两个平台的依赖图一致：换了 appicon.png 之后跑任一平台的
+      # build 都能重出 icon.ico / icon.icns，二者都已不进版本库
+      - task: common:generate:icons
     preconditions:
       - sh: 'command -v gcc >/dev/null 2>&1 || command -v clang >/dev/null 2>&1'
         msg: "A C compiler (GCC or Clang) is required for Linux builds."

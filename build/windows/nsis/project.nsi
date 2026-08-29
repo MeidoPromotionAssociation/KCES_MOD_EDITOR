@@ -19,11 +19,11 @@ Unicode true
 ####
 ## The following information is taken from the wails_tools.nsh file, but they can be overwritten here.
 ####
-## !define INFO_PROJECTNAME    "my-project" # Default "KCES_MOD_EDITOR"
-## !define INFO_COMPANYNAME    "My Company" # Default "MEIDO Promotion Association"
-## !define INFO_PRODUCTNAME    "My Product Name" # Default "My Product"
-## !define INFO_PRODUCTVERSION "1.0.0"     # Default "0.1.0"
-## !define INFO_COPYRIGHT      "(c) Now, My Company" # Default "© 2026, MEIDO Promotion Association"
+## !define INFO_PROJECTNAME    "KCES_MOD_EDITOR" # Default "KCES_MOD_EDITOR"
+## !define INFO_COMPANYNAME    "MEIDO Promotion Association" # Default "MEIDO Promotion Association"
+## !define INFO_PRODUCTNAME    "KCES MOD EDITOR" # Default "My Product"
+## !define INFO_PRODUCTVERSION "0.0.0"     # Default "0.1.0"
+## !define INFO_COPYRIGHT      "(c) 2026, MeidoPromotionAssociation under BSD 3-Clause License" # Default "© 2026, MEIDO Promotion Association"
 ###
 ## !define PRODUCT_EXECUTABLE  "Application.exe"      # Default "${INFO_PROJECTNAME}.exe"
 ## !define UNINST_KEY_NAME     "UninstKeyInRegistry"  # Default "${INFO_COMPANYNAME}${INFO_PRODUCTNAME}"

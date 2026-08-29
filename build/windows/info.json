@@ -1,15 +1,15 @@
 {
 	"fixed": {
-		"file_version": "0.1.0"
+		"file_version": "0.0.0"
 	},
 	"info": {
 		"0000": {
-			"ProductVersion": "0.1.0",
+			"ProductVersion": "0.0.0",
 			"CompanyName": "MEIDO Promotion Association",
-			"FileDescription": "A KCES_MOD_EDITOR application",
-			"LegalCopyright": "© 2026, MEIDO Promotion Association",
-			"ProductName": "My Product",
-			"Comments": "This is a comment"
+			"FileDescription": "All In One Modding tool for KCES",
+			"LegalCopyright": "(c) 2026, MeidoPromotionAssociation under BSD 3-Clause License",
+			"ProductName": "KCES MOD EDITOR",
+			"Comments": "OHHH YEEEEEEEE"
 		}
 	}
 }

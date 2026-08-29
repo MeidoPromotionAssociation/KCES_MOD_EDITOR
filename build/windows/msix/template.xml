@@ -10,15 +10,15 @@
     <Installer
         Path="kces_mod_editor.exe"
         Arguments=""
-        InstallLocation="C:\Program Files\MEIDO Promotion Association\My Product">
+        InstallLocation="C:\Program Files\MEIDO Promotion Association\KCES MOD EDITOR">
     </Installer>
     <PackageInformation
-        PackageName="My Product"
-        PackageDisplayName="My Product"
+        PackageName="KCES MOD EDITOR"
+        PackageDisplayName="KCES MOD EDITOR"
         PublisherName="CN=MEIDO Promotion Association"
         PublisherDisplayName="MEIDO Promotion Association"
-        Version="0.1.0.0"
-        PackageDescription="A KCES_MOD_EDITOR application">
+        Version="0.0.0"
+        PackageDescription="All-in-one mod editor for KCES">
         <Capabilities>
             <Capability Name="runFullTrust" />
             
@@ -26,8 +26,8 @@
         <Applications>
             <Application
                 Id="Github.MeidoPromotionAssociation.KCES_MOD_EDITOR.kcesmodeditor"
-                Description="A KCES_MOD_EDITOR application"
-                DisplayName="My Product"
+                Description="All-in-one mod editor for KCES"
+                DisplayName="KCES MOD EDITOR"
                 ExecutableName="kces_mod_editor.exe"
                 EntryPoint="Windows.FullTrustApplication">
                 
@@ -41,10 +41,10 @@
         </Dependencies>
         <Properties>
             <Framework>false</Framework>
-            <DisplayName>My Product</DisplayName>
+            <DisplayName>KCES MOD EDITOR</DisplayName>
             <PublisherDisplayName>MEIDO Promotion Association</PublisherDisplayName>
-            <Description>A KCES_MOD_EDITOR application</Description>
-            <Logo>Assets\AppIcon.png</Logo>
+            <Description>All-in-one mod editor for KCES</Description>
+            <Logo>Assets\appicon.png</Logo>
         </Properties>
     </PackageInformation>
     <SaveLocation PackagePath="kces_mod_editor.msix" />

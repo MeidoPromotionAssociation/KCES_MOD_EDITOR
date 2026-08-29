@@ -5,19 +5,19 @@
 !include "FileFunc.nsh"
 
 !ifndef INFO_PROJECTNAME
-    !define INFO_PROJECTNAME "KCES_MOD_EDITOR"
+    !define INFO_PROJECTNAME "kces-mod-editor"
 !endif
 !ifndef INFO_COMPANYNAME
     !define INFO_COMPANYNAME "MEIDO Promotion Association"
 !endif
 !ifndef INFO_PRODUCTNAME
-    !define INFO_PRODUCTNAME "My Product"
+    !define INFO_PRODUCTNAME "KCES MOD EDITOR"
 !endif
 !ifndef INFO_PRODUCTVERSION
-    !define INFO_PRODUCTVERSION "0.1.0"
+    !define INFO_PRODUCTVERSION "0.0.0"
 !endif
 !ifndef INFO_COPYRIGHT
-    !define INFO_COPYRIGHT "© 2026, MEIDO Promotion Association"
+    !define INFO_COPYRIGHT "(c) 2026, MeidoPromotionAssociation under BSD 3-Clause License"
 !endif
 !ifndef PRODUCT_EXECUTABLE
     !define PRODUCT_EXECUTABLE "${INFO_PROJECTNAME}.exe"
@@ -229,10 +229,28 @@ RequestExecutionLevel "${REQUEST_EXECUTION_LEVEL}"
 !macro wails.associateFiles
     ; Create file associations
     
+    !insertmacro APP_ASSOCIATE "menuassets" "Menu Assets" "KCES Menu Bundle File" "$INSTDIR\menuassets.ico" "Open with ${INFO_PRODUCTNAME}" "$INSTDIR\${PRODUCT_EXECUTABLE} $\"%1$\""
+    File "..\menuassets.ico"
+    
+    !insertmacro APP_ASSOCIATE "mateassets" "Mate Assets" "KCES Mate Bundle File" "$INSTDIR\mateassets.ico" "Open with ${INFO_PRODUCTNAME}" "$INSTDIR\${PRODUCT_EXECUTABLE} $\"%1$\""
+    File "..\mateassets.ico"
+    
+    !insertmacro APP_ASSOCIATE "pmatassets" "PMat Assets" "KCES PMat Bundle File" "$INSTDIR\pmatassets.ico" "Open with ${INFO_PRODUCTNAME}" "$INSTDIR\${PRODUCT_EXECUTABLE} $\"%1$\""
+    File "..\pmatassets.ico"
+    
 !macroend
 
 !macro wails.unassociateFiles
     ; Delete app associations
+    
+    !insertmacro APP_UNASSOCIATE "menuassets" "Menu Assets"
+    Delete "$INSTDIR\menuassets.ico"
+    
+    !insertmacro APP_UNASSOCIATE "mateassets" "Mate Assets"
+    Delete "$INSTDIR\mateassets.ico"
+    
+    !insertmacro APP_UNASSOCIATE "pmatassets" "PMat Assets"
+    Delete "$INSTDIR\pmatassets.ico"
     
 !macroend
 

@@ -36,6 +36,10 @@ tasks:
           DEV:
             ref: .DEV
       - task: common:generate:icons
+      # info.json / wails.exe.manifest / nsis 的 wails_tools.nsh 都由它从 build/config.yml 生成，
+      # 上游不把它挂在构建上，导致删掉就构建失败、改了 config.yml 也不生效。
+      # 放 deps 而不是 cmds：generate:syso 要读 windows/info.json，deps 保证先于 cmds 跑完
+      - task: common:update:build-assets
     preconditions:
       - sh: '{{if eq .OBFUSCATED "true"}}command -v garble >/dev/null 2>&1{{else}}true{{end}}'
         msg: "garble is required for obfuscated builds. Install it with: go install mvdan.cc/garble@v0.16.0 (requires Go 1.24+). See https://github.com/burrowers/garble/releases for version/toolchain compatibility."
@@ -71,11 +75,41 @@ tasks:
     vars:
       ARCH: '{{ARCH}}'
 
+  generate:fileassociation:icons:
+    summary: Generates the per-association `.ico` files consumed by the NSIS installer
+    # config.yml 里每声明一个 fileAssociation，NSIS 的 wails.associateFiles 宏就会
+    # File "..\<iconName>.ico"，也就是 build/windows/<iconName>.ico。
+    # wails3 只负责应用主图标，关联图标要自己出；约定 build/<iconName>.png 为源，
+    # 文件名即 config.yml 里的 iconName。-macfilename "" 跳过 .icns
+    # （GenerateIcons 对空串直接跳过 mac 分支，见 internal/commands/icons.go）
+    #
+    # 用 status 而不是 sources/generates：generates 只能写成 windows/*.ico，
+    # 会被 common:generate:icons 产出的 icon.ico 匹配上，全新检出时误判为已是最新
+    run: once
+    dir: build
+    status:
+      - |
+        for f in *.png; do
+          if [ "$f" != "appicon.png" ]; then
+            ico="windows/${f%.png}.ico"
+            { [ -f "$ico" ] && [ "$ico" -nt "$f" ]; } || exit 1
+          fi
+        done
+    cmds:
+      - |
+        for f in *.png; do
+          if [ "$f" != "appicon.png" ]; then
+            wails3 generate icons -input "$f" -windowsfilename "windows/${f%.png}.ico" -macfilename ""
+          fi
+        done
+
   create:nsis:installer:
     summary: Creates an NSIS installer
     dir: build/windows/nsis
     deps:
       - task: build
+      # wails.associateFiles 宏引用的 build/windows/<iconName>.ico，缺一个 makensis 就整个失败
+      - task: generate:fileassociation:icons
     preconditions:
       - sh: '[ "{{.INSTALL_SCOPE}}" = "user" ] || [ "{{.INSTALL_SCOPE}}" = "machine" ]'
         msg: "INSTALL_SCOPE must be 'user' or 'machine', got '{{.INSTALL_SCOPE}}'"

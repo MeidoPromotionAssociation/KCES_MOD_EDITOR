@@ -6,12 +6,12 @@ version: '3'
 # This information is used to generate the build assets.
 info:
   companyName: "MEIDO Promotion Association" # The name of the company
-  productName: "KCES_MOD_EDITOR" # The name of the application
+  productName: "KCES MOD EDITOR" # The name of the application
   productIdentifier: "Github.MeidoPromotionAssociation.KCES_MOD_EDITOR" # The unique product identifier
   description: "All In One Modding tool for KCES" # The application description
   copyright: "(c) 2026, MeidoPromotionAssociation under BSD 3-Clause License" # Copyright text
   comments: "OHHH YEEEEEEEE" # Comments
-  version: "0.0.1" # The application version
+  version: "0.0.0" # The application version
 # Dev mode configuration
 dev_mode:
   root_path: .
@@ -43,17 +43,21 @@ dev_mode:
 # File Associations
 # More information at: https://v3.wails.io/noit/done/yet
 fileAssociations:
-#  - ext: wails
-#    name: Wails
-#    description: Wails Application File
-#    iconName: wailsFileIcon
-#    role: Editor
-#  - ext: jpg
-#    name: JPEG
-#    description: Image File
-#    iconName: jpegFileIcon
-#    role: Editor
-#    mimeType: image/jpeg  # (optional)
+  - ext: menuassets
+    name: Menu Assets
+    description: KCES Menu Bundle File
+    iconName: menuassets
+    role: Editor
+  - ext: mateassets
+    name: Mate Assets
+    description: KCES Mate Bundle File
+    iconName: mateassets
+    role: Editor
+  - ext: pmatassets
+    name: PMat Assets
+    description: KCES PMat Bundle File
+    iconName: pmatassets
+    role: Editor
 
 # Other data
 other:

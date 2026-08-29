@@ -1,13 +1,13 @@
 [Desktop Entry]
 Version=1.0
-Name=My Product
-Comment=A KCES_MOD_EDITOR application
+Name=KCES MOD EDITOR
+Comment=All In One Modding tool for KCES
 # The Exec line includes %u to pass the URL to the application
-Exec=/usr/local/bin/kces_mod_editor.exe %u
+Exec=/usr/local/bin/kces-mod-editor %u
 Terminal=false
 Type=Application
-Icon=kces_mod_editor.exe
+Icon=kces-mod-editor
 Categories=Utility;
-StartupWMClass=kces_mod_editor.exe
+StartupWMClass=kces-mod-editor
 
  

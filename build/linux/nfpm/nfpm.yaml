@@ -3,26 +3,26 @@
 #
 # The lines below are called `modelines`. See `:help modeline`
 
-name: "kces_mod_editor.exe"
+name: "kces-mod-editor"
 arch: ${GOARCH}
 platform: "linux"
-version: "0.1.0"
+version: "0.0.0"
 section: "default"
 priority: "extra"
 maintainer: ${GIT_COMMITTER_NAME} <${GIT_COMMITTER_EMAIL}>
-description: "A KCES_MOD_EDITOR application"
+description: "All In One Modding tool for KCES"
 vendor: "MEIDO Promotion Association"
 homepage: "https://wails.io"
 license: "MIT"
 release: "1"
 
 contents:
-  - src: "./bin/kces_mod_editor.exe"
-    dst: "/usr/local/bin/kces_mod_editor.exe"
+  - src: "./bin/kces-mod-editor"
+    dst: "/usr/local/bin/kces-mod-editor"
   - src: "./build/appicon.png"
-    dst: "/usr/share/icons/hicolor/128x128/apps/kces_mod_editor.exe.png"
-  - src: "./build/linux/kces_mod_editor.exe.desktop"
-    dst: "/usr/share/applications/kces_mod_editor.exe.desktop"
+    dst: "/usr/share/icons/hicolor/128x128/apps/kces-mod-editor.png"
+  - src: "./build/linux/kces-mod-editor.desktop"
+    dst: "/usr/share/applications/kces-mod-editor.desktop"
 
 # Default dependencies for the GTK4 + WebKitGTK 6.0 stack (Ubuntu 24.04+ / Debian 13+)
 depends:

@@ -230,6 +230,10 @@ tasks:
 
   update:build-assets:
     summary: Updates the build assets
+    # 各平台 build:native 都把它列为 deps。wails3 update build-assets 是 os.Create
+    # 无条件覆盖，同一次调用里被请求多次会并发写同一批文件，须 run:once 串成一次。
+    # 多次执行内容幂等（plist 走 backup→merge，其余直接重写），挂在构建上不会漂移。
+    run: once
     dir: build
     cmds:
       - wails3 update build-assets -name "{{.APP_NAME}}" -binaryname "{{.APP_NAME}}" -config config.yml -dir .
