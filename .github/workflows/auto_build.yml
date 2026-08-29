@@ -22,7 +22,7 @@ jobs:
           cache: true
 
       - name: Install pnpm
-        run: npm install -g pnpm
+        run: wget -qO- https://get.pnpm.io/install.sh | ENV="$HOME/.shrc" SHELL="$(which sh)" sh -
 
       # Linux 构建为 CGO 构建；wails3 alpha2.119 默认使用 GTK4 + WebKitGTK 6.0（gtk3 为 opt-in build tag）
       - name: Install Linux Dependencies
