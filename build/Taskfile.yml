@@ -235,6 +235,29 @@ tasks:
     # 多次执行内容幂等（plist 走 backup→merge，其余直接重写），挂在构建上不会漂移。
     run: once
     dir: build
+    vars:
+      # 版本号的唯一来源是 internal/app.go 的 CurrentVersion（前端「检查更新」比对的也是它），
+      # 通过 -productversion 覆盖 config.yml，避免两处各写一遍版本号导致对不上。
+      # 只用 shell 内建（case / ${var#pat}）解析，不依赖 sed、grep：
+      # Task 在 Windows 上跑的是 mvdan/sh 解释器，外部 POSIX 工具不保证在 PATH 里
+      APP_VERSION:
+        sh: |
+          version=""
+          while IFS= read -r line; do
+            case "$line" in
+              *CurrentVersion*=*'"'*)
+                version="${line#*\"}"
+                version="${version%%\"*}"
+                break
+                ;;
+            esac
+          done < "{{.ROOT_DIR}}/internal/app.go"
+          version="${version#v}"
+          if [ -z "$version" ]; then
+            echo "cannot read CurrentVersion from internal/app.go" >&2
+            exit 1
+          fi
+          echo "$version"
     cmds:
-      - wails3 update build-assets -name "{{.APP_NAME}}" -binaryname "{{.APP_NAME}}" -config config.yml -dir .
+      - wails3 update build-assets -name "{{.APP_NAME}}" -binaryname "{{.APP_NAME}}" -productversion "{{.APP_VERSION}}" -config config.yml -dir .
 

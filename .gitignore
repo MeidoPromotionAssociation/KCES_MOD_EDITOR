@@ -37,11 +37,37 @@ frontend/dist
 frontend/node_modules
 .pnpm-store/
 .wails-dev.*.log
+# ---- build/ 下的生成产物 ----
+# 以下文件都由 wails3 在每次构建时重新生成（挂在 build/*/Taskfile.yml 的 build:native deps 上），
+# 数据源是 build/config.yml 与 build/appicon.png，手改会被无条件覆盖，因此不进版本库。
+# 未列出的是 wails3 init 的一次性脚手架，永不重新生成，必须提交：
+#   build/config.yml、build/appicon.png、build/*/Taskfile.yml、
+#   build/windows/nsis/project.nsi、build/windows/msix/*.xml、
+#   build/linux/appimage/build.sh、build/linux/nfpm/scripts/*.sh
+
+# wails3 update build-assets
+build/windows/info.json
+build/windows/wails.exe.manifest
+build/windows/nsis/wails_tools.nsh
+build/linux/desktop
+build/linux/nfpm/nfpm.yaml
+# 同上。本项目只做 Windows 与 Linux，但该命令是整平台一起铺开模板的，挡不掉
+build/darwin/Info.plist
+build/darwin/Info.dev.plist
+build/ios/
+
+# wails3 generate icons（源：build/appicon.png 与 build/<iconName>.png）
+build/windows/*.ico
+build/darwin/icon.icns
+
+# wails3 generate .desktop / webview2bootstrapper / appimage
+build/linux/*.desktop
 build/linux/appimage/build
 build/windows/nsis/MicrosoftEdgeWebview2Setup.exe
-build/darwin/icon.icns
 KCES_MOD_EDITOR.exe
 /game
 /testdata
 /COM3D2_MOD_EDITOR
 /MeidoSerialization
+build/windows/nsis/wails_tools.nsh
+build/windows/nsis/wails_tools.nsh

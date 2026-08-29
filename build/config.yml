@@ -11,7 +11,10 @@ info:
   description: "All In One Modding tool for KCES" # The application description
   copyright: "(c) 2026, MeidoPromotionAssociation under BSD 3-Clause License" # Copyright text
   comments: "OHHH YEEEEEEEE" # Comments
-  version: "0.0.0" # The application version
+  # 版本号统一由 internal/app.go 的 CurrentVersion 提供，构建时经 -productversion 传入，
+  # 这里必须留空：wails3 的 UpdateBuildAssets 只在 -productversion 等于其默认值 "0.1.0" 时
+  # 才回落到本字段，一旦 CurrentVersion 恰好是 v0.1.0，非空的本字段就会反过来把它覆盖掉
+  version: "" # The application version
 # Dev mode configuration
 dev_mode:
   root_path: .
