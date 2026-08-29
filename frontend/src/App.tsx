@@ -7,7 +7,7 @@ import HomePage from "./components/HomePage";
 import SettingsPage from "./components/SettingsPage";
 import EditorPageShell from "./components/EditorPageShell";
 import DisclaimerDialog from "./components/DisclaimerDialog";
-import {useDarkMode, useThemeColor} from "./hooks/themeSwitch";
+import {useDarkMode, useThemeColor, DefaultThemeColor} from "./hooks/themeSwitch";
 import useFileHandlers from "./hooks/fileHandler";
 import {DisclaimerAgreedKey} from "./utils/LocalStorageKeys";
 import {KCESFormats} from "./utils/consts";
@@ -79,7 +79,8 @@ const App: React.FC = () => {
         <ConfigProvider
             theme={{
                 algorithm: isDarkMode ? theme.darkAlgorithm : theme.defaultAlgorithm,
-                token: themeColor ? {colorPrimary: themeColor} : undefined,
+                // 未自定义时用 DefaultThemeColor，而不是留空让 antd 回落到它自己的主色
+                token: {colorPrimary: themeColor ?? DefaultThemeColor},
             }}>
             <AntdApp component={false}>
                 <MessageBinder/>

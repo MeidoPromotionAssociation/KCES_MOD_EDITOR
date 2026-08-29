@@ -164,11 +164,11 @@ const SettingsPage: React.FC = () => {
                                                         disabledAlpha
                                                         presets={[{
                                                             label: t('SettingsPage.theme_color_presets'),
-                                                            colors: [
+                                                            colors: [...new Set([
                                                                 DefaultThemeColor, '#f5222d', '#fa541c', '#fa8c16',
                                                                 '#faad14', '#a0d911', '#52c41a', '#13c2c2',
                                                                 '#2f54eb', '#722ed1', '#eb2f96', '#8c8c8c', '#389E0D',
-                                                            ],
+                                                            ])],
                                                         }]}
                                                         onChangeComplete={(color) => setThemeColor(color.toHexString())}
                                                     />
