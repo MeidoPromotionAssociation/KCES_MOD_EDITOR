@@ -15,27 +15,32 @@ const MaidColliderEditor = forwardRef<FormatEditorRef, Omit<BaseFormatEditorProp
         const renderStyle1 = (data: any, setData: (value: any) => void) => {
             const colliders: any[] = Array.isArray(data?.colliders) ? data.colliders : [];
 
-            const update = (index: number, next: any) => {
+            // update 按行号把补丁合并进原始碰撞体，不经过表格行对象，
+            // 行对象只承载 rowKey，不会被写回文件
+            const update = (index: number, patch: any) => {
                 const list = [...colliders];
-                list[index] = next;
+                list[index] = {...list[index], ...patch};
                 setData({...data, colliders: list});
             };
 
-            const numberCell = (record: any, index: number, field: string, width = 90, precision?: number) => (
-                <InputNumber
-                    size="small" style={{width}} step={0.01} precision={precision}
-                    value={field.includes(".") ? record?.center?.[field.split(".")[1]] : record?.[field]}
-                    onChange={(v) => {
-                        const value = (v ?? 0) as number;
-                        if (field.includes(".")) {
-                            const axis = field.split(".")[1];
-                            update(index, {...record, center: {...record.center, [axis]: value}});
-                        } else {
-                            update(index, {...record, [field]: value});
-                        }
-                    }}
-                />
-            );
+            const numberCell = (index: number, field: string, width = 90, precision?: number) => {
+                const record = colliders[index];
+                return (
+                    <InputNumber
+                        size="small" style={{width}} step={0.01} precision={precision}
+                        value={field.includes(".") ? record?.center?.[field.split(".")[1]] : record?.[field]}
+                        onChange={(v) => {
+                            const value = (v ?? 0) as number;
+                            if (field.includes(".")) {
+                                const axis = field.split(".")[1];
+                                update(index, {center: {...record?.center, [axis]: value}});
+                            } else {
+                                update(index, {[field]: value});
+                            }
+                        }}
+                    />
+                );
+            };
 
             return (
                 <div style={{textAlign: "left"}}>
@@ -46,47 +51,48 @@ const MaidColliderEditor = forwardRef<FormatEditorRef, Omit<BaseFormatEditorProp
                     </Space>
                     <Table
                         size="small"
-                        rowKey={(_, index) => String(index)}
+                        // antd v6 起 rowKey 不再接受 index 参数，改由 dataSource 携带行号
+                        rowKey="__rowKey"
                         pagination={false}
                         scroll={{y: "calc(100vh - 320px)"}}
-                        dataSource={colliders}
+                        dataSource={colliders.map((_, index) => ({__rowKey: index}))}
                         columns={[
                             {
                                 title: "bonePath",
-                                render: (_: any, record: any, index: number) => (
-                                    <Input size="small" value={record?.bonePath}
-                                           onChange={(e) => update(index, {...record, bonePath: e.target.value})}/>
+                                render: (_: any, __: any, index: number) => (
+                                    <Input size="small" value={colliders[index]?.bonePath}
+                                           onChange={(e) => update(index, {bonePath: e.target.value})}/>
                                 ),
                             },
                             {
                                 title: "direction",
                                 width: 100,
-                                render: (_: any, record: any, index: number) => numberCell(record, index, "direction", 80, 0),
+                                render: (_: any, __: any, index: number) => numberCell(index, "direction", 80, 0),
                             },
                             {
                                 title: "height",
                                 width: 110,
-                                render: (_: any, record: any, index: number) => numberCell(record, index, "height"),
+                                render: (_: any, __: any, index: number) => numberCell(index, "height"),
                             },
                             {
                                 title: "radius",
                                 width: 110,
-                                render: (_: any, record: any, index: number) => numberCell(record, index, "radius"),
+                                render: (_: any, __: any, index: number) => numberCell(index, "radius"),
                             },
                             {
                                 title: "center X",
                                 width: 110,
-                                render: (_: any, record: any, index: number) => numberCell(record, index, "center.x"),
+                                render: (_: any, __: any, index: number) => numberCell(index, "center.x"),
                             },
                             {
                                 title: "center Y",
                                 width: 110,
-                                render: (_: any, record: any, index: number) => numberCell(record, index, "center.y"),
+                                render: (_: any, __: any, index: number) => numberCell(index, "center.y"),
                             },
                             {
                                 title: "center Z",
                                 width: 110,
-                                render: (_: any, record: any, index: number) => numberCell(record, index, "center.z"),
+                                render: (_: any, __: any, index: number) => numberCell(index, "center.z"),
                             },
                             {
                                 title: t('Common.operate'),

@@ -158,9 +158,11 @@ const HitCheckEditor = forwardRef<FormatEditorRef, Omit<BaseFormatEditorProps, "
                     </Space>
                     <Table
                         size="small"
-                        rowKey={(_, index) => String(index)}
+                        // antd v6 起 rowKey 不再接受 index 参数，改由 dataSource 携带行号；
+                        // 各列都按 index 读写 entries，行对象只需要提供这个键
+                        rowKey="__rowKey"
                         columns={columns as any}
-                        dataSource={entries}
+                        dataSource={entries.map((_, index) => ({__rowKey: index}))}
                         pagination={false}
                         scroll={{y: "calc(100vh - 320px)"}}
                     />

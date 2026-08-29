@@ -249,6 +249,13 @@ export const ColliderPackageForm: React.FC<{
 
     const limbStates: any[] = value?.limbEnableList ?? [];
 
+    // updateLimbState 按行号把补丁合并进原始条目，不经过表格行对象
+    const updateLimbState = (index: number, patch: any) => {
+        const next = [...limbStates];
+        next[index] = {...next[index], ...patch};
+        set("limbEnableList", next);
+    };
+
     return (
         <div style={{textAlign: "left"}}>
             <Row label="version">
@@ -266,44 +273,34 @@ export const ColliderPackageForm: React.FC<{
                     </Typography.Title>
                     <Table
                         size="small"
-                        rowKey={(_, index) => String(index)}
+                        // antd v6 起 rowKey 不再接受 index 参数，改由 dataSource 携带行号；
+                        // 各列都按 index 读写 limbStates，行对象只承载这个键，不会被写回文件
+                        rowKey="__rowKey"
                         pagination={false}
-                        dataSource={limbStates}
+                        dataSource={limbStates.map((_, index) => ({__rowKey: index}))}
                         columns={[
                             {
                                 title: "limbType",
                                 width: 120,
-                                render: (_: any, record: any, index: number) => (
-                                    <InputNumber size="small" precision={0} value={record?.limbType}
-                                                 onChange={(v) => {
-                                                     const next = [...limbStates];
-                                                     next[index] = {...record, limbType: (v ?? 0) as number};
-                                                     set("limbEnableList", next);
-                                                 }}/>
+                                render: (_: any, __: any, index: number) => (
+                                    <InputNumber size="small" precision={0} value={limbStates[index]?.limbType}
+                                                 onChange={(v) => updateLimbState(index, {limbType: (v ?? 0) as number})}/>
                                 ),
                             },
                             {
                                 title: "isEnable",
                                 width: 100,
-                                render: (_: any, record: any, index: number) => (
-                                    <Switch size="small" checked={!!record?.isEnable}
-                                            onChange={(checked) => {
-                                                const next = [...limbStates];
-                                                next[index] = {...record, isEnable: checked};
-                                                set("limbEnableList", next);
-                                            }}/>
+                                render: (_: any, __: any, index: number) => (
+                                    <Switch size="small" checked={!!limbStates[index]?.isEnable}
+                                            onChange={(checked) => updateLimbState(index, {isEnable: checked})}/>
                                 ),
                             },
                             {
                                 title: "version",
                                 width: 110,
-                                render: (_: any, record: any, index: number) => (
-                                    <InputNumber size="small" precision={0} value={record?.version}
-                                                 onChange={(v) => {
-                                                     const next = [...limbStates];
-                                                     next[index] = {...record, version: (v ?? 0) as number};
-                                                     set("limbEnableList", next);
-                                                 }}/>
+                                render: (_: any, __: any, index: number) => (
+                                    <InputNumber size="small" precision={0} value={limbStates[index]?.version}
+                                                 onChange={(v) => updateLimbState(index, {version: (v ?? 0) as number})}/>
                                 ),
                             },
                             {
