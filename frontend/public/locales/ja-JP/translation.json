@@ -32,7 +32,7 @@
     "file_too_large_convert_to_json_directly": "「直接変換」を選ぶと、エディターに読み込まずにネイティブ形式と JSON 形式を相互変換できます。",
     "check_update_success_new_version_available": "更新の確認に成功しました。新しいバージョンがあります",
     "check_update_success_no_new_version": "更新の確認に成功しました。最新バージョンです",
-    "payload_no_active_branch": "このペイロードにはアクティブな構造化ブランチがありません。JSON モードで編集してください",
+    "payload_no_structured_root": "このペイロードのルートは編集可能なオブジェクトではありません（JSON の null ルートは MessagePack のルート値が nil であることを表します）。JSON モードで編集してください",
     "format_no_new_document": "この形式は新規作成できません（.preset はキャラクターデータ全体を含むコンテナです。ゲームからエクスポートして開いてください）"
   },
   "Errors": {

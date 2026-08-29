@@ -32,7 +32,7 @@
     "file_too_large_convert_to_json_directly": "직접 변환을 선택하면 편집기에 불러오지 않고 네이티브 형식과 JSON 형식을 상호 변환할 수 있습니다.",
     "check_update_success_new_version_available": "업데이트 확인 성공, 새 버전이 있습니다",
     "check_update_success_no_new_version": "업데이트 확인 성공, 최신 버전입니다",
-    "payload_no_active_branch": "이 페이로드에는 활성화된 구조화 브랜치가 없습니다. JSON 모드에서 편집해 주세요",
+    "payload_no_structured_root": "이 페이로드의 루트는 편집 가능한 오브젝트가 아닙니다(JSON null 루트는 MessagePack 루트 값이 nil임을 뜻합니다). JSON 모드에서 편집해 주세요",
     "format_no_new_document": "이 형식은 새로 만들 수 없습니다(.preset은 전체 캐릭터 데이터를 담는 컨테이너입니다. 게임에서 내보낸 뒤 여기서 여세요)"
   },
   "Errors": {

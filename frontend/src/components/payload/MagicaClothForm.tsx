@@ -218,7 +218,7 @@ const MagicaClothForm: React.FC<{
     const {t} = useTranslation();
 
     if (typeof params !== "object" || params === null || Array.isArray(params)) {
-        return <Typography.Text type="secondary">{t('Infos.payload_no_active_branch')}</Typography.Text>;
+        return <Typography.Text type="secondary">{t('Infos.payload_no_structured_root')}</Typography.Text>;
     }
 
     // 新建的空载荷没有字段可显示：提示从现有文件复制数据（JSON 模式粘贴）

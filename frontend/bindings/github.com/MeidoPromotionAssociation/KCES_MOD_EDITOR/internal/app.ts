@@ -12,7 +12,7 @@ import { Call as $Call, CancellablePromise as $CancellablePromise, Create as $Cr
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: Unused imports
-import * as COM3D2$0 from "../../MeidoSerialization/service/COM3D2/models.js";
+import * as COM3D2$0 from "../../MeidoSerialization/v2/service/COM3D2/models.js";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: Unused imports
 import * as application$0 from "../../../wailsapp/wails/v3/pkg/application/models.js";

@@ -1,7 +1,4 @@
 import {
-    NeiService,
-} from "../../bindings/github.com/MeidoPromotionAssociation/MeidoSerialization/service/KCES";
-import {
     DB2ConfService,
     DBColService,
     DBConfService,
@@ -18,6 +15,7 @@ import {
     MaterialAssetsService,
     MenuAssetsService,
     ModelService,
+    NeiService,
     NSONService,
     PersetService,
     PresetService,
@@ -26,7 +24,7 @@ import {
     SavedAttachService,
     UndressDataService,
     UndressPartsDataService,
-} from "../../bindings/github.com/MeidoPromotionAssociation/MeidoSerialization/service/KCES";
+} from "../../bindings/github.com/MeidoPromotionAssociation/MeidoSerialization/v2/service/KCES";
 import {
     ConvertStructuredJsonToNative,
     ReadStructuredFile,

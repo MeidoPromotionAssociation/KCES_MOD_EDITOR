@@ -32,7 +32,7 @@
     "file_too_large_convert_to_json_directly": "您可以选择直接转换，在原生格式与 JSON 格式之间直接互转而不加载到编辑器。",
     "check_update_success_new_version_available": "检查更新成功，有新版本可用",
     "check_update_success_no_new_version": "检查更新成功，当前已是最新版本",
-    "payload_no_active_branch": "此载荷没有激活的结构化分支，请使用 JSON 模式编辑",
+    "payload_no_structured_root": "该载荷的根不是可编辑的对象（JSON null 根表示 MessagePack 根值为 nil），请使用 JSON 模式编辑",
     "format_no_new_document": "此格式不支持新建（.preset 是包含完整角色数据的容器，请从游戏导出后打开编辑）"
   },
   "Errors": {

@@ -8,10 +8,10 @@ import (
 	"path/filepath"
 	"strings"
 
-	serializationCOM3D2 "github.com/MeidoPromotionAssociation/MeidoSerialization/serialization/COM3D2"
-	serializationKCES "github.com/MeidoPromotionAssociation/MeidoSerialization/serialization/KCES"
-	KCESService "github.com/MeidoPromotionAssociation/MeidoSerialization/service/KCES"
-	"github.com/MeidoPromotionAssociation/MeidoSerialization/tools"
+	serializationCOM3D2 "github.com/MeidoPromotionAssociation/MeidoSerialization/v2/serialization/COM3D2"
+	serializationKCES "github.com/MeidoPromotionAssociation/MeidoSerialization/v2/serialization/KCES"
+	KCESService "github.com/MeidoPromotionAssociation/MeidoSerialization/v2/service/KCES"
+	"github.com/MeidoPromotionAssociation/MeidoSerialization/v2/tools"
 )
 
 // structuredFormat 一个格式的结构化读写桥接：
@@ -201,9 +201,13 @@ func NewStructuredFormats() map[string]structuredFormat {
 			write: decodeInto(maidCollider.WriteMaidColliderFile),
 		},
 		// 数据 / Data
+		// 库 v2 移除了 KCESJSONText 封套：.nson 的编辑 JSON 根就是资源文档本身（自由 JSON），
+		// .undressdat/.undresspdat 已建模为结构体，改由 decodeInto 严格解码
 		"nson": {
-			read:  func(p string) (any, error) { return nson.ReadNSONFile(p) },
-			write: decodeInto(nson.WriteNSONFile),
+			read: func(p string) (any, error) { return nson.ReadNSONFile(p) },
+			write: func(p string, jsonText []byte, _ bool) error {
+				return nson.WriteNSONFile(p, json.RawMessage(jsonText))
+			},
 		},
 		"undressdat": {
 			read:  func(p string) (any, error) { return undress.ReadUndressDataFile(p) },

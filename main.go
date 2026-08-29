@@ -5,7 +5,7 @@ import (
 	"log"
 
 	"github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR/internal"
-	KCESService "github.com/MeidoPromotionAssociation/MeidoSerialization/service/KCES"
+	KCESService "github.com/MeidoPromotionAssociation/MeidoSerialization/v2/service/KCES"
 	"github.com/wailsapp/wails/v3/pkg/application"
 	"github.com/wailsapp/wails/v3/pkg/events"
 )

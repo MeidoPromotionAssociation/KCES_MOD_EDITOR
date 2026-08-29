@@ -8,7 +8,7 @@ import {
     DetermineFileType, GetFileSize,
     SelectFile
 } from "../../bindings/github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR/internal/app.ts";
-import {FileInfo} from "../../bindings/github.com/MeidoPromotionAssociation/MeidoSerialization/service/COM3D2";
+import {FileInfo} from "../../bindings/github.com/MeidoPromotionAssociation/MeidoSerialization/v2/service/COM3D2";
 
 /**
  * useFileHandlers 文件选择、打开分发与保存的统一入口

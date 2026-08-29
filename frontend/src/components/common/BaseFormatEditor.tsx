@@ -3,7 +3,7 @@ import {Button, Collapse, ConfigProvider, Descriptions, Empty, Modal, Radio} fro
 import {appMessage as message} from "../../utils/feedback";
 import {useTranslation} from "react-i18next";
 import {Window} from "@wailsio/runtime";
-import {FileInfo} from "../../../bindings/github.com/MeidoPromotionAssociation/MeidoSerialization/service/COM3D2/models";
+import {FileInfo} from "../../../bindings/github.com/MeidoPromotionAssociation/MeidoSerialization/v2/service/COM3D2/models";
 import {KCESFormatDef, selectPattern, AppTitle, AppTitleNoAuthor, isAltSuffixPath} from "../../utils/consts";
 import {formatServices, MaxConvertBytes} from "../../utils/formatServices";
 import {editorViewModeKey} from "../../utils/LocalStorageKeys";

@@ -5,7 +5,7 @@ import {ThemeColorKey, ThemeModeKey} from "../utils/LocalStorageKeys";
 export type ThemeMode = "system" | "light" | "dark";
 
 /** antd 默认主色（用户未自定义时展示） */
-export const DefaultThemeColor = "#1677ff";
+export const DefaultThemeColor = "#389E0D";
 
 // 模块级主题状态存储，广播给所有使用主题的组件（antd ConfigProvider 与各 Monaco 编辑器）
 let currentMode: ThemeMode = readStoredMode();

@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	editingv1 "github.com/MeidoPromotionAssociation/MeidoSerialization/schemas/editing/v1"
-	knowledgev1 "github.com/MeidoPromotionAssociation/MeidoSerialization/schemas/knowledge/v1"
+	editingv1 "github.com/MeidoPromotionAssociation/MeidoSerialization/v2/schemas/editing/v1"
+	knowledgev1 "github.com/MeidoPromotionAssociation/MeidoSerialization/v2/schemas/knowledge/v1"
 )
 
 // TestGetEditingSchemas 验证全部格式的编辑 schema 可加载且为合法 JSON
@@ -94,9 +94,9 @@ func TestSchemaDocsLocalized(t *testing.T) {
 	}
 
 	// 仅 serialization 认证的字段只列一项
-	zhJSON := descriptionOf("zh-CN", "dbconf", "#/properties/json")
-	if !strings.Contains(zhJSON, "已认证：序列化（AI 审核）") {
-		t.Errorf("zh-CN dbconf json verification line missing:\n%s", zhJSON)
+	zhVersion := descriptionOf("zh-CN", "dbcol", "#/properties/version")
+	if !strings.Contains(zhVersion, "已认证：序列化（AI 审核）") {
+		t.Errorf("zh-CN dbcol version verification line missing:\n%s", zhVersion)
 	}
 
 	// field_patterns 展开：子列表/嵌套字段经通配路径获得说明

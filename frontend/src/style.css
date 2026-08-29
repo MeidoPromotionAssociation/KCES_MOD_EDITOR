@@ -12,15 +12,6 @@ body {
     sans-serif;
 }
 
-@font-face {
-    font-family: "Nunito";
-    font-style: normal;
-    font-weight: 400 800;
-    font-display: swap;
-    src: local(""),
-    url("/Nunito-Regular.woff2") format("woff2");
-}
-
 #root {
     height: 100vh;
     text-align: center;
@@ -28,7 +19,7 @@ body {
 
 /* 拖入文件时 Wails 运行时会给命中的拖放目标加上 file-drop-target-active 类 */
 html.file-drop-target-active {
-    box-shadow: inset 0 0 0 3px #1677ff;
+    box-shadow: inset 0 0 0 3px #389E0D;
 }
 
 .space-addon-disabled {

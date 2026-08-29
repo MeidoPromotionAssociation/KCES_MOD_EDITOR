@@ -12,8 +12,8 @@ import (
 	"strings"
 	"time"
 
-	COM3D2Service "github.com/MeidoPromotionAssociation/MeidoSerialization/service/COM3D2"
-	KCESService "github.com/MeidoPromotionAssociation/MeidoSerialization/service/KCES"
+	COM3D2Service "github.com/MeidoPromotionAssociation/MeidoSerialization/v2/service/COM3D2"
+	KCESService "github.com/MeidoPromotionAssociation/MeidoSerialization/v2/service/KCES"
 	"github.com/wailsapp/wails/v3/pkg/application"
 )
 

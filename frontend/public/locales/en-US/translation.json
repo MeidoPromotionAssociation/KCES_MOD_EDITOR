@@ -32,7 +32,7 @@
     "file_too_large_convert_to_json_directly": "You can choose Convert Directly to convert between the native format and JSON without loading it into the editor.",
     "check_update_success_new_version_available": "Update check succeeded, a new version is available",
     "check_update_success_no_new_version": "Update check succeeded, you are on the latest version",
-    "payload_no_active_branch": "This payload has no active structured branch; please edit it in JSON mode",
+    "payload_no_structured_root": "This payload root is not an editable object (a JSON null root means a nil MessagePack root); please edit it in JSON mode",
     "format_no_new_document": "This format cannot be created from scratch (.preset is a container with full character data; export from the game and open it here)"
   },
   "Errors": {

@@ -5,7 +5,7 @@ import {Layout} from "antd";
 import {useTranslation} from "react-i18next";
 import NavBar from "./NavBar";
 import useFileHandlers from "../hooks/fileHandler";
-import {FileInfo} from "../../bindings/github.com/MeidoPromotionAssociation/MeidoSerialization/service/COM3D2/models";
+import {FileInfo} from "../../bindings/github.com/MeidoPromotionAssociation/MeidoSerialization/v2/service/COM3D2/models";
 import {KCESFormatDef, selectPattern} from "../utils/consts";
 import {FormatEditorRef} from "./common/BaseFormatEditor";
 import PayloadEditor from "./PayloadEditor";
