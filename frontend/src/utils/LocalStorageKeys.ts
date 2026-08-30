@@ -18,6 +18,8 @@ export const ThemeColorKey = "ThemeColor"; // 存储自定义主题色（hex，�
 
 export const RecalculateLookupHashKey = "RecalculateLookupHash"; // 存储保存时是否重算 ID/GUID 查找字段（默认重算）
 
+export const AssetListWidthKey = "AssetListWidth"; // 存储 xxxassets 编辑器左侧资产列表的宽度（px）
+
 // 每个格式编辑器的视图模式键统一由此函数生成
 export function editorViewModeKey(formatKey: string): string {
     return `${formatKey}EditorViewMode`;

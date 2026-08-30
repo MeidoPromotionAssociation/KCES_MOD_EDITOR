@@ -116,8 +116,8 @@ const PMatTable: React.FC<{ data: any; setData: (value: any) => void }> = ({data
                 rowKey={(record) => String(record.index)}
                 columns={columns as any}
                 dataSource={filtered}
-                pagination={{pageSize: 50, showSizeChanger: false}}
-                scroll={{y: "calc(100vh - 360px)"}}
+                pagination={{pageSize: 10, showSizeChanger: false}}
+                scroll={{y: "calc(100vh - 220px)"}}
             />
         </div>
     );

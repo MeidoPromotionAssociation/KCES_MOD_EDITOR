@@ -56,9 +56,9 @@ const NeiCsvEditor: React.FC<{
 
     return (
         <div style={{
-            height: height ?? "calc(100vh - 260px)",
+            height: height ?? "calc(100vh - 205px)",
             borderRadius: '8px',
-            overflow: 'hidden'
+            overflow: 'hidden',
         }}>
             <Editor
                 beforeMount={(monacoInstance) => setupCsvMonaco(monacoInstance)}
