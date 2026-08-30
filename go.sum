@@ -1,5 +1,5 @@
-github.com/MeidoPromotionAssociation/MeidoSerialization/v2 v2.2.0 h1:uKwsN3ADTnXlkpDNbHobVYQDv14l2T2M1hfeNT6h6SQ=
-github.com/MeidoPromotionAssociation/MeidoSerialization/v2 v2.2.0/go.mod h1:NTzBUdbJiNIWTpvbEyNQPkwTReDGV0UlXIHYIEnYIWc=
+github.com/MeidoPromotionAssociation/MeidoSerialization/v2 v2.2.1 h1:HwFoZVck/mM/RfAzEmNDfdJFk0645KD9vLu8zC5curs=
+github.com/MeidoPromotionAssociation/MeidoSerialization/v2 v2.2.1/go.mod h1:NTzBUdbJiNIWTpvbEyNQPkwTReDGV0UlXIHYIEnYIWc=
 github.com/adrg/xdg v0.5.3 h1:xRnxJXne7+oWDatRhR1JLnvuccuIeCoBu2rtuLqQB78=
 github.com/adrg/xdg v0.5.3/go.mod h1:nlTsY+NNiCBGCK2tpm09vRqfVzrc2fLmXGpBLF0zlTQ=
 github.com/coder/websocket v1.8.15 h1:6B2JPeOGlpff2Uz6vOEH1Vzpi0iUz20A+lPVhPHtNUA=
@@ -40,8 +40,8 @@ github.com/ugorji/go/codec v1.3.2 h1:zkEASHHyEClGeURfgNT9PJZVfAbs9oEX9QXggwWNJbc
 github.com/ugorji/go/codec v1.3.2/go.mod h1:pRBVtBSKl77K30Bv8R2P+cLSGaTtex6fsA2Wjqmfxj4=
 github.com/ulikunitz/xz v0.5.16 h1:ld6NyySjx5lowVKwJvMRLnW5nxKX/xnpSiFYZ/Lxur0=
 github.com/ulikunitz/xz v0.5.16/go.mod h1:H9Rt/W6/Qj27PGauhQc6nfCDy7vHpzsOThBSaYDoEhw=
-github.com/wailsapp/wails/v3 v3.0.0-beta.15 h1:iICRkqsYJgHb4dkp5GqB0rKeF/Zcr7QgjYLGAAfZkl4=
-github.com/wailsapp/wails/v3 v3.0.0-beta.15/go.mod h1:zKZYhB3WjrN5LhJWbnOAVMN0Xf8qTozbw2nf5micKl4=
+github.com/wailsapp/wails/v3 v3.0.0-beta.16 h1:ud3YMzTbPPae4EP3Wls4qBVsESZwwAkEny1P/zzw6Tk=
+github.com/wailsapp/wails/v3 v3.0.0-beta.16/go.mod h1:zKZYhB3WjrN5LhJWbnOAVMN0Xf8qTozbw2nf5micKl4=
 golang.org/x/sync v0.22.0 h1:SZjpbeLmrCk4xhRSZFNZW5gFUeCeFgjekvI/+gfScek=
 golang.org/x/sync v0.22.0/go.mod h1:9xrNwdLfx4jkKbNva9FpL6vEN7evnE43NNNJQ2LF3+0=
 golang.org/x/sys v0.0.0-20200810151505-1b9f1253b3ed/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
