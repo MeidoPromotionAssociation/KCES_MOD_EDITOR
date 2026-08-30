@@ -21,8 +21,8 @@ KCES MOD 编辑器，一个用于编辑 [KCES](https://kces.jp/) 专有文件格
 | 分组 | 格式 |
 | --- | --- |
 | 服装部件 | `.menuassets` `.materialassets` `.pmatassets` `.model` |
-| 物理 | `.dbconf` `.dbcol` `.db2conf` `.dsbconf` `.dsb2conf` `.dslconf` `.dsl2conf` `.dslcol` `.ikcol` `.ikcol.bytes` `.limbcol` |
-| 角色 | `.preset` / `.perset` `.sad` `.hitcheck` `maid_collider.bytes` |
+| 物理 | `.dbconf` `.dbcol` `.db2conf` `.dsbconf` `.dsb2conf` `.dslconf` `.dsl2conf` `.dslcol`|
+| 角色 | `.preset` |
 | 数据 | `.nson` `.undressdat` `.undresspdat`|
 
 `.ct` / `.aba` 等打包格式与 `.brd` / `.enm` 等内部格式不在本编辑器范围内。
@@ -57,8 +57,8 @@ Built on the [MeidoSerialization](https://github.com/MeidoPromotionAssociation/M
 | Group | Formats |
 | --- | --- |
 | Parts | `.menuassets` `.materialassets` `.pmatassets` `.model` |
-| Physics | `.dbconf` `.dbcol` `.db2conf` `.dsbconf` `.dsb2conf` `.dslconf` `.dsl2conf` `.dslcol` `.ikcol` `.ikcol.bytes` `.limbcol` |
-| Character | `.preset` / `.perset` `.sad` `.hitcheck` `maid_collider.bytes` |
+| Physics | `.dbconf` `.dbcol` `.db2conf` `.dsbconf` `.dsb2conf` `.dslconf` `.dsl2conf` `.dslcol`|
+| Character | `.preset` |
 | Data | `.nson` `.undressdat` `.undresspdat`|
 
 Container formats such as `.ct` / `.aba` and internal formats such as `.brd` / `.enm` are out of scope.
