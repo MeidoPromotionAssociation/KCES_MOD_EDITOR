@@ -146,6 +146,25 @@
     "empty_array": "空の配列",
     "empty_object": "空のオブジェクト"
   },
+  "FieldForm": {
+    "set": "設定済み",
+    "unset": "未設定",
+    "add_row": "追加",
+    "delete_row": "この行を削除",
+    "row_count": "全 {{count}} 件",
+    "empty_list": "データがありません",
+    "nested": "展開",
+    "map_key": "キー（uint64）",
+    "key_invalid": "キーは符号なし整数で入力してください",
+    "key_duplicated": "そのキーは既に存在します",
+    "add_item": "1 件追加",
+    "remove_last": "末尾を削除",
+    "main_color": "メイン色",
+    "shadow_color": "影色",
+    "grada_stops": "グラデーション点",
+    "color_preview": "色見本",
+    "color_preview_tip": "参考用の色見本です。無限色は元テクスチャに対する HSL 調整なので、元ピクセルの明度が中性の場合として逆算しています。色を選ぶと色相・彩度・明度のみ書き戻します"
+  },
   "HitCheckEditor": {
     "signature": "シグネチャ",
     "name": "名前",

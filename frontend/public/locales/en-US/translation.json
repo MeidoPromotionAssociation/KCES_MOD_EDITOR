@@ -146,6 +146,25 @@
     "empty_array": "Empty array",
     "empty_object": "Empty object"
   },
+  "FieldForm": {
+    "set": "Set",
+    "unset": "Not set",
+    "add_row": "Add",
+    "delete_row": "Delete this row",
+    "row_count": "{{count}} item(s)",
+    "empty_list": "No data",
+    "nested": "Expand",
+    "map_key": "Key (uint64)",
+    "key_invalid": "The key must be an unsigned integer",
+    "key_duplicated": "The key already exists",
+    "add_item": "Add an item",
+    "remove_last": "Remove the last item",
+    "main_color": "Main",
+    "shadow_color": "Shadow",
+    "grada_stops": "Gradient stops",
+    "color_preview": "Swatch",
+    "color_preview_tip": "Approximate swatch: infinity color is an HSL adjustment applied to the source texture, previewed here as if the source pixel had neutral lightness. Picking writes back hue, chroma and brightness only."
+  },
   "HitCheckEditor": {
     "signature": "Signature",
     "name": "Name",

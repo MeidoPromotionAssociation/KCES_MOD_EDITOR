@@ -174,3 +174,83 @@ export function materialPropOptions(kind: "tex" | "col" | "vec" | "f"): Array<{ 
     const table = kind === "tex" ? TexturePropNames : kind === "col" ? ColorPropNames : kind === "f" ? FloatPropNames : {};
     return Object.entries(table).map(([value, label]) => ({label: `${label} (${value})`, value: Number(value)}));
 }
+
+/* ==========================================================================
+ *  颜色变体（Colvari）与贴图预合成（PreMulTexDatas）相关枚举
+ *  取值全部照 KCES2 1.36.0 反编译源码逐个核对，注释里标出出处
+ * ========================================================================== */
+
+/** InfinityColorTexMgr2.InfColData.COLOR_TYPE，用于 colorType / colorTypeSub / infColType */
+export const ColorTypeNames: Record<number, string> = {
+    0: "NONE",
+    1: "INF_COLOR",
+    2: "PART_COLOR",
+    3: "GRADA_COLOR",
+};
+
+/** MaidInfinityColor.PARTS_COLOR，用于 partsColorType / infColorId，NONE 为 -1，末尾 MAX 是哨兵不列入选项 */
+export const PartsColorTypeNames: Record<number, string> = {
+    [-1]: "NONE",
+    0: "HAIR",
+    1: "EYE_BROW",
+    2: "UNDER_HAIR",
+    3: "ASS_HAIR",
+    4: "SKIN",
+    5: "HAIR_OUTLINE",
+    6: "SKIN_OUTLINE",
+    7: "EYE_WHITE",
+    8: "HOKURO",
+    9: "TATOO",
+    10: "SOBAKASU",
+    11: "MATSUGE_UP",
+    12: "MATSUGE_LOW",
+    13: "FUTAE",
+    14: "PART_COLOR",
+    15: "GRADA_COLOR",
+    16: "MAKE",
+    17: "MUGEN_COLOR",
+    18: "HIGE",
+    19: "SHIMI",
+    20: "SHIWA",
+    21: "BODY_HAIR",
+};
+
+/**
+ * GameUtility.SystemMaterial，用于 f_eBlendMode 与 preTexCompoTypeStr
+ * 这两个字段在 JSON 里是字符串，游戏用 Enum.Parse 还原（PreMulTexDatas.OnAfterDeserialize），
+ * 写入枚举外的字符串会让游戏加载时抛异常，所以只提供枚举名。末尾 Max 是哨兵不列入。
+ */
+export const SystemMaterialNames: string[] = [
+    "Alpha",
+    "BlendSelf",
+    "Multiply",
+    "InfinityColor",
+    "InfinityColorPart",
+    "InfinityColorGrada",
+    "TexTo8bitTex",
+    "AddNormal",
+    "AlphaDstAlpha",
+    "Screen",
+];
+
+/** Menu.Colvari.ColvariData.UseType 位标志（[Flags] byte） */
+export const ColvariUseTypeFlags: Array<{ label: string; bit: number }> = [
+    {label: "ALPHA", bit: 1},
+    {label: "COLOR", bit: 2},
+];
+
+/**
+ * 数值枚举表 → Select 选项，标签形如 NAME (值)
+ * 按数值升序排：对象字面量里 -1 这类负数键属于普通字符串键，Object.entries 会把它排在
+ * 0 起的整数索引键之后，不排一下 NONE 会跑到列表末尾
+ */
+export function numberEnumOptions(table: Record<number, string>): Array<{ label: string; value: number }> {
+    return Object.entries(table)
+        .map(([value, label]) => ({label: `${label} (${value})`, value: Number(value)}))
+        .sort((a, b) => a.value - b.value);
+}
+
+/** 字符串枚举名列表 → Select 选项 */
+export function stringEnumOptions(names: string[]): Array<{ label: string; value: string }> {
+    return names.map((name) => ({label: name, value: name}));
+}

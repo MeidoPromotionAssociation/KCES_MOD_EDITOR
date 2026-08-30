@@ -146,6 +146,25 @@
     "empty_array": "空数组",
     "empty_object": "空对象"
   },
+  "FieldForm": {
+    "set": "已设置",
+    "unset": "未设置",
+    "add_row": "添加",
+    "delete_row": "删除此行",
+    "row_count": "共 {{count}} 项",
+    "empty_list": "暂无数据",
+    "nested": "展开",
+    "map_key": "键（uint64）",
+    "key_invalid": "键必须是无符号整数",
+    "key_duplicated": "键已存在",
+    "add_item": "添加一项",
+    "remove_last": "删除末项",
+    "main_color": "主色",
+    "shadow_color": "影色",
+    "grada_stops": "渐变点",
+    "color_preview": "色块",
+    "color_preview_tip": "参考色块：无限色是对源贴图做的 HSL 调整，这里按源像素明度为中性反推，取色只写回色相/彩度/明度"
+  },
   "HitCheckEditor": {
     "signature": "签名",
     "name": "名称",

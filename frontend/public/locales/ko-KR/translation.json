@@ -146,6 +146,25 @@
     "empty_array": "빈 배열",
     "empty_object": "빈 객체"
   },
+  "FieldForm": {
+    "set": "설정됨",
+    "unset": "설정되지 않음",
+    "add_row": "추가",
+    "delete_row": "이 행 삭제",
+    "row_count": "총 {{count}}개",
+    "empty_list": "데이터가 없습니다",
+    "nested": "펼치기",
+    "map_key": "키(uint64)",
+    "key_invalid": "키는 부호 없는 정수여야 합니다",
+    "key_duplicated": "이미 존재하는 키입니다",
+    "add_item": "항목 추가",
+    "remove_last": "마지막 항목 삭제",
+    "main_color": "기본 색",
+    "shadow_color": "그림자 색",
+    "grada_stops": "그라데이션 포인트",
+    "color_preview": "색상 견본",
+    "color_preview_tip": "참고용 색상 견본입니다. 무한색은 원본 텍스처에 적용하는 HSL 조정이므로 원본 픽셀의 명도가 중성일 때를 기준으로 역산합니다. 색을 고르면 색상·채도·명도만 반영됩니다"
+  },
   "HitCheckEditor": {
     "signature": "시그니처",
     "name": "이름",

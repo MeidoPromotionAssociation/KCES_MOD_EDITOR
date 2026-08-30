@@ -3,7 +3,7 @@ import {Collapse, Space, Switch} from "antd";
 import {useTranslation} from "react-i18next";
 import {NullableStringInput, NumberField, Row} from "./formControls";
 import BigIntInput from "../common/BigIntInput";
-import JsonObjectForm from "../common/JsonObjectForm";
+import MenuAdvancedForm from "./MenuAdvancedForm";
 import MenuCommandsEditor from "./MenuCommandsEditor";
 
 /**
@@ -123,18 +123,7 @@ const MenuAssetForm: React.FC<{
         {
             key: "advanced",
             label: t('MenuAssetsEditor.advanced_fields'),
-            children: (
-                <JsonObjectForm
-                    value={{
-                        preMulTexDatas: asset.preMulTexDatas ?? null,
-                        colvariFileNameExp: asset.colvariFileNameExp ?? null,
-                        colvariInfo: asset.colvariInfo ?? null,
-                        partsVer: asset.partsVer ?? null,
-                    }}
-                    onChange={(next) => onChange({...asset, ...next})}
-                    defaultExpandDepth={0}
-                />
-            ),
+            children: <MenuAdvancedForm asset={asset} onChange={onChange}/>,
         },
     ];
 

@@ -3,6 +3,8 @@ import {Button, Collapse, Empty, Input, InputNumber, Space, Switch, Tag, Tooltip
 import {DeleteOutlined, PlusOutlined} from "@ant-design/icons";
 import {useTranslation} from "react-i18next";
 import {isBigNumber, losslessParse, losslessStringify} from "../../utils/losslessJson";
+import {detectInfinityColorTriples} from "../../utils/colorShapes";
+import {ObjectTriplePicker} from "./InfinityColorPicker";
 import BigIntInput from "./BigIntInput";
 
 /**
@@ -11,6 +13,7 @@ import BigIntInput from "./BigIntInput";
  * 用于没有专用表单的格式的样式1视图。
  * 超大数组会显示提示而不渲染（请使用 JSON 模式编辑），避免卡顿。
  * uint64 大整数以 LosslessNumber 表示，用文本输入编辑以保留精度。
+ * 识别出无限色结构时额外挂一个色块选择器（见 utils/colorShapes.ts）。
  */
 
 // 数组渲染上限，超过则提示使用 JSON 模式
@@ -177,8 +180,31 @@ const ValueEditor: React.FC<{
         if (keys.length === 0) {
             return <Typography.Text type="secondary">{t('JsonForm.empty_object')}</Typography.Text>;
         }
+        // 无限色结构（PartsColor / KCESPresetInfinityPartsColor / ColorPresetFreeColor）
+        // 额外给一行色块选择器，数值字段仍照常渲染
+        const triples = detectInfinityColorTriples(value);
         return (
             <div style={{display: "flex", flexDirection: "column", gap: 6}}>
+                {triples.length > 0 && (
+                    <div style={{display: "flex", alignItems: "center", gap: 8}}>
+                        <Typography.Text
+                            style={{minWidth: 220, maxWidth: 320, textAlign: "left", flexShrink: 0}}
+                            type="secondary"
+                        >
+                            {t('FieldForm.color_preview')}
+                        </Typography.Text>
+                        <Space size={8} wrap style={{flex: 1}}>
+                            {triples.map((triple) => (
+                                <Space key={triple.group} size={4}>
+                                    <Typography.Text type="secondary">
+                                        {t(triple.group === "main" ? 'FieldForm.main_color' : 'FieldForm.shadow_color')}
+                                    </Typography.Text>
+                                    <ObjectTriplePicker object={value} triple={triple} onChange={onChange}/>
+                                </Space>
+                            ))}
+                        </Space>
+                    </div>
+                )}
                 {keys.map((key) => {
                     const child = value[key];
                     const isNested = isPlainObject(child) || (Array.isArray(child) && !(child.length <= InlineArrayItems && child.every((item: any) => typeof item !== "object" || item === null || isBigNumber(item))));
