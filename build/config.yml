@@ -61,6 +61,56 @@ fileAssociations:
     description: KCES PMat Bundle File
     iconName: pmatassets
     role: Editor
+  - ext: dbconf
+    name: Dynamic Bone Config
+    description: KCES DynamicBone Config File
+    iconName: dbconf
+    role: Editor
+  - ext: dsbconf
+    name: Dynamic Skirt Bone Config
+    description: KCES Dynamic Skirt Bone Config File
+    iconName: dsbconf
+    role: Editor
+  - ext: dslconf
+    name: Dynamic Sleeve Bone Config
+    description: KCES Dynamic Sleeve Bone Config File
+    iconName: dslconf
+    role: Editor
+  - ext: db2conf
+    name: Dynamic Bone 2 Config
+    description: KCES Dynamic Bone 2 Config File
+    iconName: db2conf
+    role: Editor
+  - ext: dsb2conf
+    name: Dynamic Skirt Bone 2 Config
+    description: KCES Dynamic Skirt Bone 2 Config File
+    iconName: dsb2conf
+    role: Editor
+  - ext: dsl2conf
+    name: Dynamic Sleeve Bone 2 Config
+    description: KCES Dynamic Sleeve Bone 2 Config File
+    iconName: dsl2conf
+    role: Editor
+  - ext: dbcol
+    name: Dynamic Bone Collider Config
+    description: KCES Dynamic Bone Collider Config File
+    iconName: dbcol
+    role: Editor
+  - ext: dslcol
+    name: Dynamic Sleeve Bone Collider Config
+    description: KCES Dynamic Sleeve Bone Collider Config File
+    iconName: dslcol
+    role: Editor
+  - ext: model
+    name: Model
+    description: KCES Model File
+    iconName: model
+    role: Editor
+  - ext: nei
+    name: nei
+    description: KCES Encrypted CSV File
+    iconName: nei
+    role: Editor
 
 # Other data
 other:
