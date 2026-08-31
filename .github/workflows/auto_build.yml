@@ -35,7 +35,9 @@ jobs:
         run: go install github.com/wailsapp/wails/v3/cmd/wails3@$(go list -m -f '{{.Version}}' github.com/wailsapp/wails/v3)
 
       - name: Build Linux Binary
-        run: wails3 task linux:build
+        run: |
+          wails3 task linux:build
+          mv bin/kces-mod-editor bin/kces-mod-editor-linux-amd64
 
       # Windows 构建 CGO_ENABLED=0，可直接在 Linux 上交叉编译
       - name: Build Windows Binary
@@ -45,7 +47,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: linux-amd64
-          path: bin/kces-mod-editor
+          path: bin/kces-mod-editor-linux-amd64
 
       - name: Upload Windows Artifact
         uses: actions/upload-artifact@v7
