@@ -21,7 +21,7 @@ const (
 	// GitHubApiURL GitHub API 版本检查 URL
 	GitHubApiURL = "https://api.github.com/repos/MeidoPromotionAssociation/KCES_MOD_EDITOR/releases/latest"
 	// CurrentVersion 当前应用版本
-	CurrentVersion = "v0.0.1"
+	CurrentVersion = "v0.0.2"
 )
 
 // App 提供应用级功能：文件对话框、版本检查、文件信息、文件类型识别
