@@ -1,77 +1,527 @@
-# KCES_MOD_EDITOR
+[English](#english) | [简体中文](#%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87) | [日本語](#%E6%97%A5%E6%9C%AC%E8%AA%9E)
 
-[简体中文](#简体中文) | [English](#english)
+[Disclaimer/How to Dev/Credit/KISS Rule](#how-to-dev)
+
+[![Github All Releases](https://img.shields.io/github/downloads/MeidoPromotionAssociation/KCES_MOD_EDITOR/total.svg)]() [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/MeidoPromotionAssociation/KCES_MOD_EDITOR)
+
+# English
+
+## KCES MOD EDITOR
+
+KCES MOD EDITOR, built with Golang + Wails v3 + React + TypeScript, Modern technology here we come!!
+
+<br>
+
+This is a MOD creation tool (modding tool) for [KCES](https://kces.jp/) (KissCharacter EditSystem) and KCES2
+
+Create a mod for KCES2 that can be used in [COM3D2.5](https://com3d2.jp/) and [CRC3D3](https://crc3d3.jp/).
+
+[KISS](https://www.kisskiss.tv/) is the company/brand that makes these games.
+
+<br>
+
+If you like it, please light up the Star~
+
+Any Bug or request, please use Issues or Discussions
+
+Or you can find me in Discord [Custom Maid Server](https://discord.gg/custommaid)
+
+### Supported File Types
+
+Current Game Version KCES 1.34.5 and KCES2 1.36.0
+
+| Extension                                                          | Description                           | Version Support | Note                                             |
+|--------------------------------------------------------------------|---------------------------------------|-----------------|--------------------------------------------------|
+| `.menuassets`                                                      | Menu Bundle                           | All versions    |                                                  |
+| `.materialassets`                                                  | Material Bundle                       | All versions    |                                                  |
+| `.pmatassets`                                                      | Rendering order Bundle                | All versions    |                                                  |
+| `.model`                                                           | Model file                            | All versions    | Not including mesh                               |
+| `.dbconf` `.db2conf` `.dsbconf` `.dsb2conf` `.dslconf` `.dsl2conf` | Physical parameter configuration file | All versions    |                                                  |
+| `.dslcol` `.dbcol`                                                 | Collider parameter configuration file | All versions    |                                                  |
+| `.preset`                                                          | Character preset file                 | All versions    |                                                  |
+| `.undressdat` `.undresspdat`                                       | Half-undressed data                   | All versions    |                                                  |
+| `.nson`                                                            | JSON file                             | All versions    |                                                  |
+| `.nei`                                                             | Encryption CSV file                   | All versions    | COM3D2 use Shift-Jis Encoding and KCES use UTF-8 |
+
+Each file corresponds to a .go
+file：[https://github.com/MeidoPromotionAssociation/MeidoSerialization/tree/main/serialization/KCES](https://github.com/MeidoPromotionAssociation/MeidoSerialization/tree/main/serialization/KCES)
+
+If you're looking for a serialization library, check
+out [https://github.com/MeidoPromotionAssociation/MeidoSerialization](https://github.com/MeidoPromotionAssociation/MeidoSerialization)
+That is the core of KCES MOD EDITOR.
+
+### Highlights
+
+- Fully open source, completely free, and completely free; say goodbye to non-open source non-free software.
+- With full multilingual support, if you want to add languages, please contribute to us through Issues or Pull Request.
+- Ability to create files from scratch, no need to copy files from elsewhere.
+- With light mode and dark mode.
+- All-in-one.
+- More benefits are waiting for you to discover.
+
+### Requirements
+
+This application requires the following software to run:
+
+- Microsoft Edge WebView2
+    - This app is built using the Wails framework which relies on Microsoft Edge WebView2 to render the UI.
+    - If you're using Windows 11, this is usually pre-installed on your system.
+    - For other systems without WebView2 installed，the application should prompt you to install it upon launch.
+    - Alternatively, you can install it from the official
+      website: [https://developer.microsoft.com/en-us/microsoft-edge/webview2/](https://developer.microsoft.com/en-us/microsoft-edge/webview2/)
+    - What is Microsoft Edge
+      WebView2? [https://learn.microsoft.com/en-us/microsoft-edge/webview2/](https://learn.microsoft.com/en-us/microsoft-edge/webview2/)
+- ImageMagick
+    - Required for working with .tex files and image processing features to support various image formats. Optional if
+      you don't need .tex editing.
+    - Install from the official
+      website: [https://imagemagick.org/download](https://imagemagick.org/download)
+    - On the download page, look for `ImageMagick-version-Q16-HDRI-x64-dll.exe` and install it. During installation,
+      check `Add application directory to your system path`.
+    - Or install via terminal command: `winget install ImageMagick.Q16-HDRI`
+    - The version used for testing is `ImageMagick-7.1.2-30-Q16-HDRI-x64-dll.exe` If you have problems, please try this
+      version.
+    - After installation, verify by running `magick -version` in your terminal. A version number output indicates
+      success.
+    - ImageMagick® is a free and open-source software suite for image editing and manipulation.
+
+### URL Protocol
+
+Other tools can ask KCES MOD EDITOR to open a file through a custom URL scheme:
+
+```
+kces-mod-editor://open?path=<URL-encoded absolute path>
+```
+
+For example, `D:\mods\example.menuassets` becomes:
+
+```
+kces-mod-editor://open?path=D%3A%5Cmods%5Cexample.menuassets
+```
+
+- The scheme is registered when the editor is installed: by the Windows installer, or by the `.deb` / `.rpm` package on
+  Linux. A portable executable registers nothing, so the protocol is unavailable unless you install the editor.
+- `path` must be a URL-encoded absolute path pointing at a file that exists, and its extension must be one this editor
+  actually has an editor page for. A request that fails any of these checks is ignored: a protocol URL can be triggered
+  by any program or even by a web page, so without an allow list this would amount to "open and display any local file".
+- If the editor is already running, the request is handed over to that window and the window is brought to the front
+  instead of a second process being started. This is the `Run as a single instance` option on the Settings page. It is
+  off by default, so every invocation opens a new window; changing it takes effect on the next launch.
+- That option has to be known before the UI exists, so it lives in a settings file instead of browser storage:
+  `%AppData%\KCES_MOD_EDITOR\settings.json` on Windows and `~/.config/KCES_MOD_EDITOR/settings.json` on Linux. The
+  Settings page shows the exact path.
+- Dropping a file onto the window and double-clicking an associated file go through the same open path, so all three
+  ways of opening a file behave identically.
+
+### Privacy
+
+This application does not collect any personal information nor upload any data to servers.
+
+The only active network request is for update checks, which solely communicates with GitHub API. You can disable the update check feature.
+
+### Download
+
+By downloading this software, you accept and agree to abide by
+the [Disclaimer](https://github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR?tab=readme-ov-file#disclaimer)
+
+Please download it from Github
+Releases: [https://github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR/releases](https://github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR/releases)
+
+- If you want to install the editor into your system and automatically associate the file type, please use`kces-mod-editor-amd64-installer.exe `
+    - After associating the file type, different files will be displayed with different icons. Please
+      check [here](https://github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR/tree/main/build) to preview the icon
+- If you don't want to install, please use `kces-mod-editor.exe `
+- If you are on Linux, please use `kces-mod-editor_linux_amd64 `
+
+### FAQ
+
+- I want to process files in batches
+    - Please use [MeidoSerialization](https://github.com/MeidoPromotionAssociation/MeidoSerialization)
+
+- I want to export to a plain text file
+    - It can support importing and exporting to text files, for batch editing or using other editors.
+    - Using the Save As function, you can specify the extension as `*.menuassets.json`, `*.materialassets.json`, etc., and you can see
+      the prompt when exporting.
+    - [MeidoSerialization](https://github.com/MeidoPromotionAssociation/MeidoSerialization) can also support this format.
+
+- About CSV format
+    - All CSV files used in this program are encoded using UTF-8-BOM, separated by ',', and follow the [RFC4180](https://datatracker.ietf.org/doc/html/rfc4180)  standard.
+
+<br>
+
+### Also check out other repositories
+
+- [COM3D2 MOD Editor](https://github.com/MeidoPromotionAssociation/COM3D2_MOD_EDITOR)
+- [KCES MOD EDITOR](https://github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR)
+- [ABA EXPLORER](https://github.com/MeidoPromotionAssociation/ABA_EXPLORER)
+- [MeidoSerialization](https://github.com/MeidoPromotionAssociation/MeidoSerialization)
+- [COM3D2 Simple Chinese MOD Tutorial](https://github.com/MeidoPromotionAssociation/COM3D2_Simple_MOD_Guide_Chinese)
+- [Another COM3D2 Translation Plugin JAT](https://github.com/MeidoPromotionAssociation/COM3D2.JustAnotherTranslator.Plugin)
+- [90135's COM3D2 Chinese Guide](https://github.com/90135/COM3D2_GUIDE_CHINESE)
+- [90135's COM3D2 Script Collection](https://github.com/90135/COM3D2_Scripts_901)
+- [90135's COM3D2 Tools](https://github.com/90135/COM3D2_Tools_901)
+
+<br>
+
+| ScreenShot                | ScreenShot                | ScreenShot                | ScreenShot                |
+|---------------------------|---------------------------|---------------------------|---------------------------|
+| ![1](.github/image/1.png) | ![2](.github/image/2.png) | ![3](.github/image/3.png) | ![4](.github/image/4.png) |
+
+<br>
+<br>
+<br>
 
 ---
 
-## 简体中文
+<br>
+<br>
+<br>
 
-KCES MOD 编辑器，一个用于编辑 [KCES](https://kces.jp/) 专有文件格式的图形化工具，是 [COM3D2_MOD_EDITOR](https://github.com/MeidoPromotionAssociation/COM3D2_MOD_EDITOR) 的姊妹项目。
+# 简体中文
 
-基于 [MeidoSerialization](https://github.com/MeidoPromotionAssociation/MeidoSerialization) 序列化库，使用 [Wails v3](https://v3.wails.io/) + React + Ant Design + Golang 构建。
+## KCES MOD EDITOR
 
-### 功能
+KCES MOD 编辑器，使用 Golang + Wails v3 + React + TypeScript 打造，现代技术我们来了！！
 
-- 每种格式一个专用编辑页面，支持结构化表单（样式 1）与 Monaco JSON（样式 2）双模式编辑
-- 原生格式与编辑 JSON（`.xxx.json`）互相转换与直接编辑，大文件可不加载直接转换
-- 文件拖放、文件关联打开、Ctrl+O/S/Alt+S 快捷键、深色模式跟随系统、多语言（中/英/日/韩）
+<br>
 
-### 支持的格式
+这是用于 [KCES](https://kces.jp/)（KissCharacter EditSystem）与 KCES2 的 MOD 制作工具（modding tool）
 
-| 分组 | 格式 |
-| --- | --- |
-| 服装部件 | `.menuassets` `.materialassets` `.pmatassets` `.model` |
-| 物理 | `.dbconf` `.dbcol` `.db2conf` `.dsbconf` `.dsb2conf` `.dslconf` `.dsl2conf` `.dslcol`|
-| 角色 | `.preset` |
-| 数据 | `.nson` `.undressdat` `.undresspdat`|
+您可以为 KCES2 制作 MOD，并在 [COM3D2.5](https://com3d2.jp/) 与 [CRC3D3](https://crc3d3.jp/) 中使用。
 
-`.ct` / `.aba` 等打包格式与 `.brd` / `.enm` 等内部格式不在本编辑器范围内。
+[KISS](https://www.kisskiss.tv/) 是制作这些游戏的公司/品牌。
 
-### 开发
+<br>
 
-```bash
-# 开发模式（热重载）
-wails3 dev
+如果您喜欢，请点亮 Star~
 
-# 构建
-wails3 task build
+任何 Bug 或请求，请使用 Issues 或 Discussions
+
+你也可以在 Discord [Custom Maid Server](https://discord.gg/custommaid) 找到我
+
+### 支持的文件类型
+
+当前游戏版本 KCES 1.34.5 与 KCES2 1.36.0
+
+| 扩展名                                                             | 描述               | 版本支持 | 备注                                        |
+|--------------------------------------------------------------------|--------------------|----------|---------------------------------------------|
+| `.menuassets`                                                      | 菜单资源包         | 所有版本 |                                             |
+| `.materialassets`                                                  | 材质资源包         | 所有版本 |                                             |
+| `.pmatassets`                                                      | 渲染顺序资源包     | 所有版本 |                                             |
+| `.model`                                                           | 模型文件           | 所有版本 | 不包含网格数据                              |
+| `.dbconf` `.db2conf` `.dsbconf` `.dsb2conf` `.dslconf` `.dsl2conf` | 物理参数配置文件   | 所有版本 |                                             |
+| `.dslcol` `.dbcol`                                                 | 碰撞体参数配置文件 | 所有版本 |                                             |
+| `.preset`                                                          | 角色预设文件       | 所有版本 |                                             |
+| `.undressdat` `.undresspdat`                                       | 半脱衣数据         | 所有版本 |                                             |
+| `.nson`                                                            | JSON 文件          | 所有版本 |                                             |
+| `.nei`                                                             | 加密 CSV 文件      | 所有版本 | COM3D2 使用 Shift-JIS 编码，KCES 使用 UTF-8 |
+
+每种文件对应一个 .go
+文件：[https://github.com/MeidoPromotionAssociation/MeidoSerialization/tree/main/serialization/KCES](https://github.com/MeidoPromotionAssociation/MeidoSerialization/tree/main/serialization/KCES)
+
+如果您正在寻找序列化库，请查看 [https://github.com/MeidoPromotionAssociation/MeidoSerialization](https://github.com/MeidoPromotionAssociation/MeidoSerialization)
+这是 KCES MOD EDITOR 的核心。
+
+### 亮点
+
+- 完全开源，完全免费，完全自由；和非开源的非自由软件说再见。
+- 拥有完整的多国语言支持，如果您想添加语言，请通过 Issues 或 Pull Request 为我们贡献。
+- 有能力从 0 创建文件，告别需要从别处复制文件。
+- 拥有浅色模式和暗黑模式。
+- 多合一。
+- 更多好处等你来发现。
+
+### 依赖
+
+该应用需要以下软件以运行：
+
+- Microsoft Edge WebView2
+    - 本应用使用 Wails 技术打造，它依赖于 Microsoft Edge WebView2 来渲染页面，因此需要安装 WebView2。
+    - 如果你使用 Windows 11，这通常已经安装在你的系统上了。
+    - 如果你使用其他系统，且没有安装 WebView2，启动应用程序时它应该会提示您安装。
+      或者您也可以从官方网站安装：[https://developer.microsoft.com/zh-cn/microsoft-edge/webview2](https://developer.microsoft.com/zh-cn/microsoft-edge/webview2)
+    - Microsoft Edge WebView2
+      是什么？[https://learn.microsoft.com/zh-cn/microsoft-edge/webview2/](https://learn.microsoft.com/zh-cn/microsoft-edge/webview2/)
+- ImageMagick
+    - 使用 .tex 格式和图片处理相关功能需要安装 ImageMagick，这是为了支持尽可能多的图片格式。如果您不使用 .tex 编辑，您可以选择不安装。
+    - 请从官方网站安装：[https://imagemagick.org/download](https://imagemagick.org/download)
+    - 在下载页面上找到 `ImageMagick-版本号-Q16-HDRI-x64-dll.exe` 下载并安装，安装时需要勾选
+      `Add application directory to your system path`
+    - 或者在您的终端执行 `winget install ImageMagick.Q16-HDRI` 命令安装。
+    - 用于测试的版本是 `ImageMagick-7.1.2-30-Q16-HDRI-x64-dll.exe` 如果出现问题，请尝试这个版本。
+    - 安装完成后在终端执行 `magick -version` 命令查看版本号，如果显示版本号则说明安装成功。
+    - ImageMagick® 是一个自由的开源软件套件，用于编辑和操纵数字图像。
+
+### URL 协议
+
+其他工具可以通过自定义 URL scheme 请求 KCES MOD EDITOR 打开文件：
+
 ```
+kces-mod-editor://open?path=<URL 编码的绝对路径>
+```
+
+例如 `D:\mods\example.menuassets` 对应：
+
+```
+kces-mod-editor://open?path=D%3A%5Cmods%5Cexample.menuassets
+```
+
+- 该 scheme 在安装编辑器时注册：Windows 由安装器注册，Linux 由 `.deb` / `.rpm` 包注册。免安装版不注册任何东西，因此不安装编辑器就无法使用协议。
+- `path` 必须是 URL 编码后的绝对路径，且指向一个真实存在的文件，其扩展名必须是本编辑器确实有编辑页面的格式。
+  任何一项不满足的请求都会被忽略：协议 URL 可以由任意程序甚至网页触发，没有白名单就等于把「打开并显示任意本地文件」暴露出去。
+- 编辑器已经在运行时，请求会转交给那个窗口并把窗口带到前台，而不是再启动一个进程。这就是设置页里的「单实例运行」选项。
+  它默认关闭，因此每次唤起都会开一个新窗口；修改后需要重启才生效。
+- 这个选项必须在界面出现之前就被读到，所以它存在配置文件里而不是浏览器存储里：Windows 位于
+  `%AppData%\KCES_MOD_EDITOR\settings.json`，Linux 位于 `~/.config/KCES_MOD_EDITOR/settings.json`。设置页会显示完整路径。
+- 把文件拖到窗口上、双击已关联的文件走的是同一条打开逻辑，因此三种打开方式行为一致。
+
+### 隐私
+
+本应用不会收集任何个人信息，也不会上传任何信息到任何服务器。
+
+唯一的主动网络请求是用于检查更新，它只会请求 GitHub API，您也可以关闭更新检查功能。
+
+### 下载
+
+下载此软件即表示您接受并同意遵守[免责声明](https://github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR?tab=readme-ov-file#disclaimer)
+
+请在 Github Releases
+中下载：[https://github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR/releases](https://github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR/releases)
+
+- 如果您希望将编辑器安装到系统中并自动关联文件类型，请使用 `kces-mod-editor-amd64-installer.exe`
+    - 关联文件类型后，不同的文件将显示不同的图标。请查看[此处](https://github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR/tree/main/build)预览图标
+- 如果您不想安装，请使用 `kces-mod-editor.exe`
+- 如果您使用的是 Linux 系统，请使用 `kces-mod-editor_linux_amd64`
+
+### 常见问题
+
+- 我希望批量处理文件
+    - 请使用 [MeidoSerialization](https://github.com/MeidoPromotionAssociation/MeidoSerialization)
+
+- 我希望导出为纯文本文件
+    - 可以支持导入和导出为文本文件，以便进行批量编辑或使用其他编辑器。
+    - 使用另存为功能，可以指定扩展名为 `*.menuassets.json`、`*.materialassets.json` 等，导出时可以看到提示。
+    - [MeidoSerialization](https://github.com/MeidoPromotionAssociation/MeidoSerialization) 也支持这种格式。
+
+- 关于 CSV 格式
+    - 本程序中使用的所有 CSV 文件均采用 UTF-8-BOM 编码，以 `,` 分隔，并遵循 [RFC4180](https://datatracker.ietf.org/doc/html/rfc4180) 标准。
+
+<br>
+
+### 也可以看看其他仓库
+
+- [COM3D2 MOD 编辑器](https://github.com/MeidoPromotionAssociation/COM3D2_MOD_EDITOR)
+- [KCES MOD 编辑器](https://github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR)
+- [ABA 浏览器](https://github.com/MeidoPromotionAssociation/ABA_EXPLORER)
+- [MeidoSerialization](https://github.com/MeidoPromotionAssociation/MeidoSerialization)
+- [COM3D2 简明中文 MOD 教程](https://github.com/MeidoPromotionAssociation/COM3D2_Simple_MOD_Guide_Chinese)
+- [另一个 COM3D2 翻译插件 JAT](https://github.com/MeidoPromotionAssociation/COM3D2.JustAnotherTranslator.Plugin)
+- [90135 的 COM3D2 中文指北](https://github.com/90135/COM3D2_GUIDE_CHINESE)
+- [90135 的 COM3D2 脚本收藏集](https://github.com/90135/COM3D2_Scripts_901)
+- [90135 的 COM3D2 工具](https://github.com/90135/COM3D2_Tools_901)
+
+<br>
+
+| 截图                      | 截图                      | 截图                      | 截图                      |
+|---------------------------|---------------------------|---------------------------|---------------------------|
+| ![1](.github/image/1.png) | ![2](.github/image/2.png) | ![3](.github/image/3.png) | ![4](.github/image/4.png) |
+
+<br>
+<br>
+<br>
 
 ---
 
-## English
+<br>
+<br>
+<br>
 
-A graphical editor for [KCES](https://kces.jp/) proprietary file formats — the sister project of [COM3D2_MOD_EDITOR](https://github.com/MeidoPromotionAssociation/COM3D2_MOD_EDITOR).
+# 日本語
 
-Built on the [MeidoSerialization](https://github.com/MeidoPromotionAssociation/MeidoSerialization) serialization library, using [Wails v3](https://v3.wails.io/) + React + Ant Design + Golang.
+## KCES MOD EDITOR
 
+AI Translation
 
-### Features
+KCES MOD エディターは、Golang + Wails v3 + React + TypeScript を使用して開発されました。最新技術で新たな時代へ！！
 
-- One dedicated editor page per format, with a structured form view (Style 1) and a Monaco JSON view (Style 2)
-- Edit native files or editing JSON (`.xxx.json`); large files can be converted directly without loading
-- Drag & drop, file association, Ctrl+O/S/Alt+S shortcuts, system dark mode, i18n (zh/en/ja/ko)
+<br>
 
-### Supported formats
+[KCES](https://kces.jp/)（KissCharacter EditSystem）および KCES2 用の MOD 作成ツール（modding tool）です。
 
-| Group | Formats |
-| --- | --- |
-| Parts | `.menuassets` `.materialassets` `.pmatassets` `.model` |
-| Physics | `.dbconf` `.dbcol` `.db2conf` `.dsbconf` `.dsb2conf` `.dslconf` `.dsl2conf` `.dslcol`|
-| Character | `.preset` |
-| Data | `.nson` `.undressdat` `.undresspdat`|
+KCES2 向けに作成した MOD は、[COM3D2.5](https://com3d2.jp/) と [CRC3D3](https://crc3d3.jp/) で使用できます。
 
-Container formats such as `.ct` / `.aba` and internal formats such as `.brd` / `.enm` are out of scope.
+[KISS](https://www.kisskiss.tv/) はこれらのゲームを制作する会社/ブランドです。
 
-### Development
+<br>
 
-```bash
-# Development mode with hot reload
-wails3 dev
+気に入っていただけたら「Star」ボタンを点灯してくださいね〜
 
-# Build
-wails3 task build
+バグやリクエストがある場合は、Issues または Discussions をご利用ください
+
+または、Discord [Custom Maid Server](https://discord.gg/custommaid) で私を見つけることができます。
+
+### 対応ファイル形式
+
+対応ゲームバージョン KCES 1.34.5 および KCES2 1.36.0
+
+| 拡張子                                                             | 説明                             | 対応バージョン | 備考                                            |
+|--------------------------------------------------------------------|----------------------------------|----------------|-------------------------------------------------|
+| `.menuassets`                                                      | メニューアセット                 | 全バージョン   |                                                 |
+| `.materialassets`                                                  | マテリアルアセット               | 全バージョン   |                                                 |
+| `.pmatassets`                                                      | 描画順アセット                   | 全バージョン   |                                                 |
+| `.model`                                                           | モデルファイル                   | 全バージョン   | メッシュは含みません                            |
+| `.dbconf` `.db2conf` `.dsbconf` `.dsb2conf` `.dslconf` `.dsl2conf` | 物理パラメータ設定ファイル       | 全バージョン   |                                                 |
+| `.dslcol` `.dbcol`                                                 | コライダーパラメータ設定ファイル | 全バージョン   |                                                 |
+| `.preset`                                                          | キャラクタープリセットファイル   | 全バージョン   |                                                 |
+| `.undressdat` `.undresspdat`                                       | 半脱ぎデータ                     | 全バージョン   |                                                 |
+| `.nson`                                                            | JSON ファイル                    | 全バージョン   |                                                 |
+| `.nei`                                                             | 暗号化 CSV ファイル              | 全バージョン   | COM3D2 は Shift-JIS、KCES は UTF-8 を使用します |
+
+各ファイルに対応する .go
+ファイル：[https://github.com/MeidoPromotionAssociation/MeidoSerialization/tree/main/serialization/KCES](https://github.com/MeidoPromotionAssociation/MeidoSerialization/tree/main/serialization/KCES)
+
+シリアル化ライブラリをお探しの場合は、[https://github.com/MeidoPromotionAssociation/MeidoSerialization](https://github.com/MeidoPromotionAssociation/MeidoSerialization)
+をご覧ください。これが KCES MOD EDITOR の核となります。
+
+### ハイライト
+
+- 完全にオープンソース、完全に無料、そして完全にフリー。オープンソースではない、フリーではないソフトウェアとはお別れです。
+- 完全な多言語サポートを備えています。言語を追加したい場合は、Issues または Pull Request でご協力ください。
+- 最初からファイルを作成する機能。他の場所からファイルをコピーする必要はありません。
+- ライトモードとダークモードがあります。
+- オールインワン。
+- さらに多くのメリットがあなたを待っています。
+
+### 必要なソフトウェア
+
+本アプリケーションの実行には以下のソフトウェアが必要です：
+
+- Microsoft Edge WebView2
+    - 本アプリはWailsフレームワークを使用しており、UIのレンダリングにMicrosoft Edge WebView2を必要とします
+    - Windows 11をご利用の場合、通常はプリインストールされています
+    - 他のOSを使用している場合、WebView2が未インストールの状態でアプリを起動するとインストールプロンプトが表示されます
+    - 公式サイトから手動でインストールすることも可能です：[https://developer.microsoft.com/ja-jp/microsoft-edge/webview2/](https://developer.microsoft.com/ja-jp/microsoft-edge/webview2/)
+    - Microsoft Edge
+      WebView2とは？[https://learn.microsoft.com/ja-jp/microsoft-edge/webview2/](https://learn.microsoft.com/ja-jp/microsoft-edge/webview2/)
+- ImageMagick
+    - .texファイルの編集および画像処理機能を使用する場合に必要です。.tex編集が不要な場合はインストール不要です
+    - 公式サイトからインストールしてください：[https://imagemagick.org/download](https://imagemagick.org/download)
+    - ダウンロードページで`ImageMagick-バージョン-Q16-HDRI-x64-dll.exe`を選択し、インストール時に
+      `Add application directory to your system path（システムパスに追加）`にチェックを入れてください
+    - またはターミナルで次のコマンドを実行：`winget install ImageMagick.Q16-HDRI`
+    - テストに使用したバージョンは `ImageMagick-7.1.2-30-Q16-HDRI-x64-dll.exe` です。問題がある場合は、このバージョンを試してください。
+    - インストール後、ターミナルで`magick -version`を実行し、バージョン番号が表示されれば成功です
+    - ImageMagick® は画像編集・加工用のオープンソースソフトウェアスイートです
+
+### URL プロトコル
+
+他のツールから、カスタム URL スキームで KCES MOD EDITOR にファイルを開かせることができます：
+
 ```
+kces-mod-editor://open?path=<URL エンコードされた絶対パス>
+```
+
+例えば `D:\mods\example.menuassets` の場合：
+
+```
+kces-mod-editor://open?path=D%3A%5Cmods%5Cexample.menuassets
+```
+
+- このスキームはエディターをインストールしたときに登録されます。Windows ではインストーラーが、Linux では `.deb` / `.rpm` パッケージが登録します。インストール不要版は何も登録しないため、エディターをインストールしない場合プロトコルは利用できません。
+- `path` は URL エンコードされた絶対パスで、実在するファイルを指しており、かつその拡張子は本エディターに実際に編集ページがある形式でなければなりません。
+  いずれかを満たさないリクエストは無視されます：プロトコル URL は任意のプログラム、さらには Web ページからでも発行できるため、
+  許可リストがなければ「任意のローカルファイルを開いて表示する」機能を公開することになってしまいます。
+- エディターが既に起動している場合、リクエストはそのウィンドウへ引き渡され、ウィンドウが前面に表示されます。新しいプロセスは起動しません。
+  これが設定ページの「単一インスタンスで実行」オプションです。既定では無効なため、呼び出しごとに新しいウィンドウが開きます。変更は再起動後に有効になります。
+- このオプションは UI が存在する前に読み取る必要があるため、ブラウザーストレージではなく設定ファイルに保存されます。Windows では
+  `%AppData%\KCES_MOD_EDITOR\settings.json`、Linux では `~/.config/KCES_MOD_EDITOR/settings.json` です。設定ページに完全なパスが表示されます。
+- ウィンドウへのファイルのドラッグ＆ドロップ、関連付けたファイルのダブルクリックも同じ処理を通るため、3 つの開き方は同じ挙動になります。
+
+### プライバシー
+
+本アプリは個人情報を一切収集せず、いかなる情報もサーバーにアップロードすることはありません。
+
+唯一の能動的なネットワークリクエストは更新チェック用で、GitHub API のみにリクエストを送信します。更新チェック機能を無効にすることも可能です。
+
+### ダウンロード
+
+本ソフトウェアをダウンロードすることにより、[免責事項](https://github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR?tab=readme-ov-file#disclaimer)
+に同意し、遵守することに同意したものとみなされます
+
+Github
+Releasesからダウンロードしてください：[https://github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR/releases](https://github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR/releases)
+
+- システムへのインストールとファイルタイプの自動関連付けを希望する場合、`kces-mod-editor-amd64-installer.exe` を使用してください
+    - ファイルタイプの関連付けを行うと、異なるファイルタイプに応じて異なるアイコンが表示されます。アイコンプレビューは[こちら](https://github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR/tree/main/build) で確認できます
+- インストールを希望しない場合、`kces-mod-editor.exe` を使用してください
+- Linuxシステムをご利用の場合、`kces-mod-editor_linux_amd64` を使用してください
+
+### よくある質問
+
+- ファイルを一括処理したい
+    - [MeidoSerialization](https://github.com/MeidoPromotionAssociation/MeidoSerialization) をご利用ください。
+
+- プレーンテキストファイルにエクスポートしたい
+    - テキストファイルへのインポートとエクスポートをサポートしており、一括編集や他のエディタでの使用も可能です。
+    - 「名前を付けて保存」機能を使用すると、拡張子を `*.menuassets.json`、`*.materialassets.json` などに指定でき、エクスポート時にプロンプトが表示されます。
+    - [MeidoSerialization](https://github.com/MeidoPromotionAssociation/MeidoSerialization) もこの形式をサポートしています。
+
+- CSV形式について
+    - このプログラムで使用されるすべてのCSVファイルは、UTF-8-BOMでエンコードされ、「,」で区切られており、[RFC4180](https://datatracker.ietf.org/doc/html/rfc4180)標準に準拠しています。
+
+<br>
+
+### 他のリポジトリもチェック
+
+- [COM3D2 MODエディタ](https://github.com/MeidoPromotionAssociation/COM3D2_MOD_EDITOR)
+- [KCES MODエディタ](https://github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR)
+- [ABA EXPLORER](https://github.com/MeidoPromotionAssociation/ABA_EXPLORER)
+- [MeidoSerialization](https://github.com/MeidoPromotionAssociation/MeidoSerialization)
+- [COM3D2 中国語 MOD チュートリアル](https://github.com/MeidoPromotionAssociation/COM3D2_Simple_MOD_Guide_Chinese)
+- [COM3D2 翻訳プラグイン JAT](https://github.com/MeidoPromotionAssociation/COM3D2.JustAnotherTranslator.Plugin)
+- [90135 の COM3D2 中国語ガイド](https://github.com/90135/COM3D2_GUIDE_CHINESE)
+- [90135 の COM3D2 スクリプトコレクション](https://github.com/90135/COM3D2_Scripts_901)
+- [90135 の COM3D2 ツール](https://github.com/90135/COM3D2_Tools_901)
+
+<br>
+
+| SS                        | SS                        | SS                        | SS                        |
+|---------------------------|---------------------------|---------------------------|---------------------------|
+| ![1](.github/image/1.png) | ![2](.github/image/2.png) | ![3](.github/image/3.png) | ![4](.github/image/4.png) |
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+---
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+# How to Dev
+
+1. Clone this repo, and cd to project root
+2. Install [Golang](https://go.dev/)  latest version
+3. Run `go install github.com/wailsapp/wails/v3/cmd/wails3@latest`
+4. Install [Nodejs](https://nodejs.org/) v24 lts
+5. Install pnpm [https://pnpm.io/installation#installing-pnpm-12](https://pnpm.io/installation#installing-pnpm-12)
+6. Run `cd .\frontend\` and `pnpm install`
+
+<br>
+
+- Run `wails3 dev` in project root to run in dev mode
+- Run `wails3 build` in project root to build project
+- Run `wails3 package` to get installer
+- This is a Wails v3 App. The front-end method is automatically generated after the back-end is bound.
+
+<br>
 
 # KISS Rule
 
@@ -340,19 +790,14 @@ In case of any discrepancy between the translated versions, the Simplified Chine
 
 <br>
 
-## License
-
-[BSD-3-Clause](https://github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR/blob/main/LICENSE)
-
-<br>
-
 # Credit
 
 - [Golang](https://golang.org/)
-- [Wails](https://wails.io/)
+- [Wails v3](https://wails.io/)
+- [MeidoSerialization](https://github.com/MeidoPromotionAssociation/MeidoSerialization)
 - [React](https://reactjs.org/)
 - [TypeScript](https://www.typescriptlang.org/)
 - [Ant Design](https://ant.design/)
 - [Monaco Editor](https://microsoft.github.io/monaco-editor/)
+- [glTF](https://github.com/KhronosGroup/glTF)
 - [ImageMagick](https://imagemagick.org/) by ImageMagick Studio LLC
-- [MeidoSerialization](https://github.com/MeidoPromotionAssociation/MeidoSerialization)
