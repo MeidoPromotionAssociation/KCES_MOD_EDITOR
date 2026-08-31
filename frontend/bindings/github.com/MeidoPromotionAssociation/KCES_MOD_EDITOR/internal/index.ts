@@ -7,5 +7,6 @@ export {
 };
 
 export {
+    Settings,
     VersionCheckResult
 } from "./models.js";

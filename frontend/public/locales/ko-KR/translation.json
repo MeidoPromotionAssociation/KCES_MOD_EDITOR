@@ -132,7 +132,10 @@
     "is_check_update_tip": "24시간마다 GitHub에서 새 버전을 확인합니다",
     "dismiss_update_note": "이 업데이트 알림 닫기",
     "dismiss_update_note_tip": "다음 릴리스까지 현재 새 버전 알림을 숨깁니다",
-    "check_update_now": "지금 업데이트 확인"
+    "check_update_now": "지금 업데이트 확인",
+    "single_instance": "단일 인스턴스로 실행",
+    "single_instance_tip": "켜면 창을 하나만 실행하고 ABA EXPLORER 같은 외부 도구가 kces-mod-editor:// 프로토콜로 호출할 때 현재 창을 재사용합니다. 끄면 호출마다 새 창이 열립니다. 변경은 다시 시작한 뒤 적용됩니다.",
+    "single_instance_restart": "저장했습니다. 다시 시작한 뒤 적용됩니다"
   },
   "Disclaimer": {
     "title": "면책 조항",

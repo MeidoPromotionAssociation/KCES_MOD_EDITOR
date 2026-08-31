@@ -45,14 +45,10 @@ func (a *App) SetApplication(app *application.App) {
 	a.app = app
 }
 
-// commandLineFile 从命令行参数中提取文件路径（用于文件关联双击打开）
+// commandLineFile 从命令行参数中提取文件路径（用于文件关联双击与协议唤起）
+// commandLineFile extracts a file path from the command line for file-association and protocol opens
 func commandLineFile(args []string) string {
-	for _, arg := range args {
-		if arg != "" && !strings.HasPrefix(arg, "-") {
-			return arg
-		}
-	}
-	return ""
+	return OpenTargetFromArgs(args)
 }
 
 // StartupFile 返回通过文件关联传入的文件路径
@@ -60,7 +56,7 @@ func (a *App) StartupFile() string {
 	return a.startupFile
 }
 
-// SelectFile 选择需要处理的文件，返回用户选择的文件路径，用户取消时返回空字符串
+// SelectFile 选择需要处理的文件，返回用户选择的文件路径，用户取消时返回空字符串且错误为 nil
 // filetype 形如 "*.menuassets;*.menuassets.json"
 func (a *App) SelectFile(filetype string, fileDisplayName string) (string, error) {
 	if a.app == nil {
@@ -71,12 +67,15 @@ func (a *App) SelectFile(filetype string, fileDisplayName string) (string, error
 		AddFilter(fileDisplayName, filetype)
 	path, err := dialog.PromptForSingleSelection()
 	if err != nil {
+		if strings.Contains(err.Error(), "by user") {
+			return "", nil
+		}
 		return "", fmt.Errorf("open file dialog: %w", err)
 	}
 	return path, nil
 }
 
-// SelectPathToSave 选择一个路径保存文件，返回用户选择的路径，用户取消时返回空字符串
+// SelectPathToSave 选择一个路径保存文件，返回用户选择的路径，用户取消时返回空字符串且错误为 nil
 func (a *App) SelectPathToSave(filetype string, fileDisplayName string) (string, error) {
 	if a.app == nil {
 		return "", errors.New("application is not initialized")
@@ -87,12 +86,15 @@ func (a *App) SelectPathToSave(filetype string, fileDisplayName string) (string,
 	dialog.AddFilter(fileDisplayName, filetype)
 	path, err := dialog.PromptForSingleSelection()
 	if err != nil {
+		if strings.Contains(err.Error(), "by user") {
+			return "", nil
+		}
 		return "", fmt.Errorf("open save dialog: %w", err)
 	}
 	return path, nil
 }
 
-// SelectDirectory 选择一个文件夹，返回用户选择的路径，用户取消时返回空字符串
+// SelectDirectory 选择一个文件夹，返回用户选择的路径，用户取消时返回空字符串且错误为 nil
 func (a *App) SelectDirectory(title string) (string, error) {
 	if a.app == nil {
 		return "", errors.New("application is not initialized")
@@ -106,6 +108,9 @@ func (a *App) SelectDirectory(title string) (string, error) {
 		CanChooseFiles(false)
 	path, err := dialog.PromptForSingleSelection()
 	if err != nil {
+		if strings.Contains(err.Error(), "by user") {
+			return "", nil
+		}
 		return "", fmt.Errorf("open directory dialog: %w", err)
 	}
 	return path, nil
@@ -297,7 +302,7 @@ func (a *App) CompareVersions(localVersion, latestVersion string) (bool, error) 
 	if err != nil {
 		return false, fmt.Errorf("invalid remote version: %w", err)
 	}
-	for i := 0; i < 3; i++ {
+	for i := range 3 {
 		if remote[i] != local[i] {
 			return remote[i] > local[i], nil
 		}

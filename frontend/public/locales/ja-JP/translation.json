@@ -132,7 +132,10 @@
     "is_check_update_tip": "24 時間ごとに GitHub で新しいバージョンを確認します",
     "dismiss_update_note": "この更新通知を閉じる",
     "dismiss_update_note_tip": "次のリリースまで現在の新バージョン通知を非表示にします",
-    "check_update_now": "今すぐ更新を確認"
+    "check_update_now": "今すぐ更新を確認",
+    "single_instance": "単一インスタンスで実行",
+    "single_instance_tip": "オンの場合はウィンドウを 1 つだけ実行し、ABA EXPLORER などの外部ツールが kces-mod-editor:// プロトコルで呼び出したときは現在のウィンドウを再利用します。オフにすると呼び出しごとに新しいウィンドウが開きます。変更は再起動後に有効になります。",
+    "single_instance_restart": "保存しました。再起動後に有効になります"
   },
   "Disclaimer": {
     "title": "免責事項",

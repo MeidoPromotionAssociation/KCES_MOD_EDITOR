@@ -112,6 +112,16 @@ fileAssociations:
     iconName: nei
     role: Editor
 
+# Custom URL Protocols
+# 供 ABA EXPLORER 等外部工具用 kces-mod-editor://open?path=<URL 编码的绝对路径> 唤起本编辑器，
+# 已在运行时由单实例机制转交给现有窗口，不会堆积进程
+# Lets external tools such as ABA EXPLORER invoke this editor via
+# kces-mod-editor://open?path=<URL-encoded absolute path>; a running instance receives it
+# through the single-instance handover instead of spawning another process
+protocols:
+  - scheme: kces-mod-editor
+    description: KCES MOD EDITOR Protocol
+
 # Other data
 other:
   - name: My Other Data

@@ -82,6 +82,16 @@ export function GetFileSize(path: string): $CancellablePromise<number> {
 }
 
 /**
+ * GetSettings 返回当前的启动期配置，供设置页展示
+ * GetSettings returns the current startup configuration for the settings page
+ */
+export function GetSettings(): $CancellablePromise<$models.Settings> {
+    return $Call.ByID(1774682152).then(($result: any) => {
+        return $$createType3($result);
+    });
+}
+
+/**
  * NewStructuredDocument 返回一个格式的合法空文档 JSON 文本，用于新建文件（另存为保存）
  */
 export function NewStructuredDocument(formatKey: string): $CancellablePromise<string> {
@@ -104,14 +114,14 @@ export function ReadTextFile(path: string): $CancellablePromise<string> {
 }
 
 /**
- * SelectDirectory 选择一个文件夹，返回用户选择的路径，用户取消时返回空字符串
+ * SelectDirectory 选择一个文件夹，返回用户选择的路径，用户取消时返回空字符串且错误为 nil
  */
 export function SelectDirectory(title: string): $CancellablePromise<string> {
     return $Call.ByID(2605628586, title);
 }
 
 /**
- * SelectFile 选择需要处理的文件，返回用户选择的文件路径，用户取消时返回空字符串
+ * SelectFile 选择需要处理的文件，返回用户选择的文件路径，用户取消时返回空字符串且错误为 nil
  * filetype 形如 "*.menuassets;*.menuassets.json"
  */
 export function SelectFile(filetype: string, fileDisplayName: string): $CancellablePromise<string> {
@@ -119,7 +129,7 @@ export function SelectFile(filetype: string, fileDisplayName: string): $Cancella
 }
 
 /**
- * SelectPathToSave 选择一个路径保存文件，返回用户选择的路径，用户取消时返回空字符串
+ * SelectPathToSave 选择一个路径保存文件，返回用户选择的路径，用户取消时返回空字符串且错误为 nil
  */
 export function SelectPathToSave(filetype: string, fileDisplayName: string): $CancellablePromise<string> {
     return $Call.ByID(3286775384, filetype, fileDisplayName);
@@ -127,6 +137,22 @@ export function SelectPathToSave(filetype: string, fileDisplayName: string): $Ca
 
 export function SetApplication(app: application$0.App | null): $CancellablePromise<void> {
     return $Call.ByID(724352193, app);
+}
+
+/**
+ * SetSingleInstance 切换单实例开关，下次启动生效
+ * SetSingleInstance toggles single instance and takes effect on the next launch
+ */
+export function SetSingleInstance(enabled: boolean): $CancellablePromise<void> {
+    return $Call.ByID(1393570282, enabled);
+}
+
+/**
+ * SettingsFilePath 返回配置文件路径，设置页用它告诉用户配置存在哪
+ * SettingsFilePath returns the settings file path so the settings page can show where it lives
+ */
+export function SettingsFilePath(): $CancellablePromise<string> {
+    return $Call.ByID(2280734519);
 }
 
 /**
@@ -155,3 +181,4 @@ export function WriteTextFile(path: string, content: string): $CancellablePromis
 const $$createType0 = $models.VersionCheckResult.createFrom;
 const $$createType1 = COM3D2$0.FileInfo.createFrom;
 const $$createType2 = $Create.Map($Create.Any, $Create.Any);
+const $$createType3 = $models.Settings.createFrom;

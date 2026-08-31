@@ -6,6 +6,39 @@
 import { Create as $Create } from "@wailsio/runtime";
 
 /**
+ * Settings 是必须在应用启动前就读到的配置
+ * 单实例要在 application.New 时决定，那时前端还没起来，localStorage 读不到，所以这类设置存文件
+ * Settings holds configuration that must be known before the application starts
+ * Single instance is decided at application.New, before the frontend exists, so localStorage is unavailable and these settings live in a file
+ */
+export class Settings {
+    /**
+     * SingleInstance 为 true 时只允许一个实例运行，协议唤起与文件关联都转交给已有窗口
+     * 关闭后每次唤起都会开新窗口，冷启动仍能打开目标文件
+     * When true only one instance runs and protocol or association opens are handed to the existing window
+     * When off each invocation opens another window, which still opens the target file on cold start
+     */
+    "singleInstance": boolean;
+
+    /** Creates a new Settings instance. */
+    constructor($$source: Partial<Settings> = {}) {
+        if (!("singleInstance" in $$source)) {
+            this["singleInstance"] = false;
+        }
+
+        Object.assign(this, $$source);
+    }
+
+    /**
+     * Creates a new Settings instance from a string or object.
+     */
+    static createFrom($$source: any = {}): Settings {
+        let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
+        return new Settings($$parsedSource as Partial<Settings>);
+    }
+}
+
+/**
  * VersionCheckResult 版本检查结果
  */
 export class VersionCheckResult {

@@ -61,17 +61,21 @@ const App: React.FC = () => {
         };
     }, []);
 
-    // 用户拖放文件
+    // 用户拖放文件，或外部工具通过 kces-mod-editor:// 协议请求打开文件
+    // 协议请求由单实例机制转交过来，冷启动时则已经在 StartupFile 里处理过
     useEffect(() => {
-        const off = Events.On('editor:file-dropped', async (event: any) => {
+        const openFromEvent = async (event: any) => {
             const data = event?.data;
             const path = Array.isArray(data) ? data[0] : data;
             if (typeof path === "string" && path) {
                 await handleOpenedFile(path);
             }
-        });
+        };
+        const offDropped = Events.On('editor:file-dropped', openFromEvent);
+        const offProtocol = Events.On('editor:protocol-open', openFromEvent);
         return () => {
-            off();
+            offDropped();
+            offProtocol();
         };
     }, [handleOpenedFile]);
 

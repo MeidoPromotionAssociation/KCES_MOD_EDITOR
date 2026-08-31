@@ -9,6 +9,7 @@ declare module "@wailsio/runtime" {
     namespace Events {
         interface CustomEvents {
             "editor:file-dropped": string;
+            "editor:protocol-open": string;
         }
     }
 }

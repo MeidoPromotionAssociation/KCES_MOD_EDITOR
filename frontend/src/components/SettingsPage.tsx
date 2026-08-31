@@ -20,7 +20,7 @@ import NavBar from "./NavBar";
 import {Content} from "antd/es/layout/layout";
 import useFileHandlers from "../hooks/fileHandler";
 import {DefaultThemeColor, ThemeMode, useThemeColor, useThemeMode} from "../hooks/themeSwitch";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
     CloseCircleOutlined,
     DownOutlined,
@@ -32,6 +32,8 @@ import {checkForUpdatesWithMessage} from "../utils/CheckUpdate";
 import {setRecalculateLookupHash, shouldRecalculateLookupHash} from "../utils/lookupHashSetting";
 import {AllSupportedFileTypes, SettingCheckUpdateKey} from "../utils/consts";
 import {NewVersionAvailableKey} from "../utils/LocalStorageKeys";
+import {GetSettings, SetSingleInstance} from "../../bindings/github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR/internal/app.ts";
+import {appMessage as message} from "../utils/feedback";
 
 const SettingsPage: React.FC = () => {
     const {t, i18n} = useTranslation();
@@ -46,6 +48,24 @@ const SettingsPage: React.FC = () => {
     });
 
     const [recalculateHash, setRecalculateHashState] = useState(shouldRecalculateLookupHash);
+
+    // 单实例存在配置文件里而不是 localStorage：它要在应用启动前就被读到
+    const [singleInstance, setSingleInstance] = useState(true);
+    useEffect(() => {
+        GetSettings()
+            .then((settings) => setSingleInstance(settings.singleInstance))
+            .catch((err) => console.warn('read startup settings failed:', err));
+    }, []);
+
+    const handleSingleInstanceChange = (checked: boolean) => {
+        setSingleInstance(checked);
+        SetSingleInstance(checked)
+            .then(() => message.success(t('SettingsPage.single_instance_restart')))
+            .catch((err) => {
+                setSingleInstance(!checked);
+                message.error(String(err));
+            });
+    };
 
     const handleRecalculateHashChange = (checked: boolean) => {
         setRecalculateHashState(checked);
@@ -127,6 +147,13 @@ const SettingsPage: React.FC = () => {
                                         tooltip: t('SettingsPage.recalculate_lookup_hash_tip'),
                                         checked: recalculateHash,
                                         onChange: handleRecalculateHashChange,
+                                        type: 'switch'
+                                    },
+                                    {
+                                        title: t('SettingsPage.single_instance'),
+                                        tooltip: t('SettingsPage.single_instance_tip'),
+                                        checked: singleInstance,
+                                        onChange: handleSingleInstanceChange,
                                         type: 'switch'
                                     },
                                     {

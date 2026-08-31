@@ -132,7 +132,10 @@
     "is_check_update_tip": "Check GitHub for a new version every 24 hours",
     "dismiss_update_note": "Dismiss this update notice",
     "dismiss_update_note_tip": "Hide the current new-version notice until the next release",
-    "check_update_now": "Check for updates now"
+    "check_update_now": "Check for updates now",
+    "single_instance": "Run as a single instance",
+    "single_instance_tip": "When on only one window runs and invocations from external tools such as ABA EXPLORER through the kces-mod-editor:// protocol reuse the current window; when off each invocation opens another window. Restart the app for a change to take effect.",
+    "single_instance_restart": "Saved, effective after a restart"
   },
   "Disclaimer": {
     "title": "Disclaimer",
