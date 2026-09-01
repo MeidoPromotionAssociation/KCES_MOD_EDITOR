@@ -39,6 +39,132 @@ export class Settings {
 }
 
 /**
+ * Texture2DInfo 独立 Texture2D 主文件的元数据
+ */
+export class Texture2DInfo {
+    /**
+     * Unity 资源名 / Unity asset name
+     */
+    "name": string;
+
+    /**
+     * 宽 / Width
+     */
+    "width": number;
+
+    /**
+     * 高 / Height
+     */
+    "height": number;
+
+    /**
+     * Unity TextureFormat 枚举值 / Unity TextureFormat enum value
+     */
+    "textureFormat": number;
+
+    /**
+     * TextureFormat 的可读名称 / Readable TextureFormat name
+     */
+    "formatName": string;
+
+    /**
+     * mipmap 层数 / Mipmap count
+     */
+    "mipCount": number;
+
+    /**
+     * 内联像素数据大小 / Inline pixel data size
+     */
+    "inlineBytes": number;
+
+    /**
+     * 外部 .resS 引用路径，内联时为空 / External .resS path, empty when inline
+     */
+    "streamPath": string;
+
+    /**
+     * 外部引用数据大小 / External payload size
+     */
+    "streamBytes": number;
+
+    /** Creates a new Texture2DInfo instance. */
+    constructor($$source: Partial<Texture2DInfo> = {}) {
+        if (!("name" in $$source)) {
+            this["name"] = "";
+        }
+        if (!("width" in $$source)) {
+            this["width"] = 0;
+        }
+        if (!("height" in $$source)) {
+            this["height"] = 0;
+        }
+        if (!("textureFormat" in $$source)) {
+            this["textureFormat"] = 0;
+        }
+        if (!("formatName" in $$source)) {
+            this["formatName"] = "";
+        }
+        if (!("mipCount" in $$source)) {
+            this["mipCount"] = 0;
+        }
+        if (!("inlineBytes" in $$source)) {
+            this["inlineBytes"] = 0;
+        }
+        if (!("streamPath" in $$source)) {
+            this["streamPath"] = "";
+        }
+        if (!("streamBytes" in $$source)) {
+            this["streamBytes"] = 0;
+        }
+
+        Object.assign(this, $$source);
+    }
+
+    /**
+     * Creates a new Texture2DInfo instance from a string or object.
+     */
+    static createFrom($$source: any = {}): Texture2DInfo {
+        let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
+        return new Texture2DInfo($$parsedSource as Partial<Texture2DInfo>);
+    }
+}
+
+/**
+ * Texture2DPreview 预览用的 base64 图像
+ */
+export class Texture2DPreview {
+    /**
+     * 图像 MIME 类型 / Image MIME type
+     */
+    "mime": string;
+
+    /**
+     * base64 编码的图像数据 / Base64-encoded image data
+     */
+    "base64": string;
+
+    /** Creates a new Texture2DPreview instance. */
+    constructor($$source: Partial<Texture2DPreview> = {}) {
+        if (!("mime" in $$source)) {
+            this["mime"] = "";
+        }
+        if (!("base64" in $$source)) {
+            this["base64"] = "";
+        }
+
+        Object.assign(this, $$source);
+    }
+
+    /**
+     * Creates a new Texture2DPreview instance from a string or object.
+     */
+    static createFrom($$source: any = {}): Texture2DPreview {
+        let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
+        return new Texture2DPreview($$parsedSource as Partial<Texture2DPreview>);
+    }
+}
+
+/**
  * VersionCheckResult 版本检查结果
  */
 export class VersionCheckResult {

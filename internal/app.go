@@ -77,11 +77,19 @@ func (a *App) SelectFile(filetype string, fileDisplayName string) (string, error
 
 // SelectPathToSave 选择一个路径保存文件，返回用户选择的路径，用户取消时返回空字符串且错误为 nil
 func (a *App) SelectPathToSave(filetype string, fileDisplayName string) (string, error) {
+	return a.SelectPathToSaveAs(filetype, fileDisplayName, "", "")
+}
+
+// SelectPathToSaveAs 与 SelectPathToSave 相同，但可以预填保存对话框的目录与文件名
+// directory 或 filename 为空时该项不预填
+func (a *App) SelectPathToSaveAs(filetype string, fileDisplayName string, directory string, filename string) (string, error) {
 	if a.app == nil {
 		return "", errors.New("application is not initialized")
 	}
 	dialog := a.app.Dialog.SaveFileWithOptions(&application.SaveFileDialogOptions{
-		Title: "Save file",
+		Title:     "Save file",
+		Directory: directory,
+		Filename:  filename,
 	})
 	dialog.AddFilter(fileDisplayName, filetype)
 	path, err := dialog.PromptForSingleSelection()

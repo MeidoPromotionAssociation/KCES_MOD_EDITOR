@@ -13,14 +13,15 @@ import {DisclaimerAgreedKey} from "./utils/LocalStorageKeys";
 import {KCESFormats} from "./utils/consts";
 import {registerEditingSchemas} from "./utils/monacoSchemas";
 import {StartupFile} from "../bindings/github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR/internal/app.ts";
-import {bindMessage} from "./utils/feedback";
+import {bindMessage, bindModal} from "./utils/feedback";
 
-// MessageBinder 把组件树内（可消费主题上下文）的 message 实例绑定到全局桥
+// MessageBinder 把组件树内（可消费主题上下文）的 message 与 modal 实例绑定到全局桥
 const MessageBinder: React.FC = () => {
-    const {message} = AntdApp.useApp();
+    const {message, modal} = AntdApp.useApp();
     useEffect(() => {
         bindMessage(message);
-    }, [message]);
+        bindModal(modal);
+    }, [message, modal]);
     return null;
 };
 

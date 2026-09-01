@@ -20,6 +20,8 @@ export const RecalculateLookupHashKey = "RecalculateLookupHash"; // 存储保存
 
 export const AssetListWidthKey = "AssetListWidth"; // 存储 xxxassets 编辑器左侧资产列表的宽度（px）
 
+export const Texture2DExportFormatKey = "Texture2DExportFormat"; // 存储 Texture2D 编辑器导出图像的默认格式（png / dds）
+
 // 每个格式编辑器的视图模式键统一由此函数生成
 export function editorViewModeKey(formatKey: string): string {
     return `${formatKey}EditorViewMode`;

@@ -27,14 +27,19 @@ export type KCESFormatGroup = "parts" | "physics" | "character" | "data";
  * - fileType: 后端 DetermineFileType 返回的 FileType 名称
  * - suffixes: 原生文件后缀（小写），用于扩展名回退与保存校验
  * - altSuffixes: 同一编辑器可直接读写的其他明文后缀（如 .nei 的 .csv），没有 `.json` 编辑变体
+ * - noJsonVariant: 该格式没有编辑 JSON 变体（如贴图），选择对话框不追加 `*.xxx.json`
  */
 export interface KCESFormatDef {
     key: string;
     fileType: string;
     suffixes: string[];
     altSuffixes?: string[];
+    noJsonVariant?: boolean;
     group: KCESFormatGroup;
 }
+
+/** Texture2D 编辑器可作为「图像 → 贴图」输入直接打开的图像后缀 */
+export const Texture2DImageSuffixes = [".png", ".jpg", ".jpeg", ".bmp", ".gif"];
 
 // 不包含 ct/aba/mod 等打包格式，也不包含 brd/enm/vd/raw bytes 等内部格式
 export const KCESFormats: KCESFormatDef[] = [
@@ -43,6 +48,15 @@ export const KCESFormats: KCESFormatDef[] = [
     {key: "materialassets", fileType: "materialassets", suffixes: [".materialassets"], group: "parts"},
     {key: "pmatassets", fileType: "pmatassets", suffixes: [".pmatassets"], group: "parts"},
     {key: "model", fileType: "model", suffixes: [".model"], group: "parts"},
+    // 贴图是独立 Unity Texture2D 对象，不是结构化 JSON，因此没有 .json 编辑变体；
+    // 放在 maidcollider（后缀 .bytes）之前，好让 .tex.bytes 先命中这里
+    {
+        key: "texture2d",
+        fileType: "texture2d",
+        suffixes: [".tex", ".tex.bytes", ".texture2d", ".texture2d.bytes"],
+        noJsonVariant: true,
+        group: "parts",
+    },
     // 物理 / Physics
     {key: "dbconf", fileType: "dbconf", suffixes: [".dbconf"], group: "physics"},
     {key: "dbcol", fileType: "dbcol", suffixes: [".dbcol"], group: "physics"},
@@ -83,6 +97,7 @@ export function formatByFileType(fileType: string): KCESFormatDef | undefined {
 /**
  * 按文件路径的扩展名回退匹配格式（用于类型识别失败时）
  * 支持原生后缀、`.json` 编辑后缀与 altSuffixes（如 .csv），`.ikcol.bytes` 优先于 `.bytes`
+ * 图像文件交给 Texture2D 编辑器，作为「图像 → 贴图」方向的输入
  */
 export function formatByPath(path: string): KCESFormatDef | undefined {
     let lower = path.toLowerCase().replace(/\\/g, "/");
@@ -103,6 +118,9 @@ export function formatByPath(path: string): KCESFormatDef | undefined {
     if (lower === "maid_collider.bytes" || lower === "maid_collider_touch.bytes") {
         return formatByKey("maidcollider");
     }
+    if (Texture2DImageSuffixes.some((suffix) => lower.endsWith(suffix))) {
+        return formatByKey("texture2d");
+    }
     for (const format of KCESFormats) {
         for (const suffix of format.suffixes) {
             if (suffix.startsWith(".") && lower.endsWith(suffix)) {
@@ -119,7 +137,10 @@ export function selectPattern(format: KCESFormatDef): string {
     for (const suffix of format.suffixes) {
         const prefix = suffix.startsWith(".") ? "*" : "";
         patterns.push(`${prefix}${suffix}`);
-        patterns.push(`${prefix}${suffix}.json`);
+        // 贴图这类没有编辑 JSON 变体的格式不追加 .json
+        if (!format.noJsonVariant) {
+            patterns.push(`${prefix}${suffix}.json`);
+        }
     }
     // altSuffixes 是明文格式，没有 `.json` 编辑变体
     for (const suffix of format.altSuffixes ?? []) {

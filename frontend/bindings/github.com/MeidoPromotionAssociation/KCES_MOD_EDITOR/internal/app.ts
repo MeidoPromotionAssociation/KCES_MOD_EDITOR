@@ -135,6 +135,14 @@ export function SelectPathToSave(filetype: string, fileDisplayName: string): $Ca
     return $Call.ByID(3286775384, filetype, fileDisplayName);
 }
 
+/**
+ * SelectPathToSaveAs 与 SelectPathToSave 相同，但可以预填保存对话框的目录与文件名
+ * directory 或 filename 为空时该项不预填
+ */
+export function SelectPathToSaveAs(filetype: string, fileDisplayName: string, directory: string, filename: string): $CancellablePromise<string> {
+    return $Call.ByID(4080519672, filetype, fileDisplayName, directory, filename);
+}
+
 export function SetApplication(app: application$0.App | null): $CancellablePromise<void> {
     return $Call.ByID(724352193, app);
 }

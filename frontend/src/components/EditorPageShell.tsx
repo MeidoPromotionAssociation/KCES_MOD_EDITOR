@@ -20,6 +20,7 @@ import SadEditor from "./SadEditor";
 import MaidColliderEditor from "./MaidColliderEditor";
 import KCESModelEditor from "./KCESModelEditor";
 import PskEditor from "./PskEditor";
+import Texture2DEditor from "./Texture2DEditor";
 
 const {Content} = Layout;
 
@@ -37,6 +38,8 @@ function editorComponentFor(format: KCESFormatDef) {
             return PMatAssetsEditor;
         case "model":
             return KCESModelEditor;
+        case "texture2d":
+            return Texture2DEditor;
         case "sad":
             return SadEditor;
         case "maidcollider":

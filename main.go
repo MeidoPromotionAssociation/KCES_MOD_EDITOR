@@ -61,6 +61,8 @@ func main() {
 			application.NewService(&KCESService.MaterialAssetsService{}),
 			application.NewService(&KCESService.PriorityMaterialAssetsService{}),
 			application.NewService(&KCESService.ModelService{}),
+			// 贴图 / Texture（独立 Unity Texture2D 主文件，走 App 自己的服务而不是结构化 JSON 通道）
+			application.NewService(&internal.Texture2DService{}),
 			// 物理 / Physics payloads
 			application.NewService(&KCESService.DBConfService{}),
 			application.NewService(&KCESService.DBColService{}),
