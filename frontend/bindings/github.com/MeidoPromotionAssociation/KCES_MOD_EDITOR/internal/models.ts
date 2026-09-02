@@ -6,6 +6,42 @@
 import { Create as $Create } from "@wailsio/runtime";
 
 /**
+ * ProtocolStatus 是自定义协议的当前状态，设置页用它说明协议现在能不能用
+ * ProtocolStatus is the current state of the custom protocol so the settings page can explain whether it works
+ */
+export class ProtocolStatus {
+    /**
+     * 协议名，不含 :// / Scheme name without ://
+     */
+    "scheme": string;
+
+    /**
+     * 系统上是否注册过 / Whether it is registered on this system
+     */
+    "registered": boolean;
+
+    /** Creates a new ProtocolStatus instance. */
+    constructor($$source: Partial<ProtocolStatus> = {}) {
+        if (!("scheme" in $$source)) {
+            this["scheme"] = "";
+        }
+        if (!("registered" in $$source)) {
+            this["registered"] = false;
+        }
+
+        Object.assign(this, $$source);
+    }
+
+    /**
+     * Creates a new ProtocolStatus instance from a string or object.
+     */
+    static createFrom($$source: any = {}): ProtocolStatus {
+        let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
+        return new ProtocolStatus($$parsedSource as Partial<ProtocolStatus>);
+    }
+}
+
+/**
  * Settings 是必须在应用启动前就读到的配置
  * 单实例要在 application.New 时决定，那时前端还没起来，localStorage 读不到，所以这类设置存文件
  * Settings holds configuration that must be known before the application starts

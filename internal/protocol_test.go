@@ -94,7 +94,7 @@ func TestOpenTargetFromArgs(t *testing.T) {
 	}
 
 	// 协议唤起：argv 里是 URL，不能被当成普通路径
-	if got := OpenTargetFromArgs([]string{"KCES_MOD_EDITOR.exe", protocolURLFor(target)}); got != target {
+	if got := OpenTargetFromArgs([]string{protocolURLFor(target)}); got != target {
 		t.Errorf("protocol launch = %q, want %q", got, target)
 	}
 	// 文件关联双击：argv 里就是路径
@@ -111,5 +111,50 @@ func TestOpenTargetFromArgs(t *testing.T) {
 	}
 	if got := OpenTargetFromArgs([]string{"-flag", ""}); got != "" {
 		t.Errorf("flags only = %q, want empty", got)
+	}
+}
+
+// TestSecondInstanceTargetSkipsExecutable 检查单实例转交时不会把 exe 自己的路径当成要打开的文件
+// SecondInstanceData.Args 是那个进程完整的 os.Args，第一个元素是可执行文件，漏掉这一步文件关联唤起就会打开 exe
+// TestSecondInstanceTargetSkipsExecutable checks a single-instance handover does not take the exe path for the file to open
+// SecondInstanceData.Args is that process's full os.Args whose first element is the executable, and missing that
+// would make an association invocation open the exe
+func TestSecondInstanceTargetSkipsExecutable(t *testing.T) {
+	dir := t.TempDir()
+	target := filepath.Join(dir, "parts.menuassets")
+	if err := os.WriteFile(target, []byte("payload"), 0644); err != nil {
+		t.Fatalf("write sample: %v", err)
+	}
+	executable := filepath.Join(dir, "kces-mod-editor.exe")
+	if err := os.WriteFile(executable, []byte("payload"), 0644); err != nil {
+		t.Fatalf("write sample: %v", err)
+	}
+
+	// 文件关联双击唤起第二个实例
+	// An association double-click launching a second instance
+	if got := SecondInstanceTarget([]string{executable, target}); got != target {
+		t.Errorf("association handover = %q, want %q", got, target)
+	}
+	// 协议唤起第二个实例
+	// A protocol invocation launching a second instance
+	if got := SecondInstanceTarget([]string{executable, protocolURLFor(target)}); got != target {
+		t.Errorf("protocol handover = %q, want %q", got, target)
+	}
+	// 直接双击图标启动，没有任何目标
+	// Launched by clicking the icon, with no target at all
+	if got := SecondInstanceTarget([]string{executable}); got != "" {
+		t.Errorf("bare launch = %q, want empty", got)
+	}
+	if got := SecondInstanceTarget(nil); got != "" {
+		t.Errorf("empty arguments = %q, want empty", got)
+	}
+}
+
+// TestProtocolStatusReportsScheme 检查设置页拿到的协议名与常量一致
+// TestProtocolStatusReportsScheme checks the scheme the settings page receives matches the constant
+func TestProtocolStatusReportsScheme(t *testing.T) {
+	status := (&App{}).ProtocolStatus()
+	if status.Scheme != ProtocolScheme {
+		t.Errorf("ProtocolStatus().Scheme = %q, want %q", status.Scheme, ProtocolScheme)
 	}
 }

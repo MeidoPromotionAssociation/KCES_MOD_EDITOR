@@ -5,6 +5,7 @@ go 1.27
 require (
 	github.com/MeidoPromotionAssociation/MeidoSerialization/v2 v2.2.1
 	github.com/wailsapp/wails/v3 v3.0.0-beta.16
+	golang.org/x/sys v0.47.0
 )
 
 require (
@@ -21,6 +22,5 @@ require (
 	github.com/qmuntal/gltf v0.29.0 // indirect
 	github.com/ugorji/go/codec v1.3.2 // indirect
 	github.com/ulikunitz/xz v0.5.16 // indirect
-	golang.org/x/sys v0.47.0 // indirect
 	golang.org/x/text v0.41.0 // indirect
 )

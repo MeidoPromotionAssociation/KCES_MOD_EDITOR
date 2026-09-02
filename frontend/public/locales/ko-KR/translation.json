@@ -135,9 +135,13 @@
     "dismiss_update_note": "이 업데이트 알림 닫기",
     "dismiss_update_note_tip": "다음 릴리스까지 현재 새 버전 알림을 숨깁니다",
     "check_update_now": "지금 업데이트 확인",
+    "launch_settings": "실행 및 연동",
     "single_instance": "단일 인스턴스로 실행",
     "single_instance_tip": "켜면 창을 하나만 실행하고 ABA EXPLORER 같은 외부 도구가 kces-mod-editor:// 프로토콜로 호출할 때 현재 창을 재사용합니다. 끄면 호출마다 새 창이 열립니다. 변경은 다시 시작한 뒤 적용됩니다.",
-    "single_instance_restart": "저장했습니다. 다시 시작한 뒤 적용됩니다"
+    "single_instance_restart": "저장했습니다. 다시 시작한 뒤 적용됩니다",
+    "url_protocol": "URL 프로토콜",
+    "url_protocol_tip": "ABA EXPLORER 같은 외부 도구는 {{scheme}}://open?path=<URL 인코딩된 절대 경로> 형식으로 이 편집기에 파일을 열도록 요청할 수 있으며, 이 편집기에 편집 페이지가 있는 형식만 허용합니다. 프로토콜은 설치 프로그램이 시스템에 등록하므로 압축만 풀어서 쓰는 포터블 버전에는 등록이 없어 호출해도 아무 일도 일어나지 않습니다.",
+    "url_protocol_unregistered": "등록되지 않음"
   },
   "Disclaimer": {
     "title": "면책 조항",

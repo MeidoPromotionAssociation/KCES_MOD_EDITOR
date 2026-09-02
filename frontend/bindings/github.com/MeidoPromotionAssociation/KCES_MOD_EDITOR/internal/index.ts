@@ -9,6 +9,7 @@ export {
 };
 
 export {
+    ProtocolStatus,
     Settings,
     Texture2DInfo,
     Texture2DPreview,

@@ -40,7 +40,7 @@ func main() {
 					mainWindow.Show()
 					mainWindow.Focus()
 				}
-				if path := internal.OpenTargetFromArgs(data.Args); path != "" && wailsApp != nil {
+				if path := internal.SecondInstanceTarget(data.Args); path != "" && wailsApp != nil {
 					wailsApp.Event.Emit(internal.ProtocolOpenEvent, path)
 				}
 			},
@@ -50,9 +50,9 @@ func main() {
 	wailsApp = application.New(application.Options{
 		Name:        "KCES_MOD_EDITOR",
 		Description: "All In One Modding tool for KCES",
-		// 单实例：协议每次唤起都启新进程会堆积窗口，默认把请求转交给已在运行的实例
-		// Single instance: letting every protocol invocation spawn a process would pile up windows,
-		// so by default the request is handed over to the instance already running
+		// 单实例：开启后协议唤起与文件关联双击都转交给已在运行的实例，不会堆积窗口
+		// Single instance: once on, protocol invocations and association double-clicks are handed to the instance
+		// already running instead of piling up windows
 		SingleInstance: singleInstance,
 		Services: []application.Service{
 			application.NewService(app),

@@ -135,9 +135,13 @@
     "dismiss_update_note": "忽略本次更新提示",
     "dismiss_update_note_tip": "隐藏当前新版本的提示，直到下一个新版本发布",
     "check_update_now": "立即检查更新",
+    "launch_settings": "启动与集成",
     "single_instance": "单实例运行",
     "single_instance_tip": "开启后只允许一个窗口运行，从 ABA EXPLORER 等外部工具通过 kces-mod-editor:// 协议唤起时会复用当前窗口；关闭后每次唤起都会开一个新窗口。修改后需要重启本程序才生效。",
-    "single_instance_restart": "已保存，重启后生效"
+    "single_instance_restart": "已保存，重启后生效",
+    "url_protocol": "URL 协议",
+    "url_protocol_tip": "外部工具（如 ABA EXPLORER）可以用 {{scheme}}://open?path=<URL 编码的绝对路径> 请求本编辑器打开一个文件，只接受本编辑器有编辑页面的格式。协议由安装器写入系统，直接解压的绿色版不会注册，此时唤起不会有任何反应。",
+    "url_protocol_unregistered": "未注册"
   },
   "Disclaimer": {
     "title": "免责声明",

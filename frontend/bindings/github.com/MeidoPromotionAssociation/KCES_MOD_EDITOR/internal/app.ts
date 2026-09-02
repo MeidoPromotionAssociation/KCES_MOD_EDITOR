@@ -99,6 +99,19 @@ export function NewStructuredDocument(formatKey: string): $CancellablePromise<st
 }
 
 /**
+ * ProtocolStatus 返回协议名与注册状态
+ * 协议由安装器写入，直接解压的绿色版不会注册，此时外部工具唤起不会有任何反应，需要在设置页说清楚
+ * ProtocolStatus returns the scheme name and its registration state
+ * The installer writes the registration, so a portable copy has none and an external invocation would silently
+ * do nothing, which the settings page has to spell out
+ */
+export function ProtocolStatus(): $CancellablePromise<$models.ProtocolStatus> {
+    return $Call.ByID(1759370393).then(($result: any) => {
+        return $$createType4($result);
+    });
+}
+
+/**
  * ReadStructuredFile 读取原生文件并以 JSON 文本返回结构化数据。
  * 走字符串通道以保留 uint64 等大整数的精度（前端用 lossless 解析）
  */
@@ -190,3 +203,4 @@ const $$createType0 = $models.VersionCheckResult.createFrom;
 const $$createType1 = COM3D2$0.FileInfo.createFrom;
 const $$createType2 = $Create.Map($Create.Any, $Create.Any);
 const $$createType3 = $models.Settings.createFrom;
+const $$createType4 = $models.ProtocolStatus.createFrom;

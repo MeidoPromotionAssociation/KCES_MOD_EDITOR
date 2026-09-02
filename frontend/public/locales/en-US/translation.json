@@ -135,9 +135,13 @@
     "dismiss_update_note": "Dismiss this update notice",
     "dismiss_update_note_tip": "Hide the current new-version notice until the next release",
     "check_update_now": "Check for updates now",
+    "launch_settings": "Launch and Integration",
     "single_instance": "Run as a single instance",
     "single_instance_tip": "When on only one window runs and invocations from external tools such as ABA EXPLORER through the kces-mod-editor:// protocol reuse the current window; when off each invocation opens another window. Restart the app for a change to take effect.",
-    "single_instance_restart": "Saved, effective after a restart"
+    "single_instance_restart": "Saved, effective after a restart",
+    "url_protocol": "URL protocol",
+    "url_protocol_tip": "External tools such as ABA EXPLORER can ask this editor to open a file with {{scheme}}://open?path=<URL-encoded absolute path>, and only formats that have an editor page here are accepted. The installer writes the registration into the system, so a portable copy that was simply unzipped has none and an invocation does nothing.",
+    "url_protocol_unregistered": "Not registered"
   },
   "Disclaimer": {
     "title": "Disclaimer",

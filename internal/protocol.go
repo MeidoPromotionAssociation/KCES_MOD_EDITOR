@@ -111,9 +111,9 @@ func ProtocolFileFromArgs(args []string) string {
 	return ""
 }
 
-// OpenTargetFromArgs 从一组命令行参数中判断该打开哪个文件
+// OpenTargetFromArgs 从一组不含程序名的命令行参数中判断该打开哪个文件
 // 先按协议 URL 解析，没有再取第一个看起来是本地路径的参数（文件关联双击走这条）
-// OpenTargetFromArgs decides which file a set of command-line arguments asks to open
+// OpenTargetFromArgs decides which file a set of command-line arguments asks to open, program name excluded
 // Protocol URLs come first, then the first argument that looks like a local path, which is how file-association opens arrive
 func OpenTargetFromArgs(args []string) string {
 	if path := ProtocolFileFromArgs(args); path != "" {
@@ -126,4 +126,34 @@ func OpenTargetFromArgs(args []string) string {
 		return argument
 	}
 	return ""
+}
+
+// SecondInstanceTarget 从另一个实例的启动参数里判断该打开哪个文件
+// SecondInstanceData.Args 直接来自那个进程的 os.Args，第一个元素是可执行文件自身，必须先去掉：
+// 否则文件关联双击唤起时，第一个非选项参数就是 exe 的路径，会被当成用户想打开的文件
+// SecondInstanceTarget decides which file another instance's launch arguments ask to open
+// SecondInstanceData.Args is that process's os.Args verbatim and its first element is the executable itself,
+// which has to be dropped: otherwise on an association double-click the first non-flag argument is the exe path
+// and would be taken for the file the user wanted to open
+func SecondInstanceTarget(args []string) string {
+	if len(args) > 0 {
+		args = args[1:]
+	}
+	return OpenTargetFromArgs(args)
+}
+
+// ProtocolStatus 是自定义协议的当前状态，设置页用它说明协议现在能不能用
+// ProtocolStatus is the current state of the custom protocol so the settings page can explain whether it works
+type ProtocolStatus struct {
+	Scheme     string `json:"scheme"`     // 协议名，不含 :// / Scheme name without ://
+	Registered bool   `json:"registered"` // 系统上是否注册过 / Whether it is registered on this system
+}
+
+// ProtocolStatus 返回协议名与注册状态
+// 协议由安装器写入，直接解压的绿色版不会注册，此时外部工具唤起不会有任何反应，需要在设置页说清楚
+// ProtocolStatus returns the scheme name and its registration state
+// The installer writes the registration, so a portable copy has none and an external invocation would silently
+// do nothing, which the settings page has to spell out
+func (a *App) ProtocolStatus() ProtocolStatus {
+	return ProtocolStatus{Scheme: ProtocolScheme, Registered: protocolRegistered(ProtocolScheme)}
 }

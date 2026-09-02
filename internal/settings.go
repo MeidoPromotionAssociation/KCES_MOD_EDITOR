@@ -20,9 +20,10 @@ type Settings struct {
 }
 
 // DefaultSettings 返回默认配置
-// 默认开启单实例：协议唤起如果每次都启新进程，连点几次就会堆出一排窗口
+// 单实例默认关闭：编辑器经常需要开两个窗口对照两份部件，默认转交给已有窗口会让第二次唤起变成覆盖当前编辑对象
 // DefaultSettings returns the default configuration
-// Single instance defaults to on because protocol invocations would otherwise pile up a row of windows
+// Single instance defaults to off because comparing two parts in two windows is normal here, and handing over by
+// default would turn the second invocation into replacing whatever is being edited
 func DefaultSettings() Settings {
 	return Settings{SingleInstance: false}
 }

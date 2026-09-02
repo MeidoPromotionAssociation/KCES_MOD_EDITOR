@@ -135,9 +135,13 @@
     "dismiss_update_note": "この更新通知を閉じる",
     "dismiss_update_note_tip": "次のリリースまで現在の新バージョン通知を非表示にします",
     "check_update_now": "今すぐ更新を確認",
+    "launch_settings": "起動と連携",
     "single_instance": "単一インスタンスで実行",
     "single_instance_tip": "オンの場合はウィンドウを 1 つだけ実行し、ABA EXPLORER などの外部ツールが kces-mod-editor:// プロトコルで呼び出したときは現在のウィンドウを再利用します。オフにすると呼び出しごとに新しいウィンドウが開きます。変更は再起動後に有効になります。",
-    "single_instance_restart": "保存しました。再起動後に有効になります"
+    "single_instance_restart": "保存しました。再起動後に有効になります",
+    "url_protocol": "URL プロトコル",
+    "url_protocol_tip": "ABA EXPLORER などの外部ツールは {{scheme}}://open?path=<URL エンコードした絶対パス> で本エディターにファイルを開かせることができます。受け付けるのは本エディターに編集ページがあるフォーマットのみです。プロトコルはインストーラーがシステムに登録するため、展開しただけのポータブル版では登録されず、呼び出しても何も起こりません。",
+    "url_protocol_unregistered": "未登録"
   },
   "Disclaimer": {
     "title": "免責事項",
