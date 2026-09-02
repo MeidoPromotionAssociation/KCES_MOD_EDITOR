@@ -1,5 +1,5 @@
-github.com/MeidoPromotionAssociation/MeidoSerialization/v2 v2.2.1 h1:HwFoZVck/mM/RfAzEmNDfdJFk0645KD9vLu8zC5curs=
-github.com/MeidoPromotionAssociation/MeidoSerialization/v2 v2.2.1/go.mod h1:NTzBUdbJiNIWTpvbEyNQPkwTReDGV0UlXIHYIEnYIWc=
+github.com/MeidoPromotionAssociation/MeidoSerialization/v2 v2.3.0 h1:73N4exmOmgvFY1jIXIQEYE/m16VjUwAdGywtfbgacdQ=
+github.com/MeidoPromotionAssociation/MeidoSerialization/v2 v2.3.0/go.mod h1:NTzBUdbJiNIWTpvbEyNQPkwTReDGV0UlXIHYIEnYIWc=
 github.com/adrg/xdg v0.5.3 h1:xRnxJXne7+oWDatRhR1JLnvuccuIeCoBu2rtuLqQB78=
 github.com/adrg/xdg v0.5.3/go.mod h1:nlTsY+NNiCBGCK2tpm09vRqfVzrc2fLmXGpBLF0zlTQ=
 github.com/coder/websocket v1.8.15 h1:6B2JPeOGlpff2Uz6vOEH1Vzpi0iUz20A+lPVhPHtNUA=
