@@ -9,7 +9,6 @@ export {
     ClothPenetrationAxis,
     ClothPenetrationMode,
     ClothTeleportMode,
-    ColliderMaidProp,
     ColorPreset,
     ColorPresetColorPack,
     ColorPresetControlSlider,
@@ -28,10 +27,6 @@ export {
     FloatProp,
     GradaColDef,
     HairMake,
-    HitCheck,
-    HitCheckEntry,
-    IKColliderGroup,
-    IKColliderPackage,
     InfColData,
     InfColorParam,
     KCESPresetBodyData,
@@ -62,8 +57,6 @@ export {
     KCESPresetTextureMask,
     KCESPresetTextureTransform,
     KeywordProp,
-    LimbColliderItem,
-    LimbColliderPackage,
     MagicaAngleLimitConstraint,
     MagicaAngleRestorationConstraint,
     MagicaClothSerializeData,
@@ -82,8 +75,6 @@ export {
     MagicaToggleValue,
     MagicaTriangleBendingConstraint,
     MagicaWindSettings,
-    MaidCapsuleCollider,
-    MaidColliderFile,
     MaskData,
     MaskParam,
     Material,
@@ -97,7 +88,6 @@ export {
     PriorityMaterial,
     PriorityMaterialAssets,
     SavedAttachData,
-    SavedAttachFile,
     SavedAttachPosRotScale,
     SkinThickness,
     TextureProp,
@@ -142,6 +132,5 @@ export {
 
 export type {
     ColliderPackage,
-    ColliderRef,
     PartsColor
 } from "./models.js";

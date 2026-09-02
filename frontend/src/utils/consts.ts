@@ -34,14 +34,14 @@ export interface KCESFormatDef {
     fileType: string;
     suffixes: string[];
     altSuffixes?: string[];
-    noJsonVariant?: boolean;
     group: KCESFormatGroup;
+    noJsonVariant?: boolean;
 }
 
 /** Texture2D 编辑器可作为「图像 → 贴图」输入直接打开的图像后缀 */
 export const Texture2DImageSuffixes = [".png", ".jpg", ".jpeg", ".bmp", ".gif"];
 
-// 不包含 ct/aba/mod 等打包格式，也不包含 brd/enm/vd/raw bytes 等内部格式
+/** 所有支持的格式 **/
 export const KCESFormats: KCESFormatDef[] = [
     // 服装部件 / Parts
     {key: "menuassets", fileType: "menuassets", suffixes: [".menuassets"], group: "parts"},
@@ -49,13 +49,12 @@ export const KCESFormats: KCESFormatDef[] = [
     {key: "pmatassets", fileType: "pmatassets", suffixes: [".pmatassets"], group: "parts"},
     {key: "model", fileType: "model", suffixes: [".model"], group: "parts"},
     // 贴图是独立 Unity Texture2D 对象，不是结构化 JSON，因此没有 .json 编辑变体；
-    // 放在 maidcollider（后缀 .bytes）之前，好让 .tex.bytes 先命中这里
     {
         key: "texture2d",
         fileType: "texture2d",
-        suffixes: [".tex", ".tex.bytes", ".texture2d", ".texture2d.bytes"],
-        noJsonVariant: true,
+        suffixes: [".tex", ".texture2d", ".texture2d"],
         group: "parts",
+        noJsonVariant: true,
     },
     // 物理 / Physics
     {key: "dbconf", fileType: "dbconf", suffixes: [".dbconf"], group: "physics"},
@@ -66,19 +65,12 @@ export const KCESFormats: KCESFormatDef[] = [
     {key: "dslconf", fileType: "dslconf", suffixes: [".dslconf"], group: "physics"},
     {key: "dsl2conf", fileType: "dsl2conf", suffixes: [".dsl2conf"], group: "physics"},
     {key: "dslcol", fileType: "dslcol", suffixes: [".dslcol"], group: "physics"},
-    {key: "ikcol", fileType: "ikcol", suffixes: [".ikcol"], group: "physics"},
-    {key: "ikcolbytes", fileType: "ikcol.bytes", suffixes: [".ikcol.bytes"], group: "physics"},
-    {key: "limbcol", fileType: "limbcol", suffixes: [".limbcol"], group: "physics"},
     // 角色 / Character
     {key: "preset", fileType: "preset", suffixes: [".preset", ".perset"], group: "character"},
-    {key: "sad", fileType: "sad", suffixes: [".sad"], group: "character"},
-    {key: "hitcheck", fileType: "hitcheck", suffixes: [".hitcheck"], group: "character"},
-    {key: "maidcollider", fileType: "maid_collider", suffixes: [".bytes"], group: "character"},
     // 数据 / Data
     {key: "nson", fileType: "nson", suffixes: [".nson"], group: "data"},
     {key: "undressdat", fileType: "undressdat", suffixes: [".undressdat"], group: "data"},
     {key: "undresspdat", fileType: "undresspdat", suffixes: [".undresspdat"], group: "data"},
-    {key: "psk", fileType: "psk", suffixes: [".psk"], group: "data"},
     {key: "nei", fileType: "nei", suffixes: [".nei"], altSuffixes: [".csv"], group: "data"},
 ];
 
@@ -111,12 +103,6 @@ export function formatByPath(path: string): KCESFormatDef | undefined {
                 return format;
             }
         }
-    }
-    if (lower.endsWith(".ikcol.bytes")) {
-        return formatByKey("ikcolbytes");
-    }
-    if (lower === "maid_collider.bytes" || lower === "maid_collider_touch.bytes") {
-        return formatByKey("maidcollider");
     }
     if (Texture2DImageSuffixes.some((suffix) => lower.endsWith(suffix))) {
         return formatByKey("texture2d");

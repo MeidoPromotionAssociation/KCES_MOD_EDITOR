@@ -8,7 +8,6 @@ import (
 	"path/filepath"
 	"strings"
 
-	serializationCOM3D2 "github.com/MeidoPromotionAssociation/MeidoSerialization/v2/serialization/COM3D2"
 	serializationKCES "github.com/MeidoPromotionAssociation/MeidoSerialization/v2/serialization/KCES"
 	KCESService "github.com/MeidoPromotionAssociation/MeidoSerialization/v2/service/KCES"
 	"github.com/MeidoPromotionAssociation/MeidoSerialization/v2/tools"
@@ -68,39 +67,25 @@ func writeEncoded(encode func(string, []byte, bool) ([]byte, error)) func(string
 	}
 }
 
-// NewStructuredFormats 构建 formatKey → 桥接的注册表，全部直接调用 MeidoSerialization 的 service 包
+// NewStructuredFormats 构建 formatKey → 桥接的注册表
 func NewStructuredFormats() map[string]structuredFormat {
 	menu := &KCESService.MenuAssetsService{}
 	mat := &KCESService.MaterialAssetsService{}
 	pmat := &KCESService.PriorityMaterialAssetsService{}
 	model := &KCESService.ModelService{}
 	dbconf := &KCESService.DBConfService{}
-	dbcol := &KCESService.DBColService{}
-	db2conf := &KCESService.DB2ConfService{}
 	dsbconf := &KCESService.DSBConfService{}
-	dsb2conf := &KCESService.DSB2ConfService{}
 	dslconf := &KCESService.DSLConfService{}
+	db2conf := &KCESService.DB2ConfService{}
+	dsb2conf := &KCESService.DSB2ConfService{}
 	dsl2conf := &KCESService.DSL2ConfService{}
+	dbcol := &KCESService.DBColService{}
 	dslcol := &KCESService.DSLColService{}
-	ikcol := &KCESService.IKColService{}
-	ikcolBytes := &KCESService.IKColBytesService{}
-	limbcol := &KCESService.LimbColService{}
 	preset := &KCESService.PresetService{}
-	perset := &KCESService.PersetService{}
-	sad := &KCESService.SavedAttachService{}
-	hitcheck := &KCESService.HitCheckService{}
-	maidCollider := &KCESService.MaidColliderService{}
 	nson := &KCESService.NSONService{}
 	undress := &KCESService.UndressDataService{}
 	undressParts := &KCESService.UndressPartsDataService{}
-	psk := &KCESService.PskService{}
 	nei := &KCESService.NeiService{}
-
-	isPerset := func(path string) bool {
-		lower := strings.ToLower(path)
-		lower = strings.TrimSuffix(lower, ".json")
-		return strings.HasSuffix(lower, serializationKCES.KCESPersetExtension)
-	}
 
 	// 三个含名称派生查找字段（ID/GUID）的格式绕过库 service（其写死重算），由编码选项决定是否重算
 	menuAssetsEncode := encodeWithLookupOptions(serializationKCES.EncodeMenuAssetsWithOptions, false)
@@ -161,52 +146,15 @@ func NewStructuredFormats() map[string]structuredFormat {
 			read:  func(p string) (any, error) { return dslcol.ReadDSLColFile(p) },
 			write: decodeInto(dslcol.WriteDSLColFile),
 		},
-		"ikcol": {
-			read:  func(p string) (any, error) { return ikcol.ReadIKColFile(p) },
-			write: decodeInto(ikcol.WriteIKColFile),
-		},
-		"ikcolbytes": {
-			read:  func(p string) (any, error) { return ikcolBytes.ReadIKColBytesFile(p) },
-			write: decodeInto(ikcolBytes.WriteIKColBytesFile),
-		},
-		"limbcol": {
-			read:  func(p string) (any, error) { return limbcol.ReadLimbColFile(p) },
-			write: decodeInto(limbcol.WriteLimbColFile),
-		},
 		// 角色 / Character
 		"preset": {
-			read: func(p string) (any, error) {
-				if isPerset(p) {
-					return perset.ReadPersetFile(p)
-				}
-				return preset.ReadPresetFile(p)
-			},
-			write: func(p string, jsonText []byte, recalculateLookupHash bool) error {
-				if isPerset(p) {
-					return decodeInto(perset.WritePersetFile)(p, jsonText, recalculateLookupHash)
-				}
-				return decodeInto(preset.WritePresetFile)(p, jsonText, recalculateLookupHash)
-			},
+			read:  func(p string) (any, error) { return preset.ReadPresetFile(p) },
+			write: decodeInto(preset.WritePresetFile),
 		},
-		"sad": {
-			read:  func(p string) (any, error) { return sad.ReadSavedAttachFile(p) },
-			write: decodeInto(sad.WriteSavedAttachFile),
-		},
-		"hitcheck": {
-			read:  func(p string) (any, error) { return hitcheck.ReadHitCheckFile(p) },
-			write: decodeInto(hitcheck.WriteHitCheckFile),
-		},
-		"maidcollider": {
-			read:  func(p string) (any, error) { return maidCollider.ReadMaidColliderFile(p) },
-			write: decodeInto(maidCollider.WriteMaidColliderFile),
-		},
-		// 数据 / Data
-		// 库 v2 移除了 KCESJSONText 封套：.nson 的编辑 JSON 根就是资源文档本身（自由 JSON），
-		// .undressdat/.undresspdat 已建模为结构体，改由 decodeInto 严格解码
 		"nson": {
 			read: func(p string) (any, error) { return nson.ReadNSONFile(p) },
 			write: func(p string, jsonText []byte, _ bool) error {
-				return nson.WriteNSONFile(p, json.RawMessage(jsonText))
+				return nson.WriteNSONFile(p, jsonText)
 			},
 		},
 		"undressdat": {
@@ -216,10 +164,6 @@ func NewStructuredFormats() map[string]structuredFormat {
 		"undresspdat": {
 			read:  func(p string) (any, error) { return undressParts.ReadUndressPartsDataFile(p) },
 			write: decodeInto(undressParts.WriteUndressPartsDataFile),
-		},
-		"psk": {
-			read:  func(p string) (any, error) { return psk.ReadPskFile(p) },
-			write: decodeInto(psk.WritePskFile),
 		},
 		"nei": {
 			// .nei 就是加密的 CSV，编辑器允许直接打开/另存为明文 .csv
@@ -297,6 +241,3 @@ func writeNeiAsCSV(path string, value *serializationKCES.Nei) error {
 	}
 	return nil
 }
-
-// 确保引用不被裁剪（COM3D2 结构用于 psk/nei 泛型实例化推导）
-var _ = serializationCOM3D2.Psk{}

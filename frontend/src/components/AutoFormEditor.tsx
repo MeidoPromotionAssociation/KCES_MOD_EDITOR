@@ -5,7 +5,7 @@ import JsonObjectForm from "./common/JsonObjectForm";
 /**
  * AutoFormEditor 通用结构化编辑器
  * 样式1：递归结构化表单（超大数组自动降级提示）；样式2：完整 JSON
- * 适用于 menuassets/materialassets/pmatassets/model/preset/sad/maidcollider/psk/paths/system
+ * 适用于 menuassets/materialassets/pmatassets/model/preset
  */
 const AutoFormEditor = forwardRef<FormatEditorRef, Omit<BaseFormatEditorProps, "renderStyle1" | "renderHeader">>(
     (props, ref) => {

@@ -4,12 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 
-	serializationCOM3D2 "github.com/MeidoPromotionAssociation/MeidoSerialization/v2/serialization/COM3D2"
 	serializationKCES "github.com/MeidoPromotionAssociation/MeidoSerialization/v2/serialization/KCES"
 )
 
 // newPayloadDocument 按扩展名构造该扩展名的载荷根对象
-// 库 v2 移除了 KCESPayloadEnvelope，编辑 JSON 的根就是载荷本身，目标格式完全由文件名决定
 // 默认值使用库的 C# 构造默认（NewDynamicBoneStatus/NewClothParams），碰撞体包为空列表
 func newPayloadDocument(extension string) (any, error) {
 	descriptor, ok := serializationKCES.DescribeKCESPayload(extension)
@@ -385,9 +383,9 @@ func newUndressVPeelExInfo() *serializationKCES.UndressVPeelExInfo {
 // 这是从 .undressdat 烘焙出的缓存，新建时三张表都为空；
 // OneGroupLooker.Targets 必须存在，RestoreDictionary 会直接遍历它
 func newUndressPrecomputeTarget() *serializationKCES.UndressPrecomputeTarget {
-	keys := []serializationKCES.UndressGroupKey{}
-	reductions := []serializationKCES.UndressMeshReductionEntry{}
-	measurers := []serializationKCES.UndressWidthMeasurerEntry{}
+	var keys []serializationKCES.UndressGroupKey
+	var reductions []serializationKCES.UndressMeshReductionEntry
+	var measurers []serializationKCES.UndressWidthMeasurerEntry
 
 	return &serializationKCES.UndressPrecomputeTarget{
 		EditVer:                          int32Ptr(0),
@@ -435,42 +433,15 @@ func newStructuredDocument(formatKey string) (any, error) {
 			Morphs:           []*serializationKCES.BlendData{},
 		}, nil
 	// 物理 / Physics
-	case "dbconf", "dbcol", "db2conf", "dsbconf", "dsb2conf", "dslconf", "dsl2conf", "dslcol", "limbcol":
+	case "dbconf", "dbcol", "db2conf", "dsbconf", "dsb2conf", "dslconf", "dsl2conf", "dslcol":
 		return newPayloadDocument("." + formatKey)
-	case "ikcol":
-		return newPayloadDocument(".ikcol")
-	case "ikcolbytes":
-		return newPayloadDocument(".ikcol.bytes")
-	// 角色 / Character
-	case "sad":
-		return &serializationKCES.SavedAttachFile{
-			Signature: serializationKCES.SavedAttachSignature,
-			Version:   serializationKCES.SavedAttachFileVersion,
-			Items:     []serializationKCES.SavedAttachData{},
-		}, nil
-	case "hitcheck":
-		return &serializationKCES.HitCheck{
-			Signature: serializationKCES.HitCheckSignature,
-			Entries:   []serializationKCES.HitCheckEntry{},
-		}, nil
-	case "maidcollider":
-		return &serializationKCES.MaidColliderFile{
-			Colliders: []serializationKCES.MaidCapsuleCollider{},
-		}, nil
 	// 数据 / Data
-	// 库 v2 移除了 KCESJSONText 封套：.nson 的编辑 JSON 根就是资源文档本身，
-	// .undressdat/.undresspdat 已建模为结构体
 	case "nson":
 		return json.RawMessage(`{}`), nil
 	case "undressdat":
 		return newUndressArchiveTarget(), nil
 	case "undresspdat":
 		return newUndressPrecomputeTarget(), nil
-	case "psk":
-		return &serializationCOM3D2.Psk{
-			Signature: "CM3D21_PSK",
-			Version:   24301,
-		}, nil
 	case "nei":
 		// KCES 通过 crc.dll 解码单元格，新表格必须写出 UTF-8，否则游戏把日文读成乱码
 		return serializationKCES.NewNei(1, 1, [][]string{{""}}), nil

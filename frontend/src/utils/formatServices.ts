@@ -7,21 +7,13 @@ import {
     DSL2ConfService,
     DSLColService,
     DSLConfService,
-    HitCheckService,
-    IKColBytesService,
-    IKColService,
-    LimbColService,
-    MaidColliderService,
     MaterialAssetsService,
     MenuAssetsService,
     ModelService,
     NeiService,
     NSONService,
-    PersetService,
     PresetService,
     PriorityMaterialAssetsService,
-    PskService,
-    SavedAttachService,
     UndressDataService,
     UndressPartsDataService,
 } from "../../bindings/github.com/MeidoPromotionAssociation/MeidoSerialization/v2/service/KCES";
@@ -52,14 +44,6 @@ export interface FormatService {
 
 // 转换输出大小上限：1 GB
 export const MaxConvertBytes = 1 << 30;
-
-function isPersetPath(path: string): boolean {
-    let lower = path.toLowerCase();
-    if (lower.endsWith(".json")) {
-        lower = lower.slice(0, -".json".length);
-    }
-    return lower.endsWith(".perset");
-}
 
 // structured 生成一个格式的读写通道
 function structured(formatKey: string): Pick<FormatService, "read" | "write"> {
@@ -134,47 +118,11 @@ export const formatServices: Record<string, FormatService> = {
         toJson: (input, output, max) => DSLColService.ConvertDSLColToJson(input, output, max),
         toNative: (input, output, max) => DSLColService.ConvertJsonToDSLCol(input, output, max),
     },
-    ikcol: {
-        ...structured("ikcol"),
-        toJson: (input, output, max) => IKColService.ConvertIKColToJson(input, output, max),
-        toNative: (input, output, max) => IKColService.ConvertJsonToIKCol(input, output, max),
-    },
-    ikcolbytes: {
-        ...structured("ikcolbytes"),
-        toJson: (input, output, max) => IKColBytesService.ConvertIKColBytesToJson(input, output, max),
-        toNative: (input, output, max) => IKColBytesService.ConvertJsonToIKColBytes(input, output, max),
-    },
-    limbcol: {
-        ...structured("limbcol"),
-        toJson: (input, output, max) => LimbColService.ConvertLimbColToJson(input, output, max),
-        toNative: (input, output, max) => LimbColService.ConvertJsonToLimbCol(input, output, max),
-    },
     // 角色 / Character
     preset: {
         ...structured("preset"),
-        toJson: (input, output, max) =>
-            isPersetPath(input)
-                ? PersetService.ConvertPersetToJson(input, output, max)
-                : PresetService.ConvertPresetToJson(input, output, max),
-        toNative: (input, output, max) =>
-            isPersetPath(output)
-                ? PersetService.ConvertJsonToPerset(input, output, max)
-                : PresetService.ConvertJsonToPreset(input, output, max),
-    },
-    sad: {
-        ...structured("sad"),
-        toJson: (input, output, max) => SavedAttachService.ConvertSavedAttachToJSON(input, output, max),
-        toNative: (input, output, max) => SavedAttachService.ConvertJSONToSavedAttach(input, output, max),
-    },
-    hitcheck: {
-        ...structured("hitcheck"),
-        toJson: (input, output, max) => HitCheckService.ConvertHitCheckToJson(input, output, max),
-        toNative: (input, output, max) => HitCheckService.ConvertJsonToHitCheck(input, output, max),
-    },
-    maidcollider: {
-        ...structured("maidcollider"),
-        toJson: (input, output, max) => MaidColliderService.ConvertMaidColliderToJSON(input, output, max),
-        toNative: (input, output, max) => MaidColliderService.ConvertJSONToMaidCollider(input, output, max),
+        toJson: (input, output, max) => PresetService.ConvertPresetToJson(input, output, max),
+        toNative: (input, output, max) => PresetService.ConvertJsonToPreset(input, output, max),
     },
     // 数据 / Data
     nson: {
@@ -191,11 +139,6 @@ export const formatServices: Record<string, FormatService> = {
         ...structured("undresspdat"),
         toJson: (input, output, max) => UndressPartsDataService.ConvertUndressPartsDataToJson(input, output, max),
         toNative: (input, output, max) => UndressPartsDataService.ConvertJsonToUndressPartsData(input, output, max),
-    },
-    psk: {
-        ...structured("psk"),
-        toJson: (input, output, max) => PskService.ConvertPskToJson(input, output, max),
-        toNative: (input, output, max) => PskService.ConvertJsonToPsk(input, output, max),
     },
     nei: {
         ...structured("nei"),

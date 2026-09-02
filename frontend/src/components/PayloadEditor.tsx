@@ -6,7 +6,7 @@ import JsonObjectForm from "./common/JsonObjectForm";
 import DynamicBoneForm from "./payload/DynamicBoneForm";
 import ClothParamsForm from "./payload/ClothParamsForm";
 import MagicaClothForm from "./payload/MagicaClothForm";
-import {ColliderPackageForm, IKColliderForm, LimbColliderForm} from "./payload/colliderForms";
+import {ColliderPackageForm} from "./payload/colliderForms";
 
 /**
  * PayloadKinds 各物理格式的载荷类型
@@ -59,10 +59,6 @@ const PayloadEditor = forwardRef<FormatEditorRef, Omit<BaseFormatEditorProps, "r
                         return <MagicaClothForm params={data} onChange={setData}/>;
                     case "collider":
                         return <ColliderPackageForm value={data} onChange={setData}/>;
-                    case "limbCollider":
-                        return <LimbColliderForm value={data} onChange={setData}/>;
-                    case "ikCollider":
-                        return <IKColliderForm value={data} onChange={setData}/>;
                     default:
                         return <JsonObjectForm value={data} onChange={setData} defaultExpandDepth={1}/>;
                 }

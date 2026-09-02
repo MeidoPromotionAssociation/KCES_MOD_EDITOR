@@ -5,21 +5,19 @@ import {Layout} from "antd";
 import {useTranslation} from "react-i18next";
 import NavBar from "./NavBar";
 import useFileHandlers from "../hooks/fileHandler";
-import {FileInfo} from "../../bindings/github.com/MeidoPromotionAssociation/MeidoSerialization/v2/service/COM3D2/models";
+import {
+    FileInfo
+} from "../../bindings/github.com/MeidoPromotionAssociation/MeidoSerialization/v2/service/COM3D2";
 import {KCESFormatDef, selectPattern} from "../utils/consts";
 import {FormatEditorRef} from "./common/BaseFormatEditor";
 import PayloadEditor from "./PayloadEditor";
 import JsonTextEditor from "./JsonTextEditor";
-import HitCheckEditor from "./HitCheckEditor";
 import NeiEditor from "./NeiEditor";
 import AutoFormEditor from "./AutoFormEditor";
 import MenuAssetsEditor from "./MenuAssetsEditor";
 import MaterialAssetsEditor from "./MaterialAssetsEditor";
 import PMatAssetsEditor from "./PMatAssetsEditor";
-import SadEditor from "./SadEditor";
-import MaidColliderEditor from "./MaidColliderEditor";
 import KCESModelEditor from "./KCESModelEditor";
-import PskEditor from "./PskEditor";
 import Texture2DEditor from "./Texture2DEditor";
 
 const {Content} = Layout;
@@ -40,18 +38,12 @@ function editorComponentFor(format: KCESFormatDef) {
             return KCESModelEditor;
         case "texture2d":
             return Texture2DEditor;
-        case "sad":
-            return SadEditor;
-        case "maidcollider":
-            return MaidColliderEditor;
-        case "psk":
-            return PskEditor;
         case "nson":
+            return JsonTextEditor;
         case "undressdat":
+            return JsonTextEditor;
         case "undresspdat":
             return JsonTextEditor;
-        case "hitcheck":
-            return HitCheckEditor;
         case "nei":
             return NeiEditor;
         default:

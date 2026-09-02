@@ -72,20 +72,12 @@ func main() {
 			application.NewService(&KCESService.DSLConfService{}),
 			application.NewService(&KCESService.DSL2ConfService{}),
 			application.NewService(&KCESService.DSLColService{}),
-			application.NewService(&KCESService.IKColService{}),
-			application.NewService(&KCESService.IKColBytesService{}),
-			application.NewService(&KCESService.LimbColService{}),
 			// 角色 / Character
 			application.NewService(&KCESService.PresetService{}),
-			application.NewService(&KCESService.PersetService{}),
-			application.NewService(&KCESService.SavedAttachService{}),
-			application.NewService(&KCESService.HitCheckService{}),
-			application.NewService(&KCESService.MaidColliderService{}),
 			// 数据 / Data
 			application.NewService(&KCESService.NSONService{}),
 			application.NewService(&KCESService.UndressDataService{}),
 			application.NewService(&KCESService.UndressPartsDataService{}),
-			application.NewService(&KCESService.PskService{}),
 			application.NewService(&KCESService.NeiService{}),
 		},
 		Assets: application.AssetOptions{
