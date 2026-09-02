@@ -1,0 +1,202 @@
+name: Release
+
+on:
+  push:
+    tags: [ "v*" ]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "要发布的 tag，必须已存在于仓库中（例如 v0.0.3）"
+        required: true
+        type: string
+
+# 默认不给 GITHUB_TOKEN 任何权限，由各 job 单独声明自己需要的最小权限
+# GITHUB_TOKEN gets no permission by default, each job declares the minimum it needs
+permissions: {}
+
+env:
+  APP_NAME: kces-mod-editor
+
+# 同一个 tag 只允许一个发布流程在跑，避免 push 和手动触发同时创建 release
+# Only one release run per tag, so a push and a manual dispatch cannot create the release twice
+concurrency:
+  group: release-${{ github.event.inputs.tag || github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  # 编译阶段只有读权限，即使某个依赖或 action 被污染也改不了仓库内容
+  # The build stage is read-only, so a compromised dependency or action cannot write anything back
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      tag: ${{ steps.meta.outputs.tag }}
+      prerelease: ${{ steps.meta.outputs.prerelease }}
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.inputs.tag || github.ref }}
+          fetch-depth: 0
+          # 不把 token 存进 .git/config，编译过程中的代码就读不到它
+          # Keep the token out of .git/config, so code running during the build cannot read it
+          persist-credentials: false
+
+      - name: Resolve Release Metadata
+        id: meta
+        env:
+          INPUT_TAG: ${{ github.event.inputs.tag }}
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          TAG="${INPUT_TAG:-$REF_NAME}"
+          if ! git rev-parse -q --verify "refs/tags/${TAG}" >/dev/null; then
+            echo "::error::tag ${TAG} does not exist in this repository"
+            exit 1
+          fi
+          # 版本号的唯一来源是 internal/app.go 的 CurrentVersion，安装器元数据和前端「检查更新」
+          # 取的都是它，和 tag 不一致就是漏改了版本号，这里直接拦住
+          # internal/app.go CurrentVersion is the single source of the version, both the installer
+          # metadata and the update check read it, a mismatch means it was forgotten
+          APP_VERSION="$(sed -n 's/.*CurrentVersion[[:space:]]*=[[:space:]]*"\([^"]*\)".*/\1/p' internal/app.go | head -1)"
+          if [ "${APP_VERSION}" != "${TAG}" ]; then
+            echo "::error::internal/app.go CurrentVersion is ${APP_VERSION}, does not match tag ${TAG}"
+            exit 1
+          fi
+          # 0.0.x 和带连字符的版本号（v0.0.3、v1.2.0-rc1 等）视为预发布
+          # A 0.0.x version or one containing a hyphen is treated as a prerelease
+          if [[ "${TAG}" == v0.0.* || "${TAG}" == *-* ]]; then
+            PRERELEASE=true
+          else
+            PRERELEASE=false
+          fi
+          {
+            echo "tag=${TAG}"
+            echo "prerelease=${PRERELEASE}"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Set up Go
+        uses: actions/setup-go@v7
+        with:
+          go-version-file: 'go.mod'
+          cache: true
+
+      - name: Install pnpm
+        run: curl -fsSL https://get.pnpm.io/install.sh | env PNPM_VERSION=next-12 sh -
+
+      # Linux 构建为 CGO 构建，wails3 默认使用 GTK4 + WebKitGTK 6.0；nsis 提供 makensis，用来打 Windows 安装器
+      # The Linux build uses CGO with GTK4 + WebKitGTK 6.0, nsis provides makensis for the Windows installer
+      - name: Install Build Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-4-dev libwebkitgtk-6.0-dev libsoup-3.0-dev libx11-dev pkg-config nsis
+
+      # 安装与 go.mod 一致版本的 wails3 CLI
+      # Install the wails3 CLI at the version pinned in go.mod
+      - name: Install Wails CLI
+        run: go install github.com/wailsapp/wails/v3/cmd/wails3@$(go list -m -f '{{.Version}}' github.com/wailsapp/wails/v3)
+
+      - name: Build Linux Binary
+        run: |
+          wails3 task linux:build
+          mv "bin/${APP_NAME}" "bin/${APP_NAME}-linux-amd64"
+
+      # windows:package 先交叉编译 exe（CGO_ENABLED=0）再用 makensis 打安装器，两个产物一次出
+      # windows:package cross-compiles the exe first and then runs makensis, both artifacts in one go
+      - name: Build Windows Binary and Installer
+        run: |
+          wails3 task windows:package
+          # project.nsi 的 OutFile 是 Windows 风格的相对路径，Linux 上的 makensis 万一没折算到
+          # bin/，产物会留在别处（反斜杠在 Linux 上是合法文件名字符），捞回来归位
+          # The OutFile in project.nsi is a Windows style relative path, if makensis on Linux does
+          # not fold it into bin/ the artifact lands elsewhere, so move it back
+          INSTALLER="bin/${APP_NAME}-amd64-installer.exe"
+          if [ ! -f "${INSTALLER}" ]; then
+            FOUND="$(find . -type f -name '*installer*.exe' | head -1)"
+            if [ -z "${FOUND}" ]; then
+              echo "::error::NSIS installer not found after windows:package"
+              exit 1
+            fi
+            mv "${FOUND}" "${INSTALLER}"
+          fi
+          ls -l bin/
+
+      - name: Upload Binaries
+        uses: actions/upload-artifact@v7
+        with:
+          name: release-binaries
+          path: |
+            bin/${{ env.APP_NAME }}.exe
+            bin/${{ env.APP_NAME }}-linux-amd64
+            bin/${{ env.APP_NAME }}-amd64-installer.exe
+          retention-days: 1
+          if-no-files-found: error
+
+  # 只有这个 job 拿到写权限，它不编译任何东西，只生成正文并调用 gh 发布
+  # Only this job holds write access, it builds nothing and merely renders the body and calls gh
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      # 这里故意不指定 ref，用触发 workflow 的那个 ref，保证脚本和模板与 workflow 定义同源
+      # push tag 触发时取自 tag，手动补发旧 tag 时取自默认分支（旧 tag 上可能还没有这些文件）
+      # The ref is intentionally left out so the scripts and template come from the same ref as the
+      # workflow definition itself, the tag on a tag push, or the default branch when manually
+      # re-releasing an old tag that does not carry these files yet
+      #
+      # 提交列表来自 fetch-depth: 0 拉下来的完整历史和 tag，与检出哪个 ref 无关
+      # The commit list comes from the full history and tags fetched by fetch-depth: 0,
+      # which does not depend on the checked out ref
+      - name: Checkout Code
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Download Binaries
+        uses: actions/download-artifact@v7
+        with:
+          name: release-binaries
+          path: dist
+
+      - name: Generate Release Notes
+        env:
+          TAG: ${{ needs.build.outputs.tag }}
+        run: |
+          python3 .github/scripts/release_notes.py \
+            --tag "${TAG}" \
+            --repo "${GITHUB_REPOSITORY}" \
+            --template .github/scripts/release-template.md \
+            --output release-notes.md
+
+      - name: Publish Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ needs.build.outputs.tag }}
+          PRERELEASE: ${{ needs.build.outputs.prerelease }}
+        run: |
+          ASSETS=(
+            "dist/${APP_NAME}-amd64-installer.exe"
+            "dist/${APP_NAME}.exe"
+            "dist/${APP_NAME}-linux-amd64"
+          )
+          # release 已存在时更新它，便于手动重跑同一个 tag
+          # Update the release when it already exists, so the same tag can be re-run manually
+          if gh release view "${TAG}" >/dev/null 2>&1; then
+            gh release edit "${TAG}" \
+              --title "KCES MOD EDITOR ${TAG}" \
+              --notes-file release-notes.md \
+              --prerelease="${PRERELEASE}"
+            gh release upload "${TAG}" "${ASSETS[@]}" --clobber
+          else
+            gh release create "${TAG}" \
+              --verify-tag \
+              --title "KCES MOD EDITOR ${TAG}" \
+              --notes-file release-notes.md \
+              --prerelease="${PRERELEASE}" \
+              "${ASSETS[@]}"
+          fi
