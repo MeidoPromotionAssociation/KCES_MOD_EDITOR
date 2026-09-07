@@ -19,6 +19,7 @@ import {
     SelectPathToSave,
     WriteTextFile
 } from "../../../bindings/github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR/internal/app.ts";
+import {getAntdLocale} from "../../utils/i18n.ts";
 
 // 大文件警告阈值 20MB
 const LargeFileThreshold = 1024 * 1024 * 20;
@@ -287,6 +288,9 @@ const BaseFormatEditor = forwardRef<FormatEditorRef, BaseFormatEditorProps>((pro
 
     const hasStyle1 = !!props.renderStyle1;
 
+    // 订阅语言变化，切换语言后重新解析 antd 的 locale
+    useTranslation();
+
     return (
         <div style={{padding: 10}}>
             <Modal
@@ -312,6 +316,7 @@ const BaseFormatEditor = forwardRef<FormatEditorRef, BaseFormatEditorProps>((pro
                 <p>{t('Infos.file_too_large_convert_to_json_directly')}</p>
             </Modal>
             <ConfigProvider
+                locale={getAntdLocale()}
                 theme={{
                     components: {
                         Form: {

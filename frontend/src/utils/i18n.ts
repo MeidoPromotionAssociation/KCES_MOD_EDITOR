@@ -4,6 +4,11 @@ import {initReactI18next} from 'react-i18next';
 
 import Backend from 'i18next-http-backend';
 import LanguageDetector from 'i18next-browser-languagedetector';
+import {Locale} from "antd/es/locale";
+import enUS from "antd/locale/en_US";
+import zhCN from "antd/locale/zh_CN";
+import jaJP from "antd/locale/ja_JP";
+import koKR from "antd/locale/ko_KR";
 
 i18n
     // 从 /public/locales 加载翻译
@@ -21,13 +26,46 @@ i18n
         //
         // webview 有时只报主语言（zh / en / ja / ko）或 zh-Hans-CN 这类扩展标签，
         fallbackLng: {
+            // === 简体中文及地区/脚本变体 ===
             'zh': ['zh-CN'],
+            'zh-CN': ['zh-CN'],
             'zh-Hans': ['zh-CN'],
             'zh-Hans-CN': ['zh-CN'],
+            'zh-Hans-HK': ['zh-CN'],
+            'zh-Hans-MO': ['zh-CN'],
+            'zh-Hans-SG': ['zh-CN'],
             'zh-SG': ['zh-CN'],
+
+            // === 繁体中文变体 ===
+            'zh-Hant': ['zh-CN'],
+            'zh-Hant-TW': ['zh-CN'],
+            'zh-Hant-HK': ['zh-CN'],
+            'zh-Hant-MO': ['zh-CN'],
+            'zh-TW': ['zh-CN'],
+            'zh-HK': ['zh-CN'],
+            'zh-MO': ['zh-CN'],
+
+            // === 英语及变体 ===
             'en': ['en-US'],
+            'en-US': ['en-US'],
+            'en-GB': ['en-US'],
+            'en-AU': ['en-US'],
+            'en-CA': ['en-US'],
+            'en-NZ': ['en-US'],
+            'en-IE': ['en-US'],
+            'en-ZA': ['en-US'],
+            'en-IN': ['en-US'],
+            'en-SG': ['en-US'],
+
+            // === 日语及变体 ===
             'ja': ['ja-JP'],
+            'ja-JP': ['ja-JP'],
+
+            // === 韩语及变体 ===
             'ko': ['ko-KR'],
+            'ko-KR': ['ko-KR'],
+            'ko-KP': ['ko-KR'],
+
             'default': ['en-US']
         },
         interpolation: {
@@ -53,4 +91,19 @@ export function resolveUiLanguage(): string {
         }
     }
     return 'en-US';
+}
+
+
+// antd 组件文案跟随界面语言，未覆盖的语言回落到英文
+const antdLocales: Record<string, Locale> = {
+    "en-US": enUS,
+    "zh-CN": zhCN,
+    "ja-JP": jaJP,
+    "ko-KR": koKR,
+};
+
+
+// antd 的 locale 键必须是实际有翻译的四个语言码，webview 报 en-GB 这类标签时要先收敛
+export function getAntdLocale(): Locale {
+    return antdLocales[resolveUiLanguage()] ?? enUS;
 }
