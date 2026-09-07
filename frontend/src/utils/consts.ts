@@ -19,7 +19,7 @@ export const GitHubReleaseUrl = "https://github.com/MeidoPromotionAssociation/KC
 export const ChineseMODGuideUrl = "https://github.com/MeidoPromotionAssociation/COM3D2_Simple_MOD_Guide_Chinese"; // 中文 MOD 教程，简明 MOD 教程
 
 /** 格式分组，用于 NavBar 与 HomePage 归类 */
-export type KCESFormatGroup = "parts" | "physics" | "character" | "data";
+export type KCESFormatGroup = "assets" | "other" | "physics" | "data";
 
 /**
  * KCESFormatDef 描述一个 KCES 编辑器支持的格式页面
@@ -43,19 +43,10 @@ export const Texture2DImageSuffixes = [".png", ".jpg", ".jpeg", ".bmp", ".gif"];
 
 /** 所有支持的格式 **/
 export const KCESFormats: KCESFormatDef[] = [
-    // 服装部件 / Parts
-    {key: "menuassets", fileType: "menuassets", suffixes: [".menuassets"], group: "parts"},
-    {key: "materialassets", fileType: "materialassets", suffixes: [".materialassets"], group: "parts"},
-    {key: "pmatassets", fileType: "pmatassets", suffixes: [".pmatassets"], group: "parts"},
-    {key: "model", fileType: "model", suffixes: [".model"], group: "parts"},
-    // 贴图是独立 Unity Texture2D 对象，不是结构化 JSON，因此没有 .json 编辑变体；
-    {
-        key: "texture2d",
-        fileType: "texture2d",
-        suffixes: [".tex", ".texture2d", ".texture2d"],
-        group: "parts",
-        noJsonVariant: true,
-    },
+    // 资产 / Assets
+    {key: "menuassets", fileType: "menuassets", suffixes: [".menuassets"], group: "assets"},
+    {key: "materialassets", fileType: "materialassets", suffixes: [".materialassets"], group: "assets"},
+    {key: "pmatassets", fileType: "pmatassets", suffixes: [".pmatassets"], group: "assets"},
     // 物理 / Physics
     {key: "dbconf", fileType: "dbconf", suffixes: [".dbconf"], group: "physics"},
     {key: "dbcol", fileType: "dbcol", suffixes: [".dbcol"], group: "physics"},
@@ -65,8 +56,16 @@ export const KCESFormats: KCESFormatDef[] = [
     {key: "dslconf", fileType: "dslconf", suffixes: [".dslconf"], group: "physics"},
     {key: "dsl2conf", fileType: "dsl2conf", suffixes: [".dsl2conf"], group: "physics"},
     {key: "dslcol", fileType: "dslcol", suffixes: [".dslcol"], group: "physics"},
-    // 角色 / Character
-    {key: "preset", fileType: "preset", suffixes: [".preset", ".perset"], group: "character"},
+    // 其他 / Other
+    {
+        key: "texture2d",
+        fileType: "texture2d",
+        suffixes: [".tex", ".texture2d", ".texture2d"],
+        group: "other",
+        noJsonVariant: true,
+    },
+    {key: "model", fileType: "model", suffixes: [".model"], group: "other"},
+    {key: "preset", fileType: "preset", suffixes: [".preset", ".perset"], group: "other"},
     // 数据 / Data
     {key: "nson", fileType: "nson", suffixes: [".nson"], group: "data"},
     {key: "undressdat", fileType: "undressdat", suffixes: [".undressdat"], group: "data"},
@@ -74,7 +73,7 @@ export const KCESFormats: KCESFormatDef[] = [
     {key: "nei", fileType: "nei", suffixes: [".nei"], altSuffixes: [".csv"], group: "data"},
 ];
 
-export const KCESFormatGroups: KCESFormatGroup[] = ["parts", "physics", "character", "data"];
+export const KCESFormatGroups: KCESFormatGroup[] = ["assets", "other", "physics", "data"];
 
 /** 按 key 查找格式 */
 export function formatByKey(key: string): KCESFormatDef | undefined {

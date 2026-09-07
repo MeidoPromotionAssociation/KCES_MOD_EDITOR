@@ -55,6 +55,8 @@
     "save_as_file": "另存为",
     "SettingsPage": "设置",
     "group_parts": "服装部件",
+    "group_assets": "定义",
+    "group_other": "其他",
     "group_physics": "物理",
     "group_character": "角色",
     "group_data": "数据",

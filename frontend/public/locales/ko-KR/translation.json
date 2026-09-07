@@ -55,6 +55,8 @@
     "save_as_file": "다른 이름으로 저장",
     "SettingsPage": "설정",
     "group_parts": "파츠",
+    "group_assets": "정의",
+    "group_other": "기타",
     "group_physics": "물리",
     "group_character": "캐릭터",
     "group_data": "데이터",

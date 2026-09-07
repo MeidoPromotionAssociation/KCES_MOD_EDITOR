@@ -55,6 +55,8 @@
     "save_as_file": "名前を付けて保存",
     "SettingsPage": "設定",
     "group_parts": "パーツ",
+    "group_assets": "定義",
+    "group_other": "その他",
     "group_physics": "物理",
     "group_character": "キャラクター",
     "group_data": "データ",

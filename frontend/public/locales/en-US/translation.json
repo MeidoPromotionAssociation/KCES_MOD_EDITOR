@@ -55,6 +55,8 @@
     "save_as_file": "Save As",
     "SettingsPage": "Settings",
     "group_parts": "Parts",
+    "group_assets": "Definitions",
+    "group_other": "Other",
     "group_physics": "Physics",
     "group_character": "Character",
     "group_data": "Data",
