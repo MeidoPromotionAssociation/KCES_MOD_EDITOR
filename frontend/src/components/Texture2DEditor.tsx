@@ -1,5 +1,5 @@
 import {forwardRef, useEffect, useImperativeHandle, useState} from "react";
-import {Alert, Button, Card, Descriptions, Empty, Image, Radio, Space, Spin, Tooltip, Typography, theme} from "antd";
+import {Alert, Button, Card, Descriptions, Empty, Image, Radio, Space, Spin, theme, Tooltip, Typography} from "antd";
 import {
     ExportOutlined,
     FileImageOutlined,
@@ -12,7 +12,9 @@ import {
 import {useTranslation} from "react-i18next";
 import {Window} from "@wailsio/runtime";
 import {appMessage as message, appModal} from "../utils/feedback";
-import {FileInfo} from "../../bindings/github.com/MeidoPromotionAssociation/MeidoSerialization/v2/service/COM3D2/models";
+import {
+    FileInfo
+} from "../../bindings/github.com/MeidoPromotionAssociation/MeidoSerialization/v2/service/COM3D2/models";
 import {Texture2DInfo} from "../../bindings/github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR/internal/models";
 import {
     CheckImageMagick,
@@ -25,7 +27,10 @@ import {
     PreviewTexture2D,
     ReadTexture2DInfo,
 } from "../../bindings/github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR/internal/texture2dservice";
-import {SelectFile, SelectPathToSaveAs} from "../../bindings/github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR/internal/app";
+import {
+    SelectFile,
+    SelectPathToSaveAs
+} from "../../bindings/github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR/internal/app";
 import {AppTitle, AppTitleNoAuthor, KCESFormatDef, Texture2DImageSuffixes} from "../utils/consts";
 import {Texture2DExportFormatKey} from "../utils/LocalStorageKeys";
 import type {FormatEditorRef} from "./common/BaseFormatEditor";

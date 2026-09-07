@@ -228,7 +228,10 @@ export const ColliderRefList: React.FC<{
                     onChange={setAddType}
                 />
                 <Button size="small" icon={<PlusOutlined/>}
-                        onClick={() => onChange([...(colliders ?? []), {type: addType, collider: newCollider(addType)}])}>
+                        onClick={() => onChange([...(colliders ?? []), {
+                            type: addType,
+                            collider: newCollider(addType)
+                        }])}>
                     {t('ColliderEditor.add_collider')}
                 </Button>
             </Space>

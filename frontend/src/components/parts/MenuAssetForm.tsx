@@ -91,7 +91,8 @@ const MenuAssetForm: React.FC<{
                         <BigIntInput value={asset.srcFileHashCRC32} onChange={(v) => set("srcFileHashCRC32", v)}/>
                     </Row>
                     <Row label="targetBodyType">
-                        <NumberField value={asset.targetBodyType} precision={0} onChange={(v) => set("targetBodyType", v)}/>
+                        <NumberField value={asset.targetBodyType} precision={0}
+                                     onChange={(v) => set("targetBodyType", v)}/>
                     </Row>
                     <Row label="isHarayureAvailable">
                         <NumberField value={asset.isHarayureAvailable} precision={0}

@@ -43,12 +43,12 @@ interface AssetContainerEditorProps {
 }
 
 const AssetContainerEditor: React.FC<AssetContainerEditorProps> = ({
-                                                                      data,
-                                                                      setData,
-                                                                      itemLabel,
-                                                                      renderForm,
-                                                                      newAsset,
-                                                                  }) => {
+                                                                       data,
+                                                                       setData,
+                                                                       itemLabel,
+                                                                       renderForm,
+                                                                       newAsset,
+                                                                   }) => {
     const {t} = useTranslation();
     const {token} = theme.useToken();
     const [search, setSearch] = useState("");

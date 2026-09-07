@@ -7,7 +7,7 @@ import HomePage from "./components/HomePage";
 import SettingsPage from "./components/SettingsPage";
 import EditorPageShell from "./components/EditorPageShell";
 import DisclaimerDialog from "./components/DisclaimerDialog";
-import {useDarkMode, useThemeColor, DefaultThemeColor} from "./hooks/themeSwitch";
+import {DefaultThemeColor, useDarkMode, useThemeColor} from "./hooks/themeSwitch";
 import useFileHandlers from "./hooks/fileHandler";
 import {DisclaimerAgreedKey} from "./utils/LocalStorageKeys";
 import {KCESFormats} from "./utils/consts";

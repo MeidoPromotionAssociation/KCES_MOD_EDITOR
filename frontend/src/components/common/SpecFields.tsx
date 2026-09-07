@@ -281,7 +281,8 @@ export const ObjectFields: React.FC<{
                             </Space>
                         ),
                         children: (
-                            <NestedField spec={item} value={object[item.name]} onChange={(next) => set(item.name, next)}/>
+                            <NestedField spec={item} value={object[item.name]}
+                                         onChange={(next) => set(item.name, next)}/>
                         ),
                     }))}
                 />

@@ -1,43 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <MsixPackagingToolTemplate
-    xmlns="http://schemas.microsoft.com/msix/packaging/msixpackagingtool/template/2022">
+        xmlns="http://schemas.microsoft.com/msix/packaging/msixpackagingtool/template/2022">
     <Settings
-        AllowTelemetry="false"
-        ApplyACLsToPackageFiles="true"
-        GenerateCommandLineFile="true"
-        AllowPromptForPassword="false">
+            AllowTelemetry="false"
+            ApplyACLsToPackageFiles="true"
+            GenerateCommandLineFile="true"
+            AllowPromptForPassword="false">
     </Settings>
     <Installer
-        Path="kces_mod_editor.exe"
-        Arguments=""
-        InstallLocation="C:\Program Files\MEIDO Promotion Association\KCES MOD EDITOR">
+            Path="kces_mod_editor.exe"
+            Arguments=""
+            InstallLocation="C:\Program Files\MEIDO Promotion Association\KCES MOD EDITOR">
     </Installer>
     <PackageInformation
-        PackageName="KCES MOD EDITOR"
-        PackageDisplayName="KCES MOD EDITOR"
-        PublisherName="CN=MEIDO Promotion Association"
-        PublisherDisplayName="MEIDO Promotion Association"
-        Version="0.0.0"
-        PackageDescription="All-in-one mod editor for KCES">
+            PackageName="KCES MOD EDITOR"
+            PackageDisplayName="KCES MOD EDITOR"
+            PublisherName="CN=MEIDO Promotion Association"
+            PublisherDisplayName="MEIDO Promotion Association"
+            Version="0.0.0"
+            PackageDescription="All-in-one mod editor for KCES">
         <Capabilities>
-            <Capability Name="runFullTrust" />
-            
+            <Capability Name="runFullTrust"/>
+
         </Capabilities>
         <Applications>
             <Application
-                Id="Github.MeidoPromotionAssociation.KCES_MOD_EDITOR.kcesmodeditor"
-                Description="All-in-one mod editor for KCES"
-                DisplayName="KCES MOD EDITOR"
-                ExecutableName="kces_mod_editor.exe"
-                EntryPoint="Windows.FullTrustApplication">
-                
+                    Id="Github.MeidoPromotionAssociation.KCES_MOD_EDITOR.kcesmodeditor"
+                    Description="All-in-one mod editor for KCES"
+                    DisplayName="KCES MOD EDITOR"
+                    ExecutableName="kces_mod_editor.exe"
+                    EntryPoint="Windows.FullTrustApplication">
+
             </Application>
         </Applications>
         <Resources>
-            <Resource Language="en-us" />
+            <Resource Language="en-us"/>
         </Resources>
         <Dependencies>
-            <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.17763.0" MaxVersionTested="10.0.19041.0" />
+            <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.17763.0" MaxVersionTested="10.0.19041.0"/>
         </Dependencies>
         <Properties>
             <Framework>false</Framework>
@@ -47,7 +47,7 @@
             <Logo>Assets\appicon.png</Logo>
         </Properties>
     </PackageInformation>
-    <SaveLocation PackagePath="kces_mod_editor.msix" />
+    <SaveLocation PackagePath="kces_mod_editor.msix"/>
     <PackageIntegrity>
         <CertificatePath></CertificatePath>
     </PackageIntegrity>

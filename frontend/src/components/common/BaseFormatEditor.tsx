@@ -3,8 +3,10 @@ import {Button, Collapse, ConfigProvider, Descriptions, Empty, Modal, Radio} fro
 import {appMessage as message} from "../../utils/feedback";
 import {useTranslation} from "react-i18next";
 import {Window} from "@wailsio/runtime";
-import {FileInfo} from "../../../bindings/github.com/MeidoPromotionAssociation/MeidoSerialization/v2/service/COM3D2/models";
-import {KCESFormatDef, selectPattern, AppTitle, AppTitleNoAuthor, isAltSuffixPath} from "../../utils/consts";
+import {
+    FileInfo
+} from "../../../bindings/github.com/MeidoPromotionAssociation/MeidoSerialization/v2/service/COM3D2/models";
+import {AppTitle, AppTitleNoAuthor, isAltSuffixPath, KCESFormatDef, selectPattern} from "../../utils/consts";
 import {formatServices, MaxConvertBytes} from "../../utils/formatServices";
 import {editorViewModeKey} from "../../utils/LocalStorageKeys";
 import {getFileName} from "../../utils/utils";
@@ -12,7 +14,10 @@ import {losslessParse, losslessStringify} from "../../utils/losslessJson";
 import {editingModelPath} from "../../utils/monacoSchemas";
 import MonacoJsonEditor from "./MonacoJsonEditor";
 import {
-    NewStructuredDocument, ReadTextFile, SelectPathToSave, WriteTextFile
+    NewStructuredDocument,
+    ReadTextFile,
+    SelectPathToSave,
+    WriteTextFile
 } from "../../../bindings/github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR/internal/app.ts";
 
 // 大文件警告阈值 20MB
@@ -324,7 +329,8 @@ const BaseFormatEditor = forwardRef<FormatEditorRef, BaseFormatEditorProps>((pro
                             label: t('Common.file_info'),
                             children: (
                                 <Descriptions size="small" column={3}>
-                                    <Descriptions.Item label={t('Common.file_type')}>{fileInfo.FileType}</Descriptions.Item>
+                                    <Descriptions.Item
+                                        label={t('Common.file_type')}>{fileInfo.FileType}</Descriptions.Item>
                                     <Descriptions.Item
                                         label={t('Common.storage_format')}>{fileInfo.StorageFormat}</Descriptions.Item>
                                     <Descriptions.Item

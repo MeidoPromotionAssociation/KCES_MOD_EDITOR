@@ -1,5 +1,5 @@
 import React from "react";
-import {Button, InputNumber, Space, Switch, Table, Tooltip, Typography, theme} from "antd";
+import {Button, InputNumber, Space, Switch, Table, theme, Tooltip, Typography} from "antd";
 import {DeleteOutlined, PlusOutlined} from "@ant-design/icons";
 import {useTranslation} from "react-i18next";
 import {ObjectTriplePicker} from "../common/InfinityColorPicker";
@@ -142,7 +142,7 @@ const PartsColorField: React.FC<{
             width: 56,
             render: (_: any, record: { index: number; stop: any }) => (
                 <ObjectTriplePicker object={record.stop} triple={MainTriple}
-                              onChange={(next) => updateStop(record.index, next)}/>
+                                    onChange={(next) => updateStop(record.index, next)}/>
             ),
         },
         ...AllFields.map((field) => ({

@@ -370,7 +370,8 @@ const SettingsPage: React.FC = () => {
                                                     {/* 只在确知没注册时报警：非 Windows 平台查不到注册情况，不能反过来断言已注册 */}
                                                     {/* Warning only when we know it is missing: registration is unqueryable outside Windows, so the opposite cannot be claimed */}
                                                     {protocolScheme && !protocolRegistered ? (
-                                                        <Tag color="orange">{t('SettingsPage.url_protocol_unregistered')}</Tag>
+                                                        <Tag
+                                                            color="orange">{t('SettingsPage.url_protocol_unregistered')}</Tag>
                                                     ) : null}
                                                 </Space>
                                             )

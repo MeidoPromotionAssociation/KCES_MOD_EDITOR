@@ -5,7 +5,8 @@ import React, {useState} from "react";
 import {formatByFileType, formatByPath, isAltSuffixPath} from "../utils/consts";
 import {FileTypeStrictModeKey} from "../utils/LocalStorageKeys";
 import {
-    DetermineFileType, GetFileSize,
+    DetermineFileType,
+    GetFileSize,
     SelectFile
 } from "../../bindings/github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR/internal/app.ts";
 import {FileInfo} from "../../bindings/github.com/MeidoPromotionAssociation/MeidoSerialization/v2/service/COM3D2";

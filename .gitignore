@@ -71,3 +71,5 @@ KCES_MOD_EDITOR.exe
 /MeidoSerialization
 build/windows/nsis/wails_tools.nsh
 build/windows/nsis/wails_tools.nsh
+AGENTS.md
+CLAUDE.md

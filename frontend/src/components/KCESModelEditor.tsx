@@ -67,7 +67,12 @@ const KCESModelEditor = forwardRef<FormatEditorRef, Omit<BaseFormatEditorProps, 
                                     <div>
                                         {materials.map((name, index) => (
                                             <div key={index}
-                                                 style={{display: "flex", gap: 6, marginBottom: 6, alignItems: "center"}}>
+                                                 style={{
+                                                     display: "flex",
+                                                     gap: 6,
+                                                     marginBottom: 6,
+                                                     alignItems: "center"
+                                                 }}>
                                                 <Typography.Text type="secondary" style={{width: 30}}>
                                                     {index}
                                                 </Typography.Text>

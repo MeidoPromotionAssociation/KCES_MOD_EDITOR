@@ -12,10 +12,10 @@ interface DisclaimerDialogProps {
 }
 
 const LANGUAGE_OPTIONS = [
-    { label: 'English (American English)', key: 'en-US' },
-    { label: '简体中文 (Simplified Chinese)', key: 'zh-CN' },
-    { label: '日本語 (Japanese)', key: 'ja-JP' },
-    { label: '韓國語 (Korean)', key: 'ko-KR' },
+    {label: 'English (American English)', key: 'en-US'},
+    {label: '简体中文 (Simplified Chinese)', key: 'zh-CN'},
+    {label: '日本語 (Japanese)', key: 'ja-JP'},
+    {label: '韓國語 (Korean)', key: 'ko-KR'},
 ];
 
 const DisclaimerDialog: React.FC<DisclaimerDialogProps> = ({onAgree, visible}) => {
