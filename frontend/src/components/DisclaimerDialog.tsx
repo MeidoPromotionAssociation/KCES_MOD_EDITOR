@@ -7,14 +7,22 @@ import {DownOutlined, TranslationOutlined} from "@ant-design/icons";
 import {Application} from "@wailsio/runtime";
 
 interface DisclaimerDialogProps {
-    onAgree: () => void; // 当用户同意时的回调函数
-    visible: boolean; // 控制对话框的显示和隐藏
+    onAgree: () => void;
+    visible: boolean;
 }
+
+const LANGUAGE_OPTIONS = [
+    { label: 'English (American English)', key: 'en-US' },
+    { label: '简体中文 (Simplified Chinese)', key: 'zh-CN' },
+    { label: '日本語 (Japanese)', key: 'ja-JP' },
+    { label: '韓國語 (Korean)', key: 'ko-KR' },
+];
 
 const DisclaimerDialog: React.FC<DisclaimerDialogProps> = ({onAgree, visible}) => {
     const {t} = useTranslation();
     const [disclaimerText, setDisclaimerText] = useState('');
-    const [language, setLanguage] = React.useState('zh-CN');
+    // 初始值建议优先读取 i18n 当前语言，若没有则兜底 'en-US'
+    const [language, setLanguage] = useState(i18n.language || 'en-US');
 
     useEffect(() => {
         fetch('/Disclaimer.md')
@@ -36,23 +44,18 @@ const DisclaimerDialog: React.FC<DisclaimerDialogProps> = ({onAgree, visible}) =
         onAgree();
     };
 
-
     const handleLanguageChange: MenuProps['onClick'] = (e) => {
-        i18n.changeLanguage(e.key).then(() => {
-        });
+        i18n.changeLanguage(e.key);
         setLanguage(e.key);
     };
 
     const languageMenu: MenuProps = {
-        items: [
-            {label: '简体中文 (Simplified Chinese)', key: "zh-CN"},
-            {label: 'English (American English)', key: "en-US"},
-            {label: '日本語 (Japanese)', key: "ja-JP"},
-            {label: '韓國語 (Korean)', key: "ko-KR"},
-        ],
+        items: LANGUAGE_OPTIONS,
         onClick: handleLanguageChange,
     };
 
+    // 查找当前选中的 label
+    const currentLanguageLabel = LANGUAGE_OPTIONS.find(item => item.key === language)?.label || language;
 
     return (
         <Modal
@@ -64,7 +67,7 @@ const DisclaimerDialog: React.FC<DisclaimerDialogProps> = ({onAgree, visible}) =
             footer={[
                 <Dropdown key="language" menu={languageMenu} placement="topLeft">
                     <Button>
-                        <TranslationOutlined/> {language} <DownOutlined/>
+                        <TranslationOutlined/> {currentLanguageLabel} <DownOutlined/>
                     </Button>
                 </Dropdown>,
                 <Button key="cancel" onClick={() => {

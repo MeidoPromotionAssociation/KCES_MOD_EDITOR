@@ -14,6 +14,12 @@ import {KCESFormats} from "./utils/consts";
 import {registerEditingSchemas} from "./utils/monacoSchemas";
 import {StartupFile} from "../bindings/github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR/internal/app.ts";
 import {bindMessage, bindModal} from "./utils/feedback";
+import {resolveUiLanguage} from "./utils/i18n.ts";
+import {Locale} from "antd/es/locale";
+import zhCN from "antd/locale/zh_CN";
+import enUS from "antd/locale/en_US";
+import jaJP from "antd/locale/ja_JP";
+import koKR from "antd/locale/ko_KR";
 
 // MessageBinder 把组件树内（可消费主题上下文）的 message 与 modal 实例绑定到全局桥
 const MessageBinder: React.FC = () => {
@@ -24,6 +30,15 @@ const MessageBinder: React.FC = () => {
     }, [message, modal]);
     return null;
 };
+
+// antd 组件文案跟随界面语言，未覆盖的语言回落到英文
+const AntdLocales: Record<string, Locale> = {
+    "en-US": enUS,
+    "zh-CN": zhCN,
+    "ja-JP": jaJP,
+    "ko-KR": koKR,
+};
+
 
 const App: React.FC = () => {
     const isDarkMode = useDarkMode();
@@ -80,8 +95,12 @@ const App: React.FC = () => {
         };
     }, [handleOpenedFile]);
 
+    // antd 的 locale 键必须是实际有翻译的四个语言码，webview 报 en-GB 这类标签时要先收敛
+    const antdLocale = AntdLocales[resolveUiLanguage()] ?? enUS;
+
     return (
         <ConfigProvider
+            locale={antdLocale}
             theme={{
                 algorithm: isDarkMode ? theme.darkAlgorithm : theme.defaultAlgorithm,
                 // 未自定义时用 DefaultThemeColor，而不是留空让 antd 回落到它自己的主色
