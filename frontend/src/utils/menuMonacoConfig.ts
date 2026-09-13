@@ -1,5 +1,6 @@
 import {MenuCommandTypeNames} from "./kcesEnums";
-import {getMenuCommandDocs} from "./menuCommandDocs";
+import {getMenuCommandMarkdown} from "./menuCommandDocs";
+import {argPlaceholderAt, argValuesAt, requiredPlaceholders} from "./menuCommandSpecs";
 
 /**
  * KCES menu 命令 Monaco 配置，复刻自 COM3D2_MOD_EDITOR 的 menuMonacoConfig
@@ -52,31 +53,73 @@ const defineLanguages = (monacoInstance: any) => {
     });
 };
 
-// 悬停提示：显示命令的枚举值与语义文档
+/**
+ * 树形缩进格式下定位光标所在位置的语义：
+ * 无缩进行是命令名，`\t` 开头的行是它的第 n 个参数，空行分隔命令。
+ * 解析规则与 MenuCommandsEditor 的 parseTextAsTreeIndent 保持一致。
+ */
+const resolveTreeIndentContext = (
+    model: any,
+    lineNumber: number
+): { command: string; argIndex: number } | null => {
+    const line: string = model.getLineContent(lineNumber);
+    if (!line.trim()) return null;
+    if (!line.startsWith("\t")) {
+        return {command: line.trim(), argIndex: -1};
+    }
+    let argIndex = 0;
+    for (let n = lineNumber - 1; n >= 1; n--) {
+        const prev: string = model.getLineContent(n);
+        if (!prev.trim()) return null; // 上方是空行，说明这段参数没有归属的命令名
+        if (prev.startsWith("\t")) {
+            argIndex++;
+            continue;
+        }
+        return {command: prev.trim(), argIndex};
+    }
+    return null;
+};
+
+// 悬停提示：只在命令名上显示文档，参数行不提示
 const defineHoverProviders = (monacoInstance: any) => {
-    ["menuTreeIndent", "menuColonSplit", "menuTSV"].forEach((language) => {
-        monacoInstance.languages.registerHoverProvider(language, {
-            provideHover: function (model: any, position: any) {
-                const word = model.getWordAtPosition(position);
-                if (!word) return null;
-                const index = MenuCommandTypeNames.indexOf(word.word);
-                if (index < 0) return null;
-                const doc = getMenuCommandDocs()[word.word];
-                const contents = [{value: `**${word.word}** — Menu.Command.Type = ${index}`}];
-                if (doc) {
-                    contents.push({value: doc});
-                }
-                return {
-                    range: new monacoInstance.Range(
-                        position.lineNumber,
-                        word.startColumn,
-                        position.lineNumber,
-                        word.endColumn
-                    ),
-                    contents,
-                };
-            },
-        });
+    const commandHover = (model: any, position: any) => {
+        const word = model.getWordAtPosition(position);
+        if (!word) return null;
+        const index = MenuCommandTypeNames.indexOf(word.word);
+        if (index < 0) return null;
+        return {
+            range: new monacoInstance.Range(
+                position.lineNumber,
+                word.startColumn,
+                position.lineNumber,
+                word.endColumn
+            ),
+            contents: [{value: getMenuCommandMarkdown(word.word, index)}],
+        };
+    };
+
+    monacoInstance.languages.registerHoverProvider("menuTreeIndent", {
+        provideHover: function (model: any, position: any) {
+            const context = resolveTreeIndentContext(model, position.lineNumber);
+            // argIndex >= 0 表示光标在参数行上，这里不给提示
+            if (!context || context.argIndex >= 0) return null;
+
+            const type = MenuCommandTypeNames.indexOf(context.command);
+            if (type < 0) return null;
+            return {
+                range: new monacoInstance.Range(
+                    position.lineNumber,
+                    1,
+                    position.lineNumber,
+                    model.getLineMaxColumn(position.lineNumber)
+                ),
+                contents: [{value: getMenuCommandMarkdown(context.command, type)}],
+            };
+        },
+    });
+
+    ["menuColonSplit", "menuTSV"].forEach((language) => {
+        monacoInstance.languages.registerHoverProvider(language, {provideHover: commandHover});
     });
 };
 
@@ -149,31 +192,71 @@ function customShortcut(monacoInstance: any) {
     ]);
 }
 
-// 自动补全：命令名位置提示全部枚举命令（附语义文档）
+/**
+ * 自动补全（只做树形缩进格式）
+ * - 无缩进行：补全全部 74 个命令名，按 snippet 一次铺出必填参数骨架
+ * - `\t` 开头行：按所属命令与参数序号补全该位置的枚举候选
+ */
 const defineAutocomplete = (monacoInstance: any) => {
-    ["menuTreeIndent"].forEach((languageId) => {
-        monacoInstance.languages.registerCompletionItemProvider(languageId, {
-            triggerCharacters: [" ", "\t", ":"],
-            provideCompletionItems(model: any, position: any) {
-                const lineContent = model.getLineContent(position.lineNumber);
-                const suggestions: any[] = [];
+    const languageId = "menuTreeIndent";
 
-                // 无缩进的行视为命令名位置
-                if (!lineContent.startsWith('\t')) {
-                    const docs = getMenuCommandDocs();
-                    MenuCommandTypeNames.forEach((name, index) => {
-                        suggestions.push({
+    monacoInstance.languages.registerCompletionItemProvider(languageId, {
+        // 敲 Tab 换到参数行、或在 key=value 参数里敲 = 时都重新触发一次
+        triggerCharacters: ["\t", "=", ":", "|", "&"],
+        provideCompletionItems(model: any, position: any) {
+            const lineContent: string = model.getLineContent(position.lineNumber);
+            const isCommandLine = !lineContent.startsWith("\t");
+
+            // 替换范围：命令行取整行已输入部分，参数行跳过前导 Tab
+            const indent = isCommandLine ? 0 : lineContent.length - lineContent.replace(/^\t+/, "").length;
+            const range = new monacoInstance.Range(
+                position.lineNumber,
+                indent + 1,
+                position.lineNumber,
+                position.column
+            );
+
+            if (isCommandLine) {
+                return {
+                    suggestions: MenuCommandTypeNames.map((name, index) => {
+                        // 命令名之后按树形缩进铺出必填参数，每个参数一个 tabstop
+                        const placeholders = requiredPlaceholders(name);
+                        const body = placeholders
+                            .map((placeholder, i) => `\n\t\${${i + 1}:${placeholder}}`)
+                            .join("");
+                        return {
                             label: `${name} (${index})`,
                             kind: monacoInstance.languages.CompletionItemKind.Keyword,
-                            insertText: name,
-                            documentation: docs[name] ?? `Menu.Command.Type = ${index}`,
-                        });
-                    });
-                }
+                            insertText: `${name}${body}`,
+                            insertTextRules:
+                                monacoInstance.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                            documentation: {value: getMenuCommandMarkdown(name, index)},
+                            detail: `Menu.Command.Type = ${index}`,
+                            range,
+                            // 保持枚举顺序而不是字母序
+                            sortText: String(index).padStart(3, "0"),
+                        };
+                    }),
+                };
+            }
 
-                return {suggestions};
-            },
-        });
+            const context = resolveTreeIndentContext(model, position.lineNumber);
+            if (!context || context.argIndex < 0) {
+                return {suggestions: []};
+            }
+            const placeholder = argPlaceholderAt(context.command, context.argIndex);
+            const values = argValuesAt(context.command, context.argIndex);
+            return {
+                suggestions: values.map((value, index) => ({
+                    label: value,
+                    kind: monacoInstance.languages.CompletionItemKind.EnumMember,
+                    insertText: value,
+                    detail: placeholder ? `args[${context.argIndex}] <${placeholder}>` : undefined,
+                    range,
+                    sortText: String(index).padStart(4, "0"),
+                })),
+            };
+        },
     });
 };
 

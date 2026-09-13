@@ -18,6 +18,9 @@ export const GitHubReleaseUrl = "https://github.com/MeidoPromotionAssociation/KC
 
 export const ChineseMODGuideUrl = "https://github.com/MeidoPromotionAssociation/COM3D2_Simple_MOD_Guide_Chinese"; // 中文 MOD 教程，简明 MOD 教程
 
+// KCES menu 命令文档（简明 MOD 教程的附录），menuassets 编辑器的命令帮助里引用
+export const KCESMenuCommandDocUrl = "https://github.com/MeidoPromotionAssociation/COM3D2_Simple_MOD_Guide_Chinese/blob/main/%E9%99%84%E5%BD%95/KCES%20menu%20%E5%91%BD%E4%BB%A4%E6%96%87%E6%A1%A3.md";
+
 /** 格式分组，用于 NavBar 与 HomePage 归类 */
 export type KCESFormatGroup = "assets" | "other" | "physics" | "data";
 

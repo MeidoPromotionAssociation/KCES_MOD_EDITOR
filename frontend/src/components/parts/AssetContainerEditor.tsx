@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useRef, useState} from "react";
-import {Button, Empty, Input, Popconfirm, Space, Splitter, theme, Typography} from "antd";
+import {Button, Empty, Input, Space, Splitter, theme, Typography} from "antd";
 import {CopyOutlined, DeleteOutlined, PlusOutlined} from "@ant-design/icons";
 import {useTranslation} from "react-i18next";
 import {useVirtualizer} from "@tanstack/react-virtual";
@@ -12,7 +12,6 @@ import {AssetListWidthKey} from "../../utils/LocalStorageKeys";
  * 右侧：选中资产的专用表单
  *
  * parts.menuassets 这类整合包动辄上千项，列表用 @tanstack/react-virtual 只渲染视口内的行，
- * 因此不再截断（旧实现只显示前 300 项，多出来的必须靠搜索才能碰到）。
  * 左右宽度用 Splitter 交给用户拖，结果记在 localStorage 里跨会话保留。
  */
 
@@ -97,7 +96,12 @@ const AssetContainerEditor: React.FC<AssetContainerEditorProps> = ({
         const nextAssets = [...assets];
         nextAssets.splice(index, 1);
         setData({...data, assetArray: nextAssets});
-        setSelectedIndex(null);
+        if (nextAssets.length === 0) {
+            setSelectedIndex(null);
+            return;
+        }
+        const nextSelectedIndex = Math.max(0, index - 1);
+        setSelectedIndex(nextSelectedIndex);
     };
 
     const addAsset = (template: any) => {
@@ -129,7 +133,7 @@ const AssetContainerEditor: React.FC<AssetContainerEditorProps> = ({
 
     return (
         <Splitter
-            style={{height: "calc(100vh - 135px)", textAlign: "left"}}
+            style={{flex: 1, minHeight: 0, textAlign: "left"}}
             onResizeEnd={(sizes) => localStorage.setItem(AssetListWidthKey, String(Math.round(sizes[0])))}
         >
             {/* 左侧列表 */}
@@ -217,14 +221,14 @@ const AssetContainerEditor: React.FC<AssetContainerEditorProps> = ({
                             >
                                 {t('PartsEditor.clone_asset')}
                             </Button>
-                            <Popconfirm
-                                title={t('PartsEditor.delete_asset_confirm')}
-                                onConfirm={() => removeAsset(selectedIndex)}
+                            <Button
+                                size="small"
+                                danger
+                                icon={<DeleteOutlined/>}
+                                onClick={() => removeAsset(selectedIndex)}
                             >
-                                <Button size="small" danger icon={<DeleteOutlined/>}>
-                                    {t('PartsEditor.delete_asset')}
-                                </Button>
-                            </Popconfirm>
+                                {t('PartsEditor.delete_asset')}
+                            </Button>
                         </Space>
                         {renderForm(selectedAsset, (next) => updateAsset(selectedIndex, next))}
                     </div>

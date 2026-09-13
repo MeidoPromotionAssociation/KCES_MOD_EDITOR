@@ -1,9 +1,11 @@
 /**
- * KCES 枚举映射表，来源：game/KCES 1.34.4/Assembly-CSharp/Parts/Menu.cs 与 Material.cs
+ * KCES 枚举映射表，来源：game/KCES2 1.36.0/Assembly-CSharp/Parts/Menu.cs 与 Material.cs
  * Menu.Command.Type 与 Material.PropertType 都是按声明顺序的数字枚举
  */
 
-// Menu.Command.Type 枚举名（下标即枚举值）
+// Menu.Command.Type 枚举名（下标即枚举值），逐名核对 KCES2 1.36.0 Menu.cs:513-587
+// 反编译源码把标识符里的长音符 ー 写成 C# 转义 ー，这里用真实字符，
+// 所以 28 号是「アイテムパラメータ」（メータ，末尾无长音），35/36 号是「パーツ」，38 号是「リソース」
 export const MenuCommandTypeNames: string[] = [
     "additem",            // 0
     "anime",              // 1
@@ -78,6 +80,7 @@ export const MenuCommandTypeNames: string[] = [
     "しわ合成",             // 70
     "体毛合成",             // 71
     "cutout消去",          // 72
+    "タッチ範囲tex",         // 73
 ];
 
 // 命令名 → 枚举值
@@ -254,6 +257,89 @@ export function numberEnumOptions(table: Record<number, string>): Array<{ label:
 export function stringEnumOptions(names: string[]): Array<{ label: string; value: string }> {
     return names.map((name) => ({label: name, value: name}));
 }
+
+/* ==========================================================================
+ *  menu 命令参数用到的枚举（KCES2 1.36.0）
+ * ========================================================================== */
+
+/**
+ * TBody.SlotID（TBody.cs:4207-4353），下标即枚举值。
+ * 哨兵 none(-1) 与 end 不列入，它们不是可写入 menu 的槽位名。
+ *
+ * 注意大小写：走 TBody.hashSlotName 查表的命令（maskitem / node消去 / node表示 /
+ * パーツnode消去 / パーツnode表示 / param2 / useredit / material / マテリアル参照 /
+ * length 等）只接受「原样拼写 / 全小写 / 全大写」三种形式（TBody.cs:211-213 建表时
+ * 只登记这三种键）；走 Parse.TryParse<SlotID> 的命令则大小写不敏感。
+ * 照抄本表的原样拼写总是安全的。
+ */
+export const SlotIDNames: string[] = [
+    "body", "head", "eye", "hairF", "hairR", "hairS",
+    "hairS_2", "hairT", "hairT_2", "wear", "skirt", "onepiece",
+    "mizugi", "mizugi_top", "mizugi_buttom", "panz", "slip", "bra",
+    "stkg", "shoes", "headset", "glove", "jacket", "vest",
+    "shirt", "accHead", "accHead_2", "hairAho", "accHana", "accHa",
+    "accKami_1_", "accMiMiR", "accKamiSubR", "accNipR", "HandItemR", "accKubi",
+    "accKubiwa", "accHeso", "accUde", "accUde_2", "accAshi", "accAshi_2",
+    "accSenaka", "accShippo", "accKoshi", "accAnl", "accVag", "kubiwa",
+    "megane", "accXXX", "chinko", "chikubi", "accFace", "accHat",
+    "accHat_2", "kousoku_upper", "kousoku_lower", "seieki_naka", "seieki_hara", "seieki_face",
+    "seieki_mune", "seieki_hip", "seieki_ude", "seieki_ashi", "accNipL", "accMiMiL",
+    "accKamiSubL", "accKami_2_", "accKami_3_", "HandItemL", "underhair", "asshair",
+    "moza",
+    ...Array.from({length: 72}, (_, i) => `accAcc${i + 1}`),
+];
+
+/** MaterialMgr.ALPHA_TYPE（MaterialMgr.cs:2095），用于 tex / partcolor 系列的 `名称:类型=百分比` 后缀 */
+export const AlphaTypeNames: string[] = ["ALPHA_NONE", "ALPHA_TEX", "ALPHA_MAT"];
+
+/** TBodySkin.CHIKUBI_STATE（TBodySkin.cs:1528），用于 乳首 命令 */
+export const ChikubiStateNames: string[] = ["None", "固定凸", "基本凹"];
+
+/** TBodySkin.CHINKO_STATE（TBodySkin.cs:1535），用于 ちんこ 命令 */
+export const ChinkoStateNames: string[] = ["None", "しまう"];
+
+/** TBody.MOVE_HIDE_MODE（TBody.cs:4365）[Flags]，parthidemove 用 `&` 连接，走 Enum.Parse 区分大小写 */
+export const MoveHideModeNames: string[] = ["NONE", "MOVE", "HIDE"];
+
+/** TBody.PART_HIDE_TYPE（TBody.cs:4372），用于 parthidemove */
+export const PartHideTypeNames: string[] = ["TYPE_SLOT_VISIBLE", "TYPE_BONE_WEIGHT"];
+
+/** TMorphSkin.BaseBlendValue.Tag，meshmorph 的第一参数；MAX 是哨兵不列入 */
+export const MeshMorphTagNames: string[] = ["パンツ", "靴下"];
+
+/** Menu.DEFINE（Menu.cs:595）[Flags] ulong，defineTagNames 为各标签按位或，也用于 ifdef / elseifdef 的 DEFINE 条件 */
+export const MenuDefineNames: string[] = ["NONE", "COLOR_MAMA", "COLOR_MUGEN", "COLOR_BUBUN", "COLOR_GRADA"];
+
+/** Menu.DEFINE 各标签的位值（NONE = 0） */
+export const MenuDefineNameBits: Record<string, number> = {
+    NONE: 0,
+    COLOR_MAMA: 1,
+    COLOR_MUGEN: 2,
+    COLOR_BUBUN: 4,
+    COLOR_GRADA: 8,
+};
+
+/** Menu.Attribute（Menu.cs:612）[Flags] ulong，attribute 的位标签 */
+export const MenuAttributeNames: string[] = ["None", "WomanReccomend", "ManReccomend", "ManSuits", "NoExpressionFace", "NoMoveTatooHokuro"];
+
+/** Menu.Attribute 各标签的位值（None = 0） */
+export const MenuAttributeBits: Record<string, number> = {
+    None: 0,
+    WomanReccomend: 1,
+    ManReccomend: 2,
+    ManSuits: 4,
+    NoExpressionFace: 8,
+    NoMoveTatooHokuro: 16,
+};
+
+/** Menu.TargetBodyType（Menu.cs:605）非 Flags 的普通枚举，游戏侧全用 == 比较，单选 */
+export const MenuTargetBodyTypeNames: string[] = ["None", "Woman", "Man"];
+
+/** Menu.HaraYureLimitType（Menu.cs:623）非 Flags 普通枚举，isHarayureAvailable 的取值，游戏侧用 == 比较 */
+export const MenuHaraYureLimitTypeNames: string[] = ["None", "YureAvailable", "YureDisable"];
+
+/** bonemorph 的 9 参数形式的类型标记（PartsMenuManager.cs:1310-1360，比较前会 ToLower） */
+export const BoneMorphTypeNames: string[] = ["pos", "rot", "scl"];
 
 
 export enum MPN {

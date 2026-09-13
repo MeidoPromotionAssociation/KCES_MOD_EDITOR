@@ -26,3 +26,14 @@ html.file-drop-target-active {
     color: rgba(0, 0, 0, 0.25) !important;
     cursor: not-allowed;
 }
+
+/* menuassets 命令编辑器右下角的帮助按钮：平时淡出不挡视线，悬停时恢复为实心 */
+.menu-commands-help-button {
+    opacity: 0.45;
+    transition: opacity 0.2s ease;
+}
+
+.menu-commands-help-button:hover,
+.menu-commands-help-button:focus-visible {
+    opacity: 1;
+}

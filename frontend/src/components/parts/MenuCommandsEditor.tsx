@@ -1,10 +1,12 @@
 import React, {useEffect, useMemo, useRef, useState} from "react";
-import {Alert, Radio} from "antd";
+import {Alert, Button, Radio, Tooltip} from "antd";
+import {QuestionOutlined} from "@ant-design/icons";
 import {Editor} from "@monaco-editor/react";
 import {useTranslation} from "react-i18next";
 import {useDarkMode} from "../../hooks/themeSwitch";
 import {setupMenuMonaco} from "../../utils/menuMonacoConfig";
 import {menuCommandName, menuCommandType} from "../../utils/kcesEnums";
+import MenuCommandsHelpModal from "./MenuCommandsHelpModal";
 
 /**
  * MenuCommandsEditor KCES 菜单命令编辑器
@@ -185,6 +187,7 @@ const MenuCommandsEditor: React.FC<{
     );
     const [text, setText] = useState<string>(() => commandsToText(commands ?? [], format));
     const [parseError, setParseError] = useState<string | null>(null);
+    const [helpOpen, setHelpOpen] = useState(false);
 
     const isInternalUpdate = useRef(false);
     const prevKeyRef = useRef<string>(JSON.stringify(commands ?? []));
@@ -261,20 +264,36 @@ const MenuCommandsEditor: React.FC<{
                     description={parseError}
                 />
             )}
-            <div style={{height: height ?? "calc(100vh - 420px)", borderRadius: 8, overflow: "hidden"}}>
-                <Editor
-                    beforeMount={(monacoInstance) => setupMenuMonaco(monacoInstance)}
-                    language={languageFor(format)}
-                    theme={isDarkMode ? "menuTheme-dark" : "menuTheme"}
-                    value={text}
-                    onChange={handleTextChange}
-                    options={{
-                        minimap: {enabled: false},
-                        insertSpaces: false,
-                        tabSize: 4,
-                    }}
-                />
+            {/* 外层相对定位容器：帮助按钮浮在编辑器上，但不受内层 overflow:hidden 裁剪 */}
+            <div style={{position: "relative", height: height ?? "calc(100vh - 420px)"}}>
+                <div style={{height: "100%", borderRadius: 8, overflow: "hidden"}}>
+                    <Editor
+                        beforeMount={(monacoInstance) => setupMenuMonaco(monacoInstance)}
+                        language={languageFor(format)}
+                        theme={isDarkMode ? "menuTheme-dark" : "menuTheme"}
+                        value={text}
+                        onChange={handleTextChange}
+                        options={{
+                            minimap: {enabled: false},
+                            insertSpaces: false,
+                            tabSize: 4,
+                            // 让补全/悬停浮窗渲染到 body 上的固定层，可以超出编辑器边界显示
+                            fixedOverflowWidgets: true,
+                        }}
+                    />
+                </div>
+                <Tooltip title={t("MenuAssetsEditor.help.button_tooltip")} placement="left">
+                    <Button
+                        shape="circle"
+                        icon={<QuestionOutlined/>}
+                        onClick={() => setHelpOpen(true)}
+                        aria-label={t("MenuAssetsEditor.help.button_tooltip")}
+                        className="menu-commands-help-button"
+                        style={{position: "absolute", right: 16, bottom: 16, zIndex: 10}}
+                    />
+                </Tooltip>
             </div>
+            <MenuCommandsHelpModal open={helpOpen} onClose={() => setHelpOpen(false)}/>
         </div>
     );
 };
