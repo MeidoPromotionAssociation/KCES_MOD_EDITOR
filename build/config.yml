@@ -51,14 +51,14 @@ fileAssociations:
     description: KCES Menu Bundle File
     iconName: menuassets
     role: Editor
-  - ext: mateassets
-    name: Mate Assets
-    description: KCES Mate Bundle File
-    iconName: mateassets
+  - ext: materialassets
+    name: Material Assets
+    description: KCES Material Bundle File
+    iconName: materialassets
     role: Editor
   - ext: pmatassets
     name: PMat Assets
-    description: KCES PMat Bundle File
+    description: KCES Priority Material Bundle File
     iconName: pmatassets
     role: Editor
   - ext: dbconf
