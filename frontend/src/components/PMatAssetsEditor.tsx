@@ -1,5 +1,5 @@
-import {forwardRef, useMemo, useState} from "react";
-import {Button, Input, Space, Table, Typography} from "antd";
+import {forwardRef, useEffect, useMemo, useRef, useState} from "react";
+import {Button, Input, Pagination, Space, Table, theme, Typography} from "antd";
 import {DeleteOutlined, PlusOutlined} from "@ant-design/icons";
 import {useTranslation} from "react-i18next";
 import BaseFormatEditor, {BaseFormatEditorProps, FormatEditorRef} from "./common/BaseFormatEditor";
@@ -11,10 +11,33 @@ import {NullableStringInput, NumberField} from "./parts/formControls";
  * 样式1：可搜索、分页的优先级材质表格（fileName / renderQueue / targetId 等）；样式2：完整 JSON
  */
 
+// 每页条数；分页固定在容器右下角，表格本体占满剩余高度
+const PageSize = 10;
+
 // PMatTable 独立成组件以便使用 hooks（搜索状态）
 const PMatTable: React.FC<{ data: any; setData: (value: any) => void }> = ({data, setData}) => {
     const {t} = useTranslation();
+    const {token} = theme.useToken();
     const [search, setSearch] = useState("");
+    const [page, setPage] = useState(1);
+
+    // 表格区被 flex 拉伸后的实际高度再减去表头高度就是滚动区高度，
+    // 用 ResizeObserver 跟随窗口缩放，避免 calc(100vh - X) 这类估高常数与真实布局对不上
+    const tableAreaRef = useRef<HTMLDivElement>(null);
+    const [bodyHeight, setBodyHeight] = useState(0);
+    useEffect(() => {
+        const area = tableAreaRef.current;
+        if (!area) return;
+        const measure = () => {
+            const head = area.querySelector<HTMLElement>(".ant-table-thead");
+            const headH = head ? head.offsetHeight : 0;
+            setBodyHeight(Math.max(80, area.clientHeight - headH));
+        };
+        measure();
+        const observer = new ResizeObserver(measure);
+        observer.observe(area);
+        return () => observer.disconnect();
+    }, []);
 
     const assets: any[] = Array.isArray(data?.assetArray) ? data.assetArray : [];
 
@@ -25,6 +48,11 @@ const PMatTable: React.FC<{ data: any; setData: (value: any) => void }> = ({data
             .map((asset, index) => ({asset, index}))
             .filter(({asset}) => !lower || String(asset?.fileName ?? "").toLowerCase().includes(lower));
     }, [assets, search]);
+
+    // 当前页数据；删除导致页数减少时回落到最后一页，避免页越界显示空表
+    const totalPages = Math.max(1, Math.ceil(filtered.length / PageSize));
+    const currentPage = Math.min(page, totalPages);
+    const pageData = filtered.slice((currentPage - 1) * PageSize, currentPage * PageSize);
 
     const updateAsset = (index: number, next: any) => {
         const list = [...assets];
@@ -95,14 +123,17 @@ const PMatTable: React.FC<{ data: any; setData: (value: any) => void }> = ({data
     ];
 
     return (
-        <div style={{textAlign: "left"}}>
-            <Space style={{marginBottom: 8}}>
+        <div style={{textAlign: "left", display: "flex", flexDirection: "column", flex: 1, minHeight: 0}}>
+            <Space style={{marginBottom: 8, alignSelf: "flex-start", flexShrink: 0}}>
                 <Input
                     allowClear
                     style={{width: 300}}
                     placeholder={t('PartsEditor.search_placeholder')}
                     value={search}
-                    onChange={(e) => setSearch(e.target.value)}
+                    onChange={(e) => {
+                        setSearch(e.target.value);
+                        setPage(1);
+                    }}
                 />
                 <Button size="small" icon={<PlusOutlined/>} onClick={addAsset}>
                     {t('PartsEditor.add_asset')}
@@ -111,14 +142,39 @@ const PMatTable: React.FC<{ data: any; setData: (value: any) => void }> = ({data
                     {t('PartsEditor.asset_count', {count: assets.length})}
                 </Typography.Text>
             </Space>
-            <Table
-                size="small"
-                rowKey={(record) => String(record.index)}
-                columns={columns as any}
-                dataSource={filtered}
-                pagination={{pageSize: 10, showSizeChanger: false}}
-                scroll={{y: "calc(100vh - 220px)"}}
-            />
+            <div style={{
+                flex: 1,
+                minHeight: 0,
+                display: "flex",
+                flexDirection: "column",
+                overflow: "hidden",
+                // 数据不满一页时表格块不会撑到容器底，用白色圆角容器把这块区域贴住窗口底边
+                background: token.colorBgContainer,
+                borderRadius: token.borderRadius,
+            }}>
+                {/* 表格本体占满剩余高度，数据不足时留白在这里 */}
+                <div ref={tableAreaRef} style={{flex: 1, minHeight: 0, overflow: "hidden"}}>
+                    <Table
+                        size="small"
+                        rowKey={(record) => String(record.index)}
+                        columns={columns as any}
+                        dataSource={pageData}
+                        pagination={false}
+                        scroll={{y: bodyHeight}}
+                    />
+                </div>
+                {/* 分页固定在右下角 */}
+                <div style={{display: "flex", justifyContent: "flex-end", padding: "8px 12px", flexShrink: 0}}>
+                    <Pagination
+                        size="small"
+                        current={currentPage}
+                        pageSize={PageSize}
+                        total={filtered.length}
+                        showSizeChanger={false}
+                        onChange={setPage}
+                    />
+                </div>
+            </div>
         </div>
     );
 };

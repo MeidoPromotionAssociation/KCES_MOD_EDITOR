@@ -11,7 +11,8 @@ const AutoFormEditor = forwardRef<FormatEditorRef, Omit<BaseFormatEditorProps, "
     (props, ref) => {
         const renderStyle1 = (data: any, setData: (value: any) => void) => (
             <div style={{
-                height: "calc(100vh - 210px)",
+                flex: 1,
+                minHeight: 0,
                 overflow: "auto",
                 textAlign: "left"
             }}>

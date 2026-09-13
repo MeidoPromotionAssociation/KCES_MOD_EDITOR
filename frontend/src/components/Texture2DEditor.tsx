@@ -335,7 +335,7 @@ const Texture2DEditor = forwardRef<FormatEditorRef, Texture2DEditorProps>((props
     const quickTarget = filePath ? siblingPath(filePath, exportFormat, openedImage) : "";
 
     return (
-        <div style={{padding: 10, textAlign: "left"}}>
+        <div style={{padding: 10, textAlign: "left", display: "flex", flexDirection: "column", flex: 1, minHeight: 0}}>
             {magickReady === false && (
                 <Alert
                     type="warning"
@@ -450,13 +450,21 @@ const Texture2DEditor = forwardRef<FormatEditorRef, Texture2DEditorProps>((props
                        title={t('Texture2DEditor.load_failed')} description={error}/>
             )}
 
-            <Spin spinning={loading} description={t('Infos.loading_please_wait')}>
+            <Spin
+                spinning={loading}
+                description={t('Infos.loading_please_wait')}
+                style={{flex: 1, minHeight: 0, display: "flex", flexDirection: "column"}}
+                styles={{
+                    section: {flex: 1, minHeight: 0, display: "flex", flexDirection: "column"},
+                    container: {flex: 1, minHeight: 0, display: "flex", flexDirection: "column"},
+                }}
+            >
                 <Card
                     style={{
-                        minHeight: "calc(100vh - 260px)",
+                        flex: 1,
+                        minHeight: 0,
                         display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
+                        flexDirection: "column",
                         // 贴图多为带透明通道的 PNG，铺一层棋盘格才看得出 alpha
                         backgroundColor: token.colorBgContainer,
                         backgroundImage:
@@ -467,10 +475,20 @@ const Texture2DEditor = forwardRef<FormatEditorRef, Texture2DEditorProps>((props
                         backgroundSize: "20px 20px",
                         backgroundPosition: "0 0, 0 10px, 10px -10px, -10px 0",
                     }}
+                    styles={{
+                        body: {
+                            flex: 1,
+                            minHeight: 0,
+                            overflow: "auto",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                        },
+                    }}
                 >
                     {preview ? (
                         <Image src={preview} alt={info?.name ?? getFileName(filePath ?? "")}
-                               style={{maxWidth: "100%", maxHeight: "calc(100vh - 320px)"}}/>
+                               style={{maxWidth: "100%"}}/>
                     ) : (
                         <Empty
                             description={

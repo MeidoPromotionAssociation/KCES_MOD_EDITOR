@@ -13,7 +13,7 @@ import JsonObjectForm from "./common/JsonObjectForm";
 const JsonTextEditor = forwardRef<FormatEditorRef, Omit<BaseFormatEditorProps, "renderStyle1" | "renderHeader">>(
     (props, ref) => {
         const renderStyle1 = (data: any, setData: (value: any) => void) => (
-            <div style={{height: "calc(100vh - 230px)", overflow: "auto"}}>
+            <div style={{flex: 1, minHeight: 0, overflow: "auto", textAlign: "left"}}>
                 <JsonObjectForm value={data} onChange={setData}/>
             </div>
         );

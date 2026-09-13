@@ -74,7 +74,7 @@ const EditorPageShell: React.FC<{ format: KCESFormatDef }> = ({format}) => {
                 onSaveFile={() => handleSaveFile(editorRef)}
                 onSaveAsFile={() => handleSaveAsFile(editorRef)}
             />
-            <Content style={{padding: 0, overflow: "auto"}}>
+            <Content style={{padding: 0, overflow: "auto", display: "flex", flexDirection: "column"}}>
                 <EditorComponent key={format.key} fileInfo={fileInfo} format={format} ref={editorRef}/>
             </Content>
         </Layout>

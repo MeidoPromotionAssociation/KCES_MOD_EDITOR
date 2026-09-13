@@ -65,7 +65,7 @@ const PayloadEditor = forwardRef<FormatEditorRef, Omit<BaseFormatEditorProps, "r
             };
 
             return (
-                <div style={{height: "calc(100vh - 135px)", overflow: "auto"}}>
+                <div style={{flex: 1, minHeight: 0, overflow: "auto"}}>
                     {renderForm()}
                 </div>
             );

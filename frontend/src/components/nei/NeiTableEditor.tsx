@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useRef, useState} from "react";
 import {Button, Empty, Input, theme, Tooltip} from "antd";
 import {DeleteOutlined, HolderOutlined, PlusOutlined} from "@ant-design/icons";
 import {useTranslation} from "react-i18next";
@@ -162,17 +162,6 @@ const NeiTableEditor: React.FC<{
     const colCount = Math.max(1, csvColumnCount(rows));
     const totalWidth = HeadWidth + colCount * CellWidth;
 
-    // 虚拟滚动需要数值高度，随窗口变化重算。
-    // 总高度对齐样式2的 CSV 编辑器（calc(100vh - 215px)），再减去下方两个按钮占的 40px，
-    // 这样在同一个 .nei 文件的两个视图之间来回切时编辑区不会跳
-    const availableHeight = () => Math.max(240, window.innerHeight - 215 - 40);
-    const [tableHeight, setTableHeight] = useState(availableHeight);
-    useEffect(() => {
-        const onResize = () => setTableHeight(availableHeight());
-        window.addEventListener("resize", onResize);
-        return () => window.removeEventListener("resize", onResize);
-    }, []);
-
     const virtualizer = useVirtualizer({
         count: rows.length,
         getScrollElement: () => scrollRef.current,
@@ -267,25 +256,26 @@ const NeiTableEditor: React.FC<{
     };
 
     return (
-        <div style={{textAlign: "left"}}>
-            <DragDropProvider
-                onDragStart={handleDragStart}
-                onDragOver={handleDragOver}
-                onDragEnd={handleDragEnd}
-            >
-                <div
-                    ref={scrollRef}
-                    role="table"
-                    aria-rowcount={rows.length + 1}
-                    aria-colcount={colCount + 1}
-                    style={{
-                        height: tableHeight,
-                        overflow: "auto",
-                        border,
-                        borderRadius: token.borderRadius,
-                        background: token.colorBgContainer,
-                    }}
+        <div style={{textAlign: "left", display: "flex", flexDirection: "column", flex: 1, minHeight: 0}}>
+            <div style={{flex: 1, minHeight: 0}}>
+                <DragDropProvider
+                    onDragStart={handleDragStart}
+                    onDragOver={handleDragOver}
+                    onDragEnd={handleDragEnd}
                 >
+                    <div
+                        ref={scrollRef}
+                        role="table"
+                        aria-rowcount={rows.length + 1}
+                        aria-colcount={colCount + 1}
+                        style={{
+                            height: "100%",
+                            overflow: "auto",
+                            border,
+                            borderRadius: token.borderRadius,
+                            background: token.colorBgContainer,
+                        }}
+                    >
                     <div style={{width: totalWidth, position: "relative"}}>
                         {/* 表头：纵向吸顶，横向随内容滚动
                             sticky 要挂在 rowgroup 上而不是里面的行上：sticky 元素只能在父元素盒子内偏移，
@@ -371,8 +361,9 @@ const NeiTableEditor: React.FC<{
                         )}
                     </div>
                 </div>
-            </DragDropProvider>
-            <div style={{marginTop: 8}}>
+                </DragDropProvider>
+            </div>
+            <div style={{marginTop: 8, flexShrink: 0}}>
                 <Button type="primary" icon={<PlusOutlined/>} onClick={handleAddRow} style={{marginRight: 8}}>
                     {t('NeiEditor.add_row')}
                 </Button>

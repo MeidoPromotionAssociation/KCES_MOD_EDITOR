@@ -130,8 +130,8 @@ const NeiEditor = forwardRef<FormatEditorRef, Omit<BaseFormatEditorProps, "rende
     }));
 
     return (
-        <div>
-            <Space style={{margin: "8px 0 0 10px", width: "100%", justifyContent: "flex-start"}}>
+        <div style={{display: "flex", flexDirection: "column", flex: 1, minHeight: 0}}>
+            <Space style={{margin: "8px 0 0 10px", alignSelf: "flex-start", flexShrink: 0}}>
                 <Button size="small" icon={<ExportOutlined/>} onClick={handleExportCsv}>
                     {t('NeiEditor.export_csv')}
                 </Button>

@@ -1,11 +1,9 @@
 import React, {forwardRef, useEffect, useImperativeHandle, useState} from "react";
-import {Button, Collapse, ConfigProvider, Descriptions, Empty, Modal, Radio} from "antd";
+import {Button, ConfigProvider, Empty, Modal, Radio} from "antd";
 import {appMessage as message} from "../../utils/feedback";
 import {useTranslation} from "react-i18next";
 import {Window} from "@wailsio/runtime";
-import {
-    FileInfo
-} from "../../../bindings/github.com/MeidoPromotionAssociation/MeidoSerialization/v2/service/COM3D2/models";
+import {FileInfo} from "../../../bindings/github.com/MeidoPromotionAssociation/MeidoSerialization/v2/service/COM3D2";
 import {AppTitle, AppTitleNoAuthor, isAltSuffixPath, KCESFormatDef, selectPattern} from "../../utils/consts";
 import {formatServices, MaxConvertBytes} from "../../utils/formatServices";
 import {editorViewModeKey} from "../../utils/LocalStorageKeys";
@@ -292,7 +290,7 @@ const BaseFormatEditor = forwardRef<FormatEditorRef, BaseFormatEditorProps>((pro
     useTranslation();
 
     return (
-        <div style={{padding: 10}}>
+        <div style={{padding: 10, display: "flex", flexDirection: "column", flex: 1, minHeight: 0}}>
             <Modal
                 title={t('Infos.large_file_waring')}
                 open={isConfirmModalOpen}
@@ -325,30 +323,14 @@ const BaseFormatEditor = forwardRef<FormatEditorRef, BaseFormatEditorProps>((pro
                     }
                 }}
             >
-                {/* 文件信息 */}
-                {fileInfo && (
-                    <Collapse
-                        size="small"
-                        items={[{
-                            key: "fileinfo",
-                            label: t('Common.file_info'),
-                            children: (
-                                <Descriptions size="small" column={3}>
-                                    <Descriptions.Item
-                                        label={t('Common.file_type')}>{fileInfo.FileType}</Descriptions.Item>
-                                    <Descriptions.Item
-                                        label={t('Common.storage_format')}>{fileInfo.StorageFormat}</Descriptions.Item>
-                                    <Descriptions.Item
-                                        label={t('Common.file_size')}>{(fileInfo.Size / 1024).toFixed(2)} KB</Descriptions.Item>
-                                </Descriptions>
-                            ),
-                        }]}
-                    />
+
+                {props.renderHeader && data !== null && (
+                    <div style={{flexShrink: 0}}>
+                        {props.renderHeader(data, setData)}
+                    </div>
                 )}
 
-                {props.renderHeader && data !== null && props.renderHeader(data, setData)}
-
-                <div style={{marginBottom: 8, marginTop: 8}}>
+                <div style={{marginBottom: 5, marginTop: 0, flexShrink: 0}}>
                     <Radio.Group
                         block
                         value={viewMode}

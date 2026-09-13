@@ -19,7 +19,7 @@ const KCESModelEditor = forwardRef<FormatEditorRef, Omit<BaseFormatEditorProps, 
             const materials: any[] = Array.isArray(data?.materialFileName) ? data.materialFileName : [];
 
             return (
-                <div style={{textAlign: "left", height: "calc(100vh - 215px)", overflow: "auto"}}>
+                <div style={{textAlign: "left", flex: 1, minHeight: 0, overflow: "auto"}}>
                     <Collapse
                         size="small"
                         defaultActiveKey={["meta", "materials"]}

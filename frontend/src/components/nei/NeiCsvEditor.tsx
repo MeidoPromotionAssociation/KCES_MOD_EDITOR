@@ -56,7 +56,9 @@ const NeiCsvEditor: React.FC<{
 
     return (
         <div style={{
-            height: height ?? "calc(100vh - 205px)",
+            height: height,
+            flex: height ? undefined : 1,
+            minHeight: 0,
             borderRadius: '8px',
             overflow: 'hidden',
         }}>

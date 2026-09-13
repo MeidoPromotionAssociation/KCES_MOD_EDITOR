@@ -66,7 +66,9 @@ const MonacoJsonEditor: React.FC<{
 
     return (
         <div style={{
-            height: height ?? "calc(100vh - 135px)",
+            height: height,
+            flex: height ? undefined : 1,
+            minHeight: 0,
             borderRadius: '8px',
             overflow: 'hidden'
         }}>
