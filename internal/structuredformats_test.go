@@ -23,15 +23,7 @@ var structuredFormatSuffixes = map[string]string{
 	"dslconf":        ".dslconf",
 	"dsl2conf":       ".dsl2conf",
 	"dslcol":         ".dslcol",
-	"ikcol":          ".ikcol",
-	"ikcolbytes":     ".ikcol.bytes",
-	"limbcol":        ".limbcol",
-	"sad":            ".sad",
-	"hitcheck":       ".hitcheck",
 	"nson":           ".nson",
-	"undressdat":     ".undressdat",
-	"undresspdat":    ".undresspdat",
-	"psk":            ".psk",
 	"nei":            ".nei",
 }
 
@@ -118,9 +110,8 @@ func TestStructuredFormatsCoverEditorFormats(t *testing.T) {
 	expected := []string{
 		"menuassets", "materialassets", "pmatassets", "model",
 		"dbconf", "dbcol", "db2conf", "dsbconf", "dsb2conf",
-		"dslconf", "dsl2conf", "dslcol", "ikcol", "ikcolbytes", "limbcol",
-		"preset", "sad", "hitcheck", "maidcollider",
-		"nson", "undressdat", "undresspdat", "psk", "nei",
+		"dslconf", "dsl2conf", "dslcol",
+		"preset", "nson", "undressdat", "undresspdat", "nei",
 	}
 	for _, key := range expected {
 		if _, ok := formats[key]; !ok {
