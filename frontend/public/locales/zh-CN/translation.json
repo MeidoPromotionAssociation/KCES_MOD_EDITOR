@@ -556,12 +556,14 @@
     "offset_scale": "偏移与缩放",
     "color_picker": "颜色选择器",
     "number": "数值",
+    "vector_name_tip": "名字取自完整 PropertType 表：某个属性算不算向量，取决于它在 shader 里的声明类型",
     "offsetX": "偏移 X",
     "offsetY": "偏移 Y",
     "scaleX": "缩放 X",
     "scaleY": "缩放 Y",
     "layout_compact": "紧凑布局",
     "layout_labeled": "标签布局",
+    "layout_sidebar": "分栏布局",
     "kw": "关键字属性",
     "keyword_enabled": "启用",
     "keyword_enabled_tip": "对应游戏的 EnableKeyword / DisableKeyword，并同时把同名浮点属性设为 1 或 0",
@@ -572,7 +574,12 @@
     "layout_kces2": "KCES2（10 槽）",
     "layout_upgrade": "升级为 KCES2 布局",
     "layout_downgrade": "改回 KCES 布局",
-    "layout_legacy_tip": "KCES 8 槽布局没有 keywordProps 与 renderQueue 的位置，要编辑这两项得先把该材质升级为 KCES2 10 槽布局"
+    "layout_legacy_tip": "KCES 8 槽布局没有 keywordProps 与 renderQueue 的位置，要编辑这两项得先把该材质升级为 KCES2 10 槽布局",
+    "sidebar_all": "全部",
+    "layout_legacy_short": "KCES 8 槽放不下关键字属性",
+    "sidebar_search": "搜索属性名",
+    "sidebar_no_prop": "没有匹配的属性",
+    "sidebar_select_hint": "从左侧选择一条属性"
   },
   "KeyFrameEditor": {
     "show_visual_editor": "显示可视化编辑器",

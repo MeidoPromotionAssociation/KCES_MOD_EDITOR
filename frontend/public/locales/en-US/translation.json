@@ -556,12 +556,14 @@
     "offset_scale": "Offset & Scale",
     "color_picker": "Color Picker",
     "number": "Value",
+    "vector_name_tip": "Names come from the full PropertType table: whether a property counts as a vector depends on how it is declared in the shader",
     "offsetX": "Offset X",
     "offsetY": "Offset Y",
     "scaleX": "Scale X",
     "scaleY": "Scale Y",
     "layout_compact": "Compact Layout",
     "layout_labeled": "Labeled Layout",
+    "layout_sidebar": "Sidebar Layout",
     "kw": "Keyword Props",
     "keyword_enabled": "Enabled",
     "keyword_enabled_tip": "Maps to the game's EnableKeyword / DisableKeyword call and also sets the float property of the same name to 1 or 0",
@@ -572,7 +574,12 @@
     "layout_kces2": "KCES2 (10 slots)",
     "layout_upgrade": "Upgrade to KCES2 layout",
     "layout_downgrade": "Revert to KCES layout",
-    "layout_legacy_tip": "The KCES 8-slot layout has no room for keywordProps or renderQueue, so this material must be upgraded to the KCES2 10-slot layout before editing them"
+    "layout_legacy_tip": "The KCES 8-slot layout has no room for keywordProps or renderQueue, so this material must be upgraded to the KCES2 10-slot layout before editing them",
+    "sidebar_all": "All",
+    "layout_legacy_short": "The KCES 8-slot layout has no room for keyword properties",
+    "sidebar_search": "Search property name",
+    "sidebar_no_prop": "No matching property",
+    "sidebar_select_hint": "Select a property on the left"
   },
   "KeyFrameEditor": {
     "show_visual_editor": "Show Visual Editor",

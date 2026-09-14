@@ -218,22 +218,36 @@ export const KeywordPropNames: Record<number, string> = {
     308: "_ALPHAPREMULTIPLY_ON",
 };
 
+/**
+ * Material.PropertType 向量属性用的名字表：没有专属取值段，取纹理 + 颜色 + 浮点三段的并集
+ *
+ * 一个属性进不进 vectorProps 由它在 shader 里的声明类型决定，与名字属于哪一段无关
+ * （ExportKCES 先 Enum.TryParse 名字，再按 shader.GetPropertyType 分派到
+ * Vector / Color / Float / Texture 四张表），所以候选只能是全集。
+ * 关键字段（300+）不列：Unity 里着色器关键字不是 shader property，不会以 Vector 形式导出。
+ */
+export const VectorPropNames: Record<number, string> = {
+    ...TexturePropNames,
+    ...ColorPropNames,
+    ...FloatPropNames,
+};
+
 /** 材质属性种类：纹理 / 颜色 / 向量 / 浮点 / 关键字 */
 export type MaterialPropKind = "tex" | "col" | "vec" | "f" | "kw";
 
-/** 某类属性用的枚举表；向量属性游戏侧没有专属取值，表为空，靠自由输入填数字 */
+/** 某类属性用的枚举表 */
 export function materialPropTable(kind: MaterialPropKind): Record<number, string> {
     switch (kind) {
         case "tex":
             return TexturePropNames;
         case "col":
             return ColorPropNames;
+        case "vec":
+            return VectorPropNames;
         case "f":
             return FloatPropNames;
         case "kw":
             return KeywordPropNames;
-        default:
-            return {};
     }
 }
 

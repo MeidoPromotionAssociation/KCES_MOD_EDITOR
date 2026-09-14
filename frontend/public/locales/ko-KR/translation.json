@@ -556,12 +556,14 @@
     "offset_scale": "오프셋과 스케일",
     "color_picker": "색상 선택기",
     "number": "값",
+    "vector_name_tip": "이름은 PropertType 전체 표에서 고릅니다. 터인지 여부는 shader 에서의 선언 형식에 따라 결정됩니다",
     "offsetX": "오프셋 X",
     "offsetY": "오프셋 Y",
     "scaleX": "스케일 X",
     "scaleY": "스케일 Y",
     "layout_compact": "컴팩트",
     "layout_labeled": "라벨형",
+    "layout_sidebar": "분할 레이아웃",
     "kw": "키워드 속성",
     "keyword_enabled": "사용",
     "keyword_enabled_tip": "게임의 EnableKeyword / DisableKeyword 에 대응하며 같은 이름의 float 프로퍼티도 1 또는 0 로 설정합니다",
@@ -572,7 +574,12 @@
     "layout_kces2": "KCES2(10 슬롯)",
     "layout_upgrade": "KCES2 레이아웃으로 업그레이드",
     "layout_downgrade": "KCES 레이아웃으로 되돌리기",
-    "layout_legacy_tip": "KCES 8 슬롯 레이아웃에는 keywordProps 와 renderQueue 자리가 없습니다. 편집하려면 먼저 이 머티리얼을 KCES2 10 슬롯으로 업그레이드하세요"
+    "layout_legacy_tip": "KCES 8 슬롯 레이아웃에는 keywordProps 와 renderQueue 자리가 없습니다. 편집하려면 먼저 이 머티리얼을 KCES2 10 슬롯으로 업그레이드하세요",
+    "layout_legacy_short": "KCES 8 슬롯에는 키워드 속성 자리가 없습니다",
+    "sidebar_all": "전체",
+    "sidebar_search": "속성 이름 검색",
+    "sidebar_no_prop": "일치하는 속성이 없습니다",
+    "sidebar_select_hint": "왼쪽에서 속성을 선택하세요"
   },
   "KeyFrameEditor": {
     "show_visual_editor": "비주얼 에디터 표시",

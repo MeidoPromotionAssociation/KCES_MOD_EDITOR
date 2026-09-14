@@ -556,12 +556,14 @@
     "offset_scale": "オフセットとスケール",
     "color_picker": "カラーピッカー",
     "number": "数値",
+    "vector_name_tip": "名前は PropertType 全体から選べます。ベクターかどうかは shader での宣言型で決まります",
     "offsetX": "オフセット X",
     "offsetY": "オフセット Y",
     "scaleX": "スケール X",
     "scaleY": "スケール Y",
     "layout_compact": "コンパクト",
     "layout_labeled": "ラベル付き",
+    "layout_sidebar": "分割レイアウト",
     "kw": "キーワード属性",
     "keyword_enabled": "有効",
     "keyword_enabled_tip": "ゲームの EnableKeyword / DisableKeyword に対応し、同名の float プロパティも 1 か 0 に設定します",
@@ -572,7 +574,12 @@
     "layout_kces2": "KCES2（10 スロット）",
     "layout_upgrade": "KCES2 レイアウトへ更新",
     "layout_downgrade": "KCES レイアウトに戻す",
-    "layout_legacy_tip": "KCES の 8 スロットレイアウトには keywordProps と renderQueue の枠がありません。編集するには先にこのマテリアルを KCES2 の 10 スロットへ更新してください"
+    "layout_legacy_tip": "KCES の 8 スロットレイアウトには keywordProps と renderQueue の枠がありません。編集するには先にこのマテリアルを KCES2 の 10 スロットへ更新してください",
+    "sidebar_all": "すべて",
+    "layout_legacy_short": "KCES の 8 スロットにはキーワード属性の枠がありません",
+    "sidebar_search": "プロパティ名で検索",
+    "sidebar_no_prop": "一致するプロパティがありません",
+    "sidebar_select_hint": "左側からプロパティを選択してください"
   },
   "KeyFrameEditor": {
     "show_visual_editor": "ビジュアルエディターを表示",
