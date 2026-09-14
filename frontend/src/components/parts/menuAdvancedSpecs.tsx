@@ -218,7 +218,13 @@ const maskParamSpec = (): FieldSpec[] => [
     {kind: "str", name: "linkMaskName", label: "MenuAdvanced.maskParam.linkMaskName"},
     {kind: "int", name: "linkMaskNo", label: "MenuAdvanced.maskParam.linkMaskNo"},
     {kind: "str", name: "shareRtTargetPart", label: "MenuAdvanced.maskParam.shareRtTargetPart"},
-    {kind: "list", name: "maskData", label: "MenuAdvanced.maskParam.maskData", spec: maskDataSpec, newItem: newMaskData},
+    {
+        kind: "list",
+        name: "maskData",
+        label: "MenuAdvanced.maskParam.maskData",
+        spec: maskDataSpec,
+        newItem: newMaskData
+    },
     {
         kind: "list",
         name: "maskRanges",

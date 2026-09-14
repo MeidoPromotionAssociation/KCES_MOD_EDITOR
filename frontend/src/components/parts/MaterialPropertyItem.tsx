@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {AutoComplete, Button, Space, Switch, Tooltip, Typography} from "antd";
 import {DeleteOutlined} from "@ant-design/icons";
 import {useTranslation} from "react-i18next";
-import {materialPropName, materialPropOptions, materialPropValue, MaterialPropKind} from "../../utils/kcesEnums";
+import {MaterialPropKind, materialPropName, materialPropOptions, materialPropValue} from "../../utils/kcesEnums";
 import {NullableStringInput, NumberField, Row} from "./formControls";
 import ColorPickerSync from "./ColorPickerSync";
 

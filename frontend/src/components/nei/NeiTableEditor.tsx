@@ -276,91 +276,91 @@ const NeiTableEditor: React.FC<{
                             background: token.colorBgContainer,
                         }}
                     >
-                    <div style={{width: totalWidth, position: "relative"}}>
-                        {/* 表头：纵向吸顶，横向随内容滚动
+                        <div style={{width: totalWidth, position: "relative"}}>
+                            {/* 表头：纵向吸顶，横向随内容滚动
                             sticky 要挂在 rowgroup 上而不是里面的行上：sticky 元素只能在父元素盒子内偏移，
                             而 rowgroup 的高度就等于表头行高，挂在行上等于完全不能动 */}
-                        <div role="rowgroup" style={{position: "sticky", top: 0, zIndex: 2}}>
-                            <div
-                                role="row"
-                                aria-rowindex={1}
-                                style={{
-                                    display: "flex",
-                                    height: HeaderHeight,
-                                    width: totalWidth,
-                                    background: token.colorFillAlter,
-                                    fontWeight: 500,
-                                }}
-                            >
-                                <div role="columnheader" style={{
-                                    ...headerCellStyle,
-                                    position: "sticky",
-                                    left: 0,
-                                    zIndex: 1,
-                                    flex: `0 0 ${HeadWidth}px`,
-                                    justifyContent: "center",
-                                    background: "inherit",
-                                }}>
-                                    #
-                                </div>
-                                {Array.from({length: colCount}, (_, colIndex) => (
-                                    <div key={colIndex} role="columnheader" style={{
-                                        ...headerCellStyle,
-                                        justifyContent: "space-between",
-                                        gap: 4,
-                                    }}>
-                                        <span>{`${t('NeiEditor.column')} ${colIndex + 1}`}</span>
-                                        <Tooltip title={t('NeiEditor.delete_column')}>
-                                            <Button
-                                                type="text"
-                                                size="small"
-                                                danger
-                                                aria-label={t('NeiEditor.delete_column')}
-                                                icon={<DeleteOutlined/>}
-                                                onClick={() => handleDeleteColumn(colIndex)}
-                                            />
-                                        </Tooltip>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                        {/* 表体：只渲染视口内的行 */}
-                        <div role="rowgroup" style={{height: virtualizer.getTotalSize(), position: "relative"}}>
-                            {virtualizer.getVirtualItems().map((row) => (
-                                <NeiRow
-                                    key={row.key}
-                                    rowIndex={row.index}
-                                    cells={rows[row.index] ?? []}
-                                    colCount={colCount}
-                                    top={row.start}
-                                    dragLabel={t('NeiEditor.drag_row')}
-                                    deleteLabel={t('NeiEditor.delete_row')}
-                                    onCellChange={handleCellChange}
-                                    onDeleteRow={handleDeleteRow}
-                                />
-                            ))}
-                            {drag && drag.from !== drag.to && (
+                            <div role="rowgroup" style={{position: "sticky", top: 0, zIndex: 2}}>
                                 <div
-                                    aria-hidden="true"
+                                    role="row"
+                                    aria-rowindex={1}
                                     style={{
-                                        position: "absolute",
-                                        top: (drag.to > drag.from ? drag.to + 1 : drag.to) * RowHeight - 1,
-                                        left: 0,
-                                        height: 3,
+                                        display: "flex",
+                                        height: HeaderHeight,
                                         width: totalWidth,
-                                        borderRadius: 2,
-                                        background: token.colorPrimary,
-                                        pointerEvents: "none",
-                                        zIndex: 1,
+                                        background: token.colorFillAlter,
+                                        fontWeight: 500,
                                     }}
-                                />
+                                >
+                                    <div role="columnheader" style={{
+                                        ...headerCellStyle,
+                                        position: "sticky",
+                                        left: 0,
+                                        zIndex: 1,
+                                        flex: `0 0 ${HeadWidth}px`,
+                                        justifyContent: "center",
+                                        background: "inherit",
+                                    }}>
+                                        #
+                                    </div>
+                                    {Array.from({length: colCount}, (_, colIndex) => (
+                                        <div key={colIndex} role="columnheader" style={{
+                                            ...headerCellStyle,
+                                            justifyContent: "space-between",
+                                            gap: 4,
+                                        }}>
+                                            <span>{`${t('NeiEditor.column')} ${colIndex + 1}`}</span>
+                                            <Tooltip title={t('NeiEditor.delete_column')}>
+                                                <Button
+                                                    type="text"
+                                                    size="small"
+                                                    danger
+                                                    aria-label={t('NeiEditor.delete_column')}
+                                                    icon={<DeleteOutlined/>}
+                                                    onClick={() => handleDeleteColumn(colIndex)}
+                                                />
+                                            </Tooltip>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            {/* 表体：只渲染视口内的行 */}
+                            <div role="rowgroup" style={{height: virtualizer.getTotalSize(), position: "relative"}}>
+                                {virtualizer.getVirtualItems().map((row) => (
+                                    <NeiRow
+                                        key={row.key}
+                                        rowIndex={row.index}
+                                        cells={rows[row.index] ?? []}
+                                        colCount={colCount}
+                                        top={row.start}
+                                        dragLabel={t('NeiEditor.drag_row')}
+                                        deleteLabel={t('NeiEditor.delete_row')}
+                                        onCellChange={handleCellChange}
+                                        onDeleteRow={handleDeleteRow}
+                                    />
+                                ))}
+                                {drag && drag.from !== drag.to && (
+                                    <div
+                                        aria-hidden="true"
+                                        style={{
+                                            position: "absolute",
+                                            top: (drag.to > drag.from ? drag.to + 1 : drag.to) * RowHeight - 1,
+                                            left: 0,
+                                            height: 3,
+                                            width: totalWidth,
+                                            borderRadius: 2,
+                                            background: token.colorPrimary,
+                                            pointerEvents: "none",
+                                            zIndex: 1,
+                                        }}
+                                    />
+                                )}
+                            </div>
+                            {rows.length === 0 && (
+                                <Empty description={t('NeiEditor.empty_table')} style={{margin: "32px 0"}}/>
                             )}
                         </div>
-                        {rows.length === 0 && (
-                            <Empty description={t('NeiEditor.empty_table')} style={{margin: "32px 0"}}/>
-                        )}
                     </div>
-                </div>
                 </DragDropProvider>
             </div>
             <div style={{marginTop: 8, flexShrink: 0}}>

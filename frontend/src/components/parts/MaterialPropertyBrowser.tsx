@@ -20,7 +20,7 @@ type FilterKind = MaterialPropKind | "all";
 /** 选中项的键 */
 const rowKey = (kind: MaterialPropKind, index: number) => `${kind}:${index}`;
 
-const parseRowKey = (key: string | null): {kind: MaterialPropKind; index: number} | null => {
+const parseRowKey = (key: string | null): { kind: MaterialPropKind; index: number } | null => {
     if (!key) return null;
     const [kind, index] = key.split(":");
     return {kind: kind as MaterialPropKind, index: Number(index)};

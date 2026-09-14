@@ -32,7 +32,11 @@ const MenuCommandsHelpModal: React.FC<{
         {key: "copyLine", keys: ["Shift", "Alt", "↑/↓"], action: t("MenuAssetsEditor.help.shortcut_copy_line")},
         {key: "find", keys: ["Ctrl", "F"], action: t("MenuAssetsEditor.help.shortcut_find")},
         {key: "replace", keys: ["Ctrl", "H"], action: t("MenuAssetsEditor.help.shortcut_replace")},
-        {key: "multiCursor", keys: ["Alt", t("MenuAssetsEditor.help.mouse_click")], action: t("MenuAssetsEditor.help.shortcut_multi_cursor")},
+        {
+            key: "multiCursor",
+            keys: ["Alt", t("MenuAssetsEditor.help.mouse_click")],
+            action: t("MenuAssetsEditor.help.shortcut_multi_cursor")
+        },
         {key: "selectNext", keys: ["Ctrl", "D"], action: t("MenuAssetsEditor.help.shortcut_select_next")},
         {key: "undo", keys: ["Ctrl", "Z"], action: t("MenuAssetsEditor.help.shortcut_undo")},
         {key: "palette", keys: ["F1"], action: t("MenuAssetsEditor.help.shortcut_palette")},

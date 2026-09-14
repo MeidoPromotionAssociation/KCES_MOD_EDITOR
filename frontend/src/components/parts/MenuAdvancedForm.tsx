@@ -126,7 +126,8 @@ const MenuAdvancedForm: React.FC<{
                                     onToggle={(enabled) => set("partsVer", enabled ? newPartsVer() : null)}/>
                     </div>
                     {partsVer && (
-                        <ObjectFields value={partsVer} spec={partsVerSpec()} onChange={(next) => set("partsVer", next)}/>
+                        <ObjectFields value={partsVer} spec={partsVerSpec()}
+                                      onChange={(next) => set("partsVer", next)}/>
                     )}
                 </div>
             ),

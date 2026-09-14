@@ -229,7 +229,7 @@ const defineAutocomplete = (monacoInstance: any) => {
                             kind: monacoInstance.languages.CompletionItemKind.Keyword,
                             insertText: `${name}${body}`,
                             insertTextRules:
-                                monacoInstance.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                            monacoInstance.languages.CompletionItemInsertTextRule.InsertAsSnippet,
                             documentation: {value: getMenuCommandMarkdown(name, index)},
                             detail: `Menu.Command.Type = ${index}`,
                             range,
