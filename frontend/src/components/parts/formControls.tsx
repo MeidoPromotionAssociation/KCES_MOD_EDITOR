@@ -53,12 +53,14 @@ export const NumberField: React.FC<{
     step?: number;
     precision?: number;
     width?: number;
-}> = ({value, onChange, step, precision, width}) => (
+    disabled?: boolean;
+}> = ({value, onChange, step, precision, width, disabled}) => (
     <InputNumber
         style={{width: width ?? 250}}
         value={value}
         step={step}
         precision={precision}
+        disabled={disabled}
         onChange={(newValue) => onChange((newValue ?? 0) as number)}
     />
 );

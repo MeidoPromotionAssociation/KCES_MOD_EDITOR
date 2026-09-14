@@ -561,7 +561,18 @@
     "scaleX": "스케일 X",
     "scaleY": "스케일 Y",
     "layout_compact": "컴팩트",
-    "layout_labeled": "라벨형"
+    "layout_labeled": "라벨형",
+    "kw": "키워드 속성",
+    "keyword_enabled": "사용",
+    "keyword_enabled_tip": "게임의 EnableKeyword / DisableKeyword 에 대응하며 같은 이름의 float 프로퍼티도 1 또는 0 로 설정합니다",
+    "keyword_on": "사용",
+    "keyword_off": "사용 안 함",
+    "render_queue_tip": "0 이면 셰이더 기본 렌더 큐를 그대로 씁니다(게임은 0 보다 클 때만 적용합니다)",
+    "layout_legacy": "KCES(8 슬롯)",
+    "layout_kces2": "KCES2(10 슬롯)",
+    "layout_upgrade": "KCES2 레이아웃으로 업그레이드",
+    "layout_downgrade": "KCES 레이아웃으로 되돌리기",
+    "layout_legacy_tip": "KCES 8 슬롯 레이아웃에는 keywordProps 와 renderQueue 자리가 없습니다. 편집하려면 먼저 이 머티리얼을 KCES2 10 슬롯으로 업그레이드하세요"
   },
   "KeyFrameEditor": {
     "show_visual_editor": "비주얼 에디터 표시",

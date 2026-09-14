@@ -1,8 +1,8 @@
-import React from "react";
-import {Button, Select, Space, Tooltip} from "antd";
+import React, {useEffect, useState} from "react";
+import {AutoComplete, Button, Space, Switch, Tooltip} from "antd";
 import {DeleteOutlined} from "@ant-design/icons";
 import {useTranslation} from "react-i18next";
-import {materialPropOptions} from "../../utils/kcesEnums";
+import {materialPropName, materialPropOptions, materialPropValue, MaterialPropKind} from "../../utils/kcesEnums";
 import {NullableStringInput, NumberField, Row} from "./formControls";
 import ColorPickerSync from "./ColorPickerSync";
 
@@ -10,31 +10,52 @@ import ColorPickerSync from "./ColorPickerSync";
  * MaterialPropertyItem 单条材质属性编辑（复刻 COM3D2 MateEditor 的两种表单布局）
  * - compact：一行式紧凑布局（对应 MatePropertyItemType1 风格）
  * - labeled：标签竖排布局（对应 MatePropertyItemType2 风格）
- * 属性名为 Material.PropertType 枚举，通过 Select 选择（未知值以 #数字 显示）
+ * 属性名走 AutoComplete：提示 Material.PropertType 的枚举名，也允许自由输入数字
  */
 
-export type MaterialPropKind = "tex" | "col" | "vec" | "f";
+export type {MaterialPropKind};
 
 export type MaterialFormLayout = "compact" | "labeled";
 
-// propNameSelect 属性名选择器，未知枚举值动态补一个选项
-function propNameSelect(kind: MaterialPropKind, type: number, onChange: (type: number) => void, width: number) {
-    const options = [...materialPropOptions(kind)];
-    if (!options.some((option) => option.value === type)) {
-        options.push({label: `#${type}`, value: type});
-    }
+/**
+ * PropNameInput 属性名输入
+ * 枚举名（忽略大小写，与游戏侧 Enum.TryParse(ignoreCase: true) 一致）或 `#数字` / 纯数字会被提交；
+ * 认不出的文本留在框里不提交，免得把数据改成没意义的取值
+ */
+const PropNameInput: React.FC<{
+    kind: MaterialPropKind;
+    type: number;
+    onChange: (type: number) => void;
+    width: number;
+}> = ({kind, type, onChange, width}) => {
+    const nameOf = (value: number) => materialPropName(kind, value);
+    const [text, setText] = useState(nameOf(type));
+
+    useEffect(() => {
+        setText(nameOf(type));
+    }, [kind, type]);
+
     return (
-        <Select
-            showSearch={{optionFilterProp: "label"}}
-            size="small"
+        <AutoComplete
             style={{width}}
-            styles={{popup: {root: {textAlign: "left"}}}}
-            value={type}
-            options={options}
-            onChange={(value) => onChange(value)}
+            allowClear
+            value={text}
+            options={materialPropOptions(kind)}
+            onChange={(next) => {
+                setText(next);
+                const named = materialPropValue(kind, next);
+                if (named !== null) {
+                    onChange(named);
+                    return;
+                }
+                const trimmed = next.trim();
+                if (/^#?\d+$/.test(trimmed)) {
+                    onChange(Number(trimmed.replace(/^#/, "")));
+                }
+            }}
         />
     );
-}
+};
 
 const MaterialPropertyItem: React.FC<{
     kind: MaterialPropKind;
@@ -63,10 +84,17 @@ const MaterialPropertyItem: React.FC<{
         />
     );
 
+    // 关键字属性只有「名字 + 开关」两项
+    const keywordSwitch = (
+        <Tooltip title={t('MaterialAssetsEditor.keyword_enabled_tip')}>
+            <Switch size="small" checked={!!item.value} onChange={(v) => set("value", v)}/>
+        </Tooltip>
+    );
+
     if (layout === "compact") {
         return (
             <div style={{display: "flex", gap: 6, alignItems: "center", marginBottom: 6}}>
-                {propNameSelect(kind, item.type ?? 0, (type) => set("type", type), 200)}
+                <PropNameInput kind={kind} type={item.type ?? 0} onChange={(type) => set("type", type)} width={200}/>
                 <div style={{flex: 1, minWidth: 0}}>
                     {kind === "tex" && (
                         <Space wrap size={4}>
@@ -95,6 +123,7 @@ const MaterialPropertyItem: React.FC<{
                         </Space>
                     )}
                     {kind === "f" && numberBox("v", t('MaterialAssetsEditor.number'), 0.01, 140)}
+                    {kind === "kw" && keywordSwitch}
                 </div>
                 <Button size="small" type="text" danger icon={<DeleteOutlined/>} onClick={onRemove}/>
             </div>
@@ -112,7 +141,8 @@ const MaterialPropertyItem: React.FC<{
         }}>
             <Row label={t('MaterialAssetsEditor.property_name')}>
                 <Space>
-                    {propNameSelect(kind, item.type ?? 0, (type) => set("type", type), 240)}
+                    <PropNameInput kind={kind} type={item.type ?? 0} onChange={(type) => set("type", type)}
+                                   width={240}/>
                     <Button size="small" type="text" danger icon={<DeleteOutlined/>} onClick={onRemove}/>
                 </Space>
             </Row>
@@ -159,6 +189,14 @@ const MaterialPropertyItem: React.FC<{
             {kind === "f" && (
                 <Row label={t('MaterialAssetsEditor.number')}>
                     {numberBox("v", t('MaterialAssetsEditor.number'), 0.01, 140)}
+                </Row>
+            )}
+            {kind === "kw" && (
+                <Row label={t('MaterialAssetsEditor.keyword_enabled')}>
+                    <Space size={6}>
+                        {keywordSwitch}
+                        <span>{item.value ? t('MaterialAssetsEditor.keyword_on') : t('MaterialAssetsEditor.keyword_off')}</span>
+                    </Space>
                 </Row>
             )}
         </div>

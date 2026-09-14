@@ -561,7 +561,18 @@
     "scaleX": "スケール X",
     "scaleY": "スケール Y",
     "layout_compact": "コンパクト",
-    "layout_labeled": "ラベル付き"
+    "layout_labeled": "ラベル付き",
+    "kw": "キーワード属性",
+    "keyword_enabled": "有効",
+    "keyword_enabled_tip": "ゲームの EnableKeyword / DisableKeyword に対応し、同名の float プロパティも 1 か 0 に設定します",
+    "keyword_on": "有効",
+    "keyword_off": "無効",
+    "render_queue_tip": "0 はシェーダー既定のレンダーキューを使う意味です（ゲームは 0 より大きいときだけ適用します）",
+    "layout_legacy": "KCES（8 スロット）",
+    "layout_kces2": "KCES2（10 スロット）",
+    "layout_upgrade": "KCES2 レイアウトへ更新",
+    "layout_downgrade": "KCES レイアウトに戻す",
+    "layout_legacy_tip": "KCES の 8 スロットレイアウトには keywordProps と renderQueue の枠がありません。編集するには先にこのマテリアルを KCES2 の 10 スロットへ更新してください"
   },
   "KeyFrameEditor": {
     "show_visual_editor": "ビジュアルエディターを表示",

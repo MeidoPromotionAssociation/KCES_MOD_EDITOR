@@ -25,6 +25,10 @@ const MaterialAssetsEditor = forwardRef<FormatEditorRef, Omit<BaseFormatEditorPr
                     colorProps: [],
                     vectorProps: [],
                     floatProps: [],
+                    // KCES2 是一等公民：新建材质默认用 10 槽布局，才能写 keywordProps 与 renderQueue
+                    keywordProps: [],
+                    renderQueue: 0,
+                    indexedArrayWidth: 10,
                 })}
             />
         );

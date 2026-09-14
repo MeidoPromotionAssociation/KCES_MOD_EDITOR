@@ -106,7 +106,10 @@ export function menuCommandType(name: string): number | null {
     return null;
 }
 
-/** Material.PropertType 纹理属性枚举（0 起） */
+/**
+ * Material.PropertType 纹理属性枚举（0 起）
+ * 0-19 是 KCES 1.34.5 就有的，20-26 是 KCES2 1.36.0 新增
+ */
 export const TexturePropNames: Record<number, string> = {
     0: "_MainTex",
     1: "_BumpMap",
@@ -128,9 +131,16 @@ export const TexturePropNames: Record<number, string> = {
     17: "_OutlineWidthSampler",
     18: "_NyurinTex",
     19: "_ChikubiTex",
+    20: "_LightMap",
+    21: "_EnvMap",
+    22: "_HeightMap",
+    23: "_GradationMap",
+    24: "_GradationOffsetMap",
+    25: "_HighlightStretchMap",
+    26: "_RimMaskMap",
 };
 
-/** Material.PropertType 颜色属性枚举（100 起） */
+/** Material.PropertType 颜色属性枚举（100 起），110 是 KCES2 1.36.0 新增 */
 export const ColorPropNames: Record<number, string> = {
     100: "_Color",
     101: "_ShadowColor",
@@ -142,9 +152,10 @@ export const ColorPropNames: Record<number, string> = {
     107: "_MyLightColor0",
     108: "_MyLightColor1",
     109: "_TintColor",
+    110: "_2ndHighlightColor",
 };
 
-/** Material.PropertType 浮点属性枚举（200 起） */
+/** Material.PropertType 浮点属性枚举（200 起），218-240 是 KCES2 1.36.0 新增 */
 export const FloatPropNames: Record<number, string> = {
     200: "_Shininess",
     201: "_FurLength",
@@ -164,18 +175,90 @@ export const FloatPropNames: Record<number, string> = {
     215: "_ShadowToonBlend",
     216: "_ShininessDecal",
     217: "_ShininessDecalPow",
+    218: "_EnvAlpha",
+    219: "_EnvAdd",
+    220: "_NormalMapFactor",
+    221: "_HeightMapFactor",
+    222: "_NyurinAlpha",
+    223: "_ChikubiAlpha",
+    224: "_Cull",
+    225: "_SrcBlend",
+    226: "_DstBlend",
+    227: "_ZWrite",
+    228: "_HighlightPosition",
+    229: "_HighlightRange",
+    230: "_HighlightOffsetMapRate",
+    231: "_HighlightStretchMapRate",
+    232: "_HighlightCameraAngleRate",
+    233: "_HighlightRate",
+    234: "_2ndHighlightRange",
+    235: "_2ndHighlightRate",
+    236: "_StencilRef",
+    237: "_StencilComp",
+    238: "_StencilPass",
+    239: "_StencilFail",
+    240: "_StencilZFail",
 };
 
-/** 属性枚举值 → 名称，未知值返回 #数字 */
-export function materialPropName(kind: "tex" | "col" | "vec" | "f", type: number): string {
-    const table = kind === "tex" ? TexturePropNames : kind === "col" ? ColorPropNames : kind === "f" ? FloatPropNames : {};
-    return (table as Record<number, string>)[type] ?? `#${type}`;
+/**
+ * Material.PropertType 关键字枚举（300 起，KCES2 1.36.0 新增）
+ *
+ * 游戏按 `keywordProp.type.ToString()` 直接取关键字名（PartsMaterialManager 里 EnableKeyword / DisableKeyword），
+ * 所以名字必须与枚举拼写完全一致——304 的 USE_NYURIN 在源码里就没有前导下划线，不要「修正」成 _USE_NYURIN。
+ */
+export const KeywordPropNames: Record<number, string> = {
+    300: "_USE_LIGHT_MAP_TEX",
+    301: "_USE_REFLECTION_MAP",
+    302: "_USE_TOON_RAMP_TEX",
+    303: "_USE_NORMAL_MAP",
+    304: "USE_NYURIN",
+    305: "_ALPHATEST_ON",
+    306: "_RECEIVE_SHADOWS_OFF",
+    307: "_USE_HAIR_HIGHLIGHT",
+    308: "_ALPHAPREMULTIPLY_ON",
+};
+
+/** 材质属性种类：纹理 / 颜色 / 向量 / 浮点 / 关键字 */
+export type MaterialPropKind = "tex" | "col" | "vec" | "f" | "kw";
+
+/** 某类属性用的枚举表；向量属性游戏侧没有专属取值，表为空，靠自由输入填数字 */
+export function materialPropTable(kind: MaterialPropKind): Record<number, string> {
+    switch (kind) {
+        case "tex":
+            return TexturePropNames;
+        case "col":
+            return ColorPropNames;
+        case "f":
+            return FloatPropNames;
+        case "kw":
+            return KeywordPropNames;
+        default:
+            return {};
+    }
 }
 
-/** 生成某类属性的 Select 选项 */
-export function materialPropOptions(kind: "tex" | "col" | "vec" | "f"): Array<{ label: string; value: number }> {
-    const table = kind === "tex" ? TexturePropNames : kind === "col" ? ColorPropNames : kind === "f" ? FloatPropNames : {};
-    return Object.entries(table).map(([value, label]) => ({label: `${label} (${value})`, value: Number(value)}));
+/** 属性枚举值 → 名称，未知值返回 #数字 */
+export function materialPropName(kind: MaterialPropKind, type: number): string {
+    return materialPropTable(kind)[type] ?? `#${type}`;
+}
+
+/** 属性名 → 枚举值；游戏侧是 Enum.TryParse(name, ignoreCase: true)，这里同样忽略大小写，认不出返回 null */
+export function materialPropValue(kind: MaterialPropKind, name: string): number | null {
+    const wanted = name.trim().toLowerCase();
+    for (const [value, candidate] of Object.entries(materialPropTable(kind))) {
+        if (candidate.toLowerCase() === wanted) {
+            return Number(value);
+        }
+    }
+    return null;
+}
+
+/** 生成某类属性的 AutoComplete 选项（值与名字都显示，方便直接照抄数字） */
+export function materialPropOptions(kind: MaterialPropKind): Array<{ label: string; value: string }> {
+    return Object.entries(materialPropTable(kind)).map(([value, label]) => ({
+        label: `${label} (${value})`,
+        value: label,
+    }));
 }
 
 /* ==========================================================================

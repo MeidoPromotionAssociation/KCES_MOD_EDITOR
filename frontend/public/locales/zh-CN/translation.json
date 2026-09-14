@@ -561,7 +561,18 @@
     "scaleX": "缩放 X",
     "scaleY": "缩放 Y",
     "layout_compact": "紧凑布局",
-    "layout_labeled": "标签布局"
+    "layout_labeled": "标签布局",
+    "kw": "关键字属性",
+    "keyword_enabled": "启用",
+    "keyword_enabled_tip": "对应游戏的 EnableKeyword / DisableKeyword，并同时把同名浮点属性设为 1 或 0",
+    "keyword_on": "已启用",
+    "keyword_off": "已关闭",
+    "render_queue_tip": "0 表示沿用 shader 默认渲染队列（游戏仅在大于 0 时套用）",
+    "layout_legacy": "KCES（8 槽）",
+    "layout_kces2": "KCES2（10 槽）",
+    "layout_upgrade": "升级为 KCES2 布局",
+    "layout_downgrade": "改回 KCES 布局",
+    "layout_legacy_tip": "KCES 8 槽布局没有 keywordProps 与 renderQueue 的位置，要编辑这两项得先把该材质升级为 KCES2 10 槽布局"
   },
   "KeyFrameEditor": {
     "show_visual_editor": "显示可视化编辑器",
