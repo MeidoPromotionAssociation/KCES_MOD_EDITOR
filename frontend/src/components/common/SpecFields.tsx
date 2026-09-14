@@ -9,25 +9,36 @@ import BigIntInput from "./BigIntInput";
  *
  * 用途是那些「一串同构记录 + 少量嵌套」的库结构：把标量字段摊成表格列逐行编辑，
  * 嵌套的子对象与子列表放进展开行，避免整块结构只能扔给 JSON 树形表单。
- * 字段名直接用库里的 JSON 键（与 MenuAssetForm 等既有表单一致），不另做翻译。
  */
+
+/**
+ * 所有字段共有的描述
+ * name 是库里的 JSON 键，既是数据路径也是缺省显示名，**不能翻译**；
+ * 显示名另走 label（i18n key），没给的字段就照旧显示 JSON 键
+ */
+type SpecBase = { name: string; label?: string };
 
 /** 标量与容器字段的统一描述 */
 export type FieldSpec =
-    | { kind: "str"; name: string; width?: number }
-    | { kind: "int"; name: string; width?: number }
-    | { kind: "float"; name: string; width?: number }
-    | { kind: "bool"; name: string }
-    | { kind: "big"; name: string }
-    | { kind: "enum"; name: string; options: Array<{ label: string; value: number }>; width?: number }
-    | { kind: "strEnum"; name: string; options: Array<{ label: string; value: string }>; width?: number }
-    | { kind: "flags"; name: string; flags: Array<{ label: string; bit: number }>; width?: number }
-    | { kind: "vec"; name: string; axes: string[]; integer?: boolean }
-    | { kind: "numList"; name: string; integer?: boolean }
-    | { kind: "strList"; name: string }
-    | { kind: "custom"; name: string; render: (value: any, onChange: (next: any) => void) => React.ReactNode }
-    | { kind: "obj"; name: string; spec: () => FieldSpec[]; newValue: () => any }
-    | { kind: "list"; name: string; spec: () => FieldSpec[]; newItem: () => any };
+    | (SpecBase & { kind: "str"; width?: number })
+    | (SpecBase & { kind: "int"; width?: number })
+    | (SpecBase & { kind: "float"; width?: number })
+    | (SpecBase & { kind: "bool" })
+    | (SpecBase & { kind: "big" })
+    | (SpecBase & { kind: "enum"; options: Array<{ label: string; value: number }>; width?: number })
+    | (SpecBase & { kind: "strEnum"; options: Array<{ label: string; value: string }>; width?: number })
+    | (SpecBase & { kind: "flags"; flags: Array<{ label: string; bit: number }>; width?: number })
+    | (SpecBase & { kind: "vec"; axes: string[]; integer?: boolean })
+    | (SpecBase & { kind: "numList"; integer?: boolean })
+    | (SpecBase & { kind: "strList" })
+    | (SpecBase & { kind: "custom"; render: (value: any, onChange: (next: any) => void) => React.ReactNode })
+    | (SpecBase & { kind: "obj"; spec: () => FieldSpec[]; newValue: () => any })
+    | (SpecBase & { kind: "list"; spec: () => FieldSpec[]; newItem: () => any });
+
+/** fieldLabel 字段显示名：spec 带 label 就用翻译，没带就退回库里的 JSON 键 */
+function fieldLabel(t: (key: string) => string, spec: FieldSpec): string {
+    return spec.label ? t(spec.label) : spec.name;
+}
 
 /** 能塞进一个表格单元格的字段：其余（custom/obj/list）走展开行 */
 export function isInlineSpec(spec: FieldSpec): boolean {
@@ -249,7 +260,7 @@ export const ObjectFields: React.FC<{
             {inline.map((item) => (
                 <div key={item.name} style={{display: "flex", alignItems: "center", gap: 8, marginBottom: 6}}>
                     <Typography.Text style={{width: 200, flexShrink: 0}} ellipsis={{tooltip: item.name}}>
-                        {item.name}
+                        {fieldLabel(t, item)}
                     </Typography.Text>
                     <div style={{flex: 1, minWidth: 0}}>
                         <InlineControl spec={item} value={object[item.name]} onChange={(next) => set(item.name, next)}
@@ -265,7 +276,9 @@ export const ObjectFields: React.FC<{
                         key: item.name,
                         label: (
                             <Space>
-                                <Typography.Text strong>{item.name}</Typography.Text>
+                                <Typography.Text strong ellipsis={{tooltip: item.name}}>
+                                    {fieldLabel(t, item)}
+                                </Typography.Text>
                                 {item.kind === "list" && (
                                     <Typography.Text type="secondary">
                                         {Array.isArray(object[item.name])
@@ -373,7 +386,7 @@ export const RecordTable: React.FC<{
             ),
         },
         ...inline.map((item) => ({
-            title: item.name,
+            title: fieldLabel(t, item),
             width: inlineWidth(item),
             render: (_: any, record: IndexedRow) => (
                 <InlineControl spec={item} value={record.row?.[item.name]}
@@ -535,7 +548,7 @@ export const MapTable: React.FC<{
             ),
         },
         ...inline.map((item) => ({
-            title: item.name,
+            title: fieldLabel(t, item),
             width: inlineWidth(item),
             render: (_: any, record: { key: string; value: any }) => (
                 <InlineControl spec={item} value={record.value?.[item.name]}

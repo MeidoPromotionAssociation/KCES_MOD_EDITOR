@@ -37,3 +37,52 @@ html.file-drop-target-active {
 .menu-commands-help-button:focus-visible {
     opacity: 1;
 }
+
+/* ---------------------------------------------------------------------------
+ * menuassets 样式1：让命令编辑器（Monaco）吃掉视口剩余高度，页面自身不出滚动条
+ *
+ * Monaco 的 height:100% 要求父级链上每一环都有确定高度，缺一环就退化成 0 高。
+ * antd Collapse 内部是 item > panel > body 三层，其中 panel 是普通 block、
+ * body 是它的 block 子元素（高度 auto，不会被拉伸），所以必须把三层都显式接成
+ * 可伸缩的 flex 列，否则 panel 拿到了高度也传不到 body 以下。
+ *
+ * panel 没有 styles 语义化入口（是 CSSMotion 的动画容器），只能在这里用类选择器接；
+ * 给它写 display:flex 会盖掉折叠态的 .ant-collapse-panel-hidden{display:none}
+ * （那个选择器特异性更低），所以要用 :not() 把隐藏态排除掉。
+ *
+ * 撑满只在 -fill（命令面板展开）时生效：命令面板折叠后没有子元素会伸展，
+ * 无条件 flex:1 会让 Collapse 自己留下一大片和标题栏同色的空白。
+ * ------------------------------------------------------------------------- */
+.menu-asset-collapse-fill {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+}
+
+/* 展开的命令面板吃掉剩余高度 */
+.menu-asset-collapse-fill > .menu-commands-collapse-item {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+}
+
+/* 标题栏保持自身高度，不参与压缩 */
+.menu-asset-collapse-fill > .menu-commands-collapse-item > .ant-collapse-header {
+    flex-shrink: 0;
+}
+
+.menu-asset-collapse-fill > .menu-commands-collapse-item
+> .ant-collapse-panel:not(.ant-collapse-panel-hidden) {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+}
+
+/* 「基本信息」同时展开时内容高于视口，让它在自己那一块内部滚动，而不是把页面顶出滚动条 */
+.menu-asset-collapse-fill > .ant-collapse-item:not(.menu-commands-collapse-item) > .ant-collapse-panel {
+    overflow: auto;
+    min-height: 0;
+}

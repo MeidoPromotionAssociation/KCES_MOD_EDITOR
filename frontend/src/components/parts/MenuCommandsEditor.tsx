@@ -244,7 +244,7 @@ const MenuCommandsEditor: React.FC<{
     ]), [t]);
 
     return (
-        <div>
+        <div style={{display: "flex", flexDirection: "column", flex: 1, minHeight: 0}}>
             <Radio.Group
                 size="small"
                 block
@@ -253,19 +253,25 @@ const MenuCommandsEditor: React.FC<{
                 buttonStyle="solid"
                 value={format}
                 onChange={(e) => handleFormatChange(e.target.value as FormatType)}
-                style={{marginBottom: 8}}
+                style={{marginBottom: 8, flexShrink: 0}}
             />
             {parseError && (
                 <Alert
                     type="warning"
                     showIcon
-                    style={{marginBottom: 8}}
+                    style={{marginBottom: 8, flexShrink: 0}}
                     title={t('MenuAssetsEditor.command_parse_error')}
                     description={parseError}
                 />
             )}
-            {/* 外层相对定位容器：帮助按钮浮在编辑器上，但不受内层 overflow:hidden 裁剪 */}
-            <div style={{position: "relative", height: height ?? "calc(100vh - 420px)"}}>
+            {/* 外层相对定位容器：帮助按钮浮在编辑器上，但不受内层 overflow:hidden 裁剪。
+                不给显式 height 时靠 flex:1 吃掉折叠面板的剩余高度；这里必须是 minHeight:0，
+                写成非 0 的下限会让它拒绝压缩到视口内，反而把外层顶出滚动条 */}
+            <div
+                style={height
+                    ? {position: "relative", height}
+                    : {position: "relative", flex: 1, minHeight: 0}}
+            >
                 <div style={{height: "100%", borderRadius: 8, overflow: "hidden"}}>
                     <Editor
                         beforeMount={(monacoInstance) => setupMenuMonaco(monacoInstance)}
@@ -274,11 +280,13 @@ const MenuCommandsEditor: React.FC<{
                         value={text}
                         onChange={handleTextChange}
                         options={{
-                            minimap: {enabled: false},
+                            minimap: {enabled: true},
                             insertSpaces: false,
                             tabSize: 4,
                             // 让补全/悬停浮窗渲染到 body 上的固定层，可以超出编辑器边界显示
                             fixedOverflowWidgets: true,
+                            // 折叠面板隐藏内容时容器会变成 0 高，展开后靠这个自动重新测量并恢复
+                            automaticLayout: true,
                         }}
                     />
                 </div>

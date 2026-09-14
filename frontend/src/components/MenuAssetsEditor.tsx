@@ -14,6 +14,7 @@ const MenuAssetsEditor = forwardRef<FormatEditorRef, Omit<BaseFormatEditorProps,
             <AssetContainerEditor
                 data={data}
                 setData={setData}
+                fillHeight
                 itemLabel={(asset) => asset?.fileName ?? numberToString(asset?.id ?? "")}
                 renderForm={(asset, updateAsset) => <MenuAssetForm asset={asset} onChange={updateAsset}/>}
                 newAsset={() => ({

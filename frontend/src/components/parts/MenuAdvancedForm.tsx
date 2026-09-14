@@ -49,7 +49,7 @@ const MenuAdvancedForm: React.FC<{
             key: "colvariInfo",
             label: (
                 <Space>
-                    <Typography.Text strong>colvariInfo</Typography.Text>
+                    <Typography.Text strong>{t('MenuAdvanced.colvariInfo')}</Typography.Text>
                     <Typography.Text type="secondary">
                         {colvariInfo
                             ? t('FieldForm.row_count', {count: colvariInfo.colvariDatas?.length ?? 0})
@@ -74,14 +74,14 @@ const MenuAdvancedForm: React.FC<{
             key: "colvariFileNameExp",
             label: (
                 <Space>
-                    <Typography.Text strong>colvariFileNameExp</Typography.Text>
+                    <Typography.Text strong>{t('MenuAdvanced.colvariFileNameExp')}</Typography.Text>
                     <Typography.Text type="secondary">
                         {asset.colvariFileNameExp ? asset.colvariFileNameExp : t('FieldForm.unset')}
                     </Typography.Text>
                 </Space>
             ),
             children: (
-                <Row label="colvariFileNameExp">
+                <Row label={t('MenuAdvanced.colvariFileNameExp')}>
                     <NullableStringInput value={asset.colvariFileNameExp}
                                          onChange={(v) => set("colvariFileNameExp", v)}/>
                 </Row>
@@ -91,7 +91,7 @@ const MenuAdvancedForm: React.FC<{
             key: "preMulTexDatas",
             label: (
                 <Space>
-                    <Typography.Text strong>preMulTexDatas</Typography.Text>
+                    <Typography.Text strong>{t('MenuAdvanced.preMulTexDatas')}</Typography.Text>
                     <Typography.Text type="secondary">
                         {preMulTexDatas
                             ? t('FieldForm.row_count', {count: Object.keys(preMulTexDatas).length})
@@ -113,7 +113,7 @@ const MenuAdvancedForm: React.FC<{
             key: "partsVer",
             label: (
                 <Space>
-                    <Typography.Text strong>partsVer</Typography.Text>
+                    <Typography.Text strong>{t('MenuAssetsEditor.parts_ver')}</Typography.Text>
                     <Typography.Text type="secondary">
                         {partsVer ? `${partsVer.item1 ?? ""} / ${partsVer.item2 ?? 0}` : t('FieldForm.unset')}
                     </Typography.Text>
@@ -126,8 +126,7 @@ const MenuAdvancedForm: React.FC<{
                                     onToggle={(enabled) => set("partsVer", enabled ? newPartsVer() : null)}/>
                     </div>
                     {partsVer && (
-                        <ObjectFields value={partsVer} spec={partsVerSpec()}
-                                      onChange={(next) => set("partsVer", next)}/>
+                        <ObjectFields value={partsVer} spec={partsVerSpec()} onChange={(next) => set("partsVer", next)}/>
                     )}
                 </div>
             ),

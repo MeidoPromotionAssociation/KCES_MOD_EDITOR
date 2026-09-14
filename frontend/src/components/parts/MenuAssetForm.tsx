@@ -1,11 +1,17 @@
 import React from "react";
-import {AutoComplete, Collapse, Flex, Space, Switch, Tooltip} from "antd";
+import {AutoComplete, Collapse, CollapseProps, Flex, Space, Switch, Tooltip} from "antd";
 import {useTranslation} from "react-i18next";
 import {EnumAutoComplete, FlagsCascader, NullableStringInput, NumberField, Row} from "./formControls";
 import BigIntInput from "../common/BigIntInput";
 import MenuAdvancedForm from "./MenuAdvancedForm";
 import MenuCommandsEditor from "./MenuCommandsEditor";
-import {MenuAttributeBits, MenuDefineNameBits, MenuHaraYureLimitTypeNames, MenuTargetBodyTypeNames, MPNOptionsWithId} from "../../utils/kcesEnums.ts";
+import {
+    MenuAttributeBits,
+    MenuDefineNameBits,
+    MenuHaraYureLimitTypeNames,
+    MenuTargetBodyTypeNames,
+    MPNOptionsWithId
+} from "../../utils/kcesEnums.ts";
 import {QuestionCircleOutlined} from "@ant-design/icons";
 
 /** DEFINE 标签的 i18n key（选项 value 保持枚举名，展示用对应语言翻译 + 位值） */
@@ -50,6 +56,11 @@ const MenuAssetForm: React.FC<{
 }> = ({asset, onChange}) => {
     const {t} = useTranslation();
 
+    // 命令面板展开时整个 Collapse 才撑满剩余高度；折叠时保持内容高度，
+    // 否则没有任何子元素会伸展，Collapse 会留下一大片和标题栏同色的空白
+    const [activeKeys, setActiveKeys] = React.useState<string[]>(["basic", "commands"]);
+    const commandsOpen = activeKeys.includes("commands");
+
     const set = (field: string, value: any) => onChange({...asset, [field]: value});
 
     const commands: any[] = Array.isArray(asset.commandList) ? asset.commandList : [];
@@ -58,7 +69,133 @@ const MenuAssetForm: React.FC<{
     const labelOf = (keys: Record<string, string>) => (name: string): string | null =>
         t(keys[name] ?? "", {defaultValue: ""}) || null;
 
-    const items = [
+    const subItems: CollapseProps['items'] = [
+        {
+            key: '1',
+            label: t('MenuAssetsEditor.advanced_fields'),
+            children: <div>
+                <Row label={t('MenuAssetsEditor.version')}>
+                    <Flex gap="small">
+                        <NumberField value={asset.version} precision={0} onChange={(v) => set("version", v)}/>
+                        <Tooltip title={t('MenuAssetsEditor.version_tooltip')}>
+                            <QuestionCircleOutlined/>
+                        </Tooltip>
+                    </Flex>
+                </Row>
+                <Row label={t('MenuAssetsEditor.guid')}>
+                    <Flex gap="small">
+                        <BigIntInput value={asset.guid} onChange={(v) => set("guid", v)}/>
+                        <Tooltip title={t('MenuAssetsEditor.guid_tooltip')}>
+                            <QuestionCircleOutlined/>
+                        </Tooltip>
+                    </Flex>
+                </Row>
+                <Row label={t('MenuAssetsEditor.id')}>
+                    <Flex gap="small">
+                        <BigIntInput value={asset.id} onChange={(v) => set("id", v)}/>
+                        <Tooltip title={t('MenuAssetsEditor.id_tooltip')}>
+                            <QuestionCircleOutlined/>
+                        </Tooltip>
+                    </Flex>
+                </Row>
+                <Row label={t('MenuAssetsEditor.parentId')}>
+                    <Flex gap="small">
+                        <BigIntInput value={asset.parentId} onChange={(v) => set("parentId", v)}/>
+                        <Tooltip title={t('MenuAssetsEditor.parentId_tooltip')}>
+                            <QuestionCircleOutlined/>
+                        </Tooltip>
+                    </Flex>
+                </Row>
+                <Row label={t('MenuAssetsEditor.defineTagNames')}>
+                    <Flex gap="small">
+                        <FlagsCascader
+                            value={asset.defineTagNames}
+                            flags={MenuDefineNameBits}
+                            labelOf={labelOf(DEFINE_LABEL_KEYS)}
+                            onChange={(v) => set("defineTagNames", v)}
+                        />
+                        <Tooltip title={t('MenuAssetsEditor.defineTagNames_tooltip')}>
+                            <QuestionCircleOutlined/>
+                        </Tooltip>
+                    </Flex>
+                </Row>
+                <Row label={t('MenuAssetsEditor.attribute')}>
+                    <Flex gap="small">
+                        <FlagsCascader value={asset.attribute} flags={MenuAttributeBits}
+                                       labelOf={labelOf(ATTRIBUTE_LABEL_KEYS)}
+                                       onChange={(v) => set("attribute", v)}/>
+                        <Tooltip title={t('MenuAssetsEditor.attribute_tooltip')}>
+                            <QuestionCircleOutlined/>
+                        </Tooltip>
+                    </Flex>
+                </Row>
+                <Row label={t('MenuAssetsEditor.targetBodyType')}>
+                    <Flex gap="small">
+                        <EnumAutoComplete value={asset.targetBodyType} names={MenuTargetBodyTypeNames}
+                                          labelOf={labelOf(BODY_TYPE_LABEL_KEYS)}
+                                          onChange={(v) => set("targetBodyType", v)}/>
+                        <Tooltip title={t('MenuAssetsEditor.targetBodyType_tooltip')}>
+                            <QuestionCircleOutlined/>
+                        </Tooltip>
+                    </Flex>
+                </Row>
+                <Row label={t('MenuAssetsEditor.isHarayureAvailable')}>
+                    <Flex gap="small">
+                        <EnumAutoComplete value={asset.isHarayureAvailable} names={MenuHaraYureLimitTypeNames}
+                                          labelOf={labelOf(HARA_LABEL_KEYS)}
+                                          onChange={(v) => set("isHarayureAvailable", v)}/>
+                        <Tooltip title={t('MenuAssetsEditor.isHarayureAvailable_tooltip')}>
+                            <QuestionCircleOutlined/>
+                        </Tooltip>
+                    </Flex>
+                </Row>
+                <Row label={t('MenuAssetsEditor.skirt_phys')}>
+                    <Flex gap="small">
+                        <NumberField value={asset.skirt_phys} precision={0} onChange={(v) => set("skirt_phys", v)}/>
+                        <Tooltip title={t('MenuAssetsEditor.skirt_phys_tooltip')}>
+                            <QuestionCircleOutlined/>
+                        </Tooltip>
+                    </Flex>
+                </Row>
+                <Row label={t('MenuAssetsEditor.srcFileHashCRC32')}>
+                    <Flex gap="small">
+                        <BigIntInput value={asset.srcFileHashCRC32} onChange={(v) => set("srcFileHashCRC32", v)}/>
+                        <Tooltip title={t('MenuAssetsEditor.srcFileHashCRC32_tooltip')}>
+                            <QuestionCircleOutlined/>
+                        </Tooltip>
+                    </Flex>
+                </Row>
+                <Row label={t('MenuAssetsEditor.defineFirst')}>
+                    <Flex gap="small">
+                        <BigIntInput value={asset.defineFirst} onChange={(v) => set("defineFirst", v)}/>
+                        <Tooltip title={t('MenuAssetsEditor.defineFirst_tooltip')}>
+                            <QuestionCircleOutlined/>
+                        </Tooltip>
+                    </Flex>
+                </Row>
+                <Row label={t('MenuAssetsEditor.toeLockSlotId')}>
+                    <Flex gap="small">
+                        <NullableStringInput value={asset.toeLockSlotId} onChange={(v) => set("toeLockSlotId", v)}/>
+                        <Tooltip title={t('MenuAssetsEditor.toeLockSlotId_tooltip')}>
+                            <QuestionCircleOutlined/>
+                        </Tooltip>
+                    </Flex>
+                </Row>
+                <Row label={t('MenuAssetsEditor.exportModelFormTextureName')}>
+                    <Flex gap="small">
+                        <NullableStringInput value={asset.exportModelFormTextureName}
+                                             onChange={(v) => set("exportModelFormTextureName", v)}/>
+                        <Tooltip title={t('MenuAssetsEditor.exportModelFormTextureName_tooltip')}>
+                            <QuestionCircleOutlined/>
+                        </Tooltip>
+                    </Flex>
+                </Row>
+                <MenuAdvancedForm asset={asset} onChange={onChange}/>
+            </div>,
+        }
+    ];
+
+    const items: CollapseProps['items'] = [
         {
             key: "basic",
             label: t('MenuAssetsEditor.basic_info'),
@@ -132,14 +269,6 @@ const MenuAssetForm: React.FC<{
                             </Tooltip>
                         </Flex>
                     </Row>
-                    <Row label={t('MenuAssetsEditor.version')}>
-                        <Flex gap="small">
-                            <NumberField value={asset.version} precision={0} onChange={(v) => set("version", v)}/>
-                            <Tooltip title={t('MenuAssetsEditor.version_tooltip')}>
-                                <QuestionCircleOutlined/>
-                            </Tooltip>
-                        </Flex>
-                    </Row>
                     <Row label={t('MenuAssetsEditor.switches')}>
                         <Space wrap>
                             <Space key={"isMan"} size={4}>
@@ -183,12 +312,17 @@ const MenuAssetForm: React.FC<{
                             </Space>
                         </Space>
                     </Row>
+                    <Collapse size="small" defaultActiveKey={[]} items={subItems}/>
                 </div>
             ),
         },
         {
             key: "commands",
             label: `${t('MenuAssetsEditor.command_list')} (${commands.length})`,
+            // 命令编辑器要吃掉折叠面板的剩余高度，这一条链上的每层都得能伸缩，
+            // 中间的 .ant-collapse-panel 由 CSSMotion 控高、没有语义化入口，只能靠 CSS 类接上
+            className: "menu-commands-collapse-item",
+            styles: {body: {display: "flex", flexDirection: "column", flex: 1, minHeight: 0}},
             children: (
                 <MenuCommandsEditor
                     commands={commands}
@@ -196,119 +330,17 @@ const MenuAssetForm: React.FC<{
                 />
             ),
         },
-        {
-            key: "ids",
-            label: t('MenuAssetsEditor.ids_and_flags'),
-            children: (
-                <div>
-                    <Row label={t('MenuAssetsEditor.guid')}>
-                        <Flex gap="small">
-                            <BigIntInput value={asset.guid} onChange={(v) => set("guid", v)}/>
-                            <Tooltip title={t('MenuAssetsEditor.guid_tooltip')}>
-                                <QuestionCircleOutlined/>
-                            </Tooltip>
-                        </Flex>
-                    </Row>
-                    <Row label={t('MenuAssetsEditor.id')}>
-                        <Flex gap="small">
-                            <BigIntInput value={asset.id} onChange={(v) => set("id", v)}/>
-                            <Tooltip title={t('MenuAssetsEditor.id_tooltip')}>
-                                <QuestionCircleOutlined/>
-                            </Tooltip>
-                        </Flex>
-                    </Row>
-                    <Row label={t('MenuAssetsEditor.parentId')}>
-                        <Flex gap="small">
-                            <BigIntInput value={asset.parentId} onChange={(v) => set("parentId", v)}/>
-                            <Tooltip title={t('MenuAssetsEditor.parentId_tooltip')}>
-                                <QuestionCircleOutlined/>
-                            </Tooltip>
-                        </Flex>
-                    </Row>
-                    <Row label={t('MenuAssetsEditor.defineTagNames')}>
-                        <Flex gap="small">
-                            <FlagsCascader
-                                value={asset.defineTagNames}
-                                flags={MenuDefineNameBits}
-                                labelOf={labelOf(DEFINE_LABEL_KEYS)}
-                                onChange={(v) => set("defineTagNames", v)}
-                            />
-                            <Tooltip title={t('MenuAssetsEditor.defineTagNames_tooltip')}>
-                                <QuestionCircleOutlined/>
-                            </Tooltip>
-                        </Flex>
-                    </Row>
-                    <Row label={t('MenuAssetsEditor.defineFirst')}>
-                        <Flex gap="small">
-                            <BigIntInput value={asset.defineFirst} onChange={(v) => set("defineFirst", v)}/>
-                            <Tooltip title={t('MenuAssetsEditor.defineFirst_tooltip')}>
-                                <QuestionCircleOutlined/>
-                            </Tooltip>
-                        </Flex>
-                    </Row>
-                    <Row label={t('MenuAssetsEditor.attribute')}>
-                        <Flex gap="small">
-                            <FlagsCascader value={asset.attribute} flags={MenuAttributeBits}
-                                           labelOf={labelOf(ATTRIBUTE_LABEL_KEYS)}
-                                           onChange={(v) => set("attribute", v)}/>
-                            <Tooltip title={t('MenuAssetsEditor.attribute_tooltip')}>
-                                <QuestionCircleOutlined/>
-                            </Tooltip>
-                        </Flex>
-                    </Row>
-                    <Row label={t('MenuAssetsEditor.srcFileHashCRC32')}>
-                        <Flex gap="small">
-                            <BigIntInput value={asset.srcFileHashCRC32} onChange={(v) => set("srcFileHashCRC32", v)}/>
-                            <Tooltip title={t('MenuAssetsEditor.srcFileHashCRC32_tooltip')}>
-                                <QuestionCircleOutlined/>
-                            </Tooltip>
-                        </Flex>
-                    </Row>
-                    <Row label={t('MenuAssetsEditor.targetBodyType')}>
-                        <EnumAutoComplete value={asset.targetBodyType} names={MenuTargetBodyTypeNames}
-                                          labelOf={labelOf(BODY_TYPE_LABEL_KEYS)}
-                                          onChange={(v) => set("targetBodyType", v)}/>
-                        <Tooltip title={t('MenuAssetsEditor.targetBodyType_tooltip')}>
-                            <QuestionCircleOutlined/>
-                        </Tooltip>
-                    </Row>
-                    <Row label={t('MenuAssetsEditor.isHarayureAvailable')}>
-                        <EnumAutoComplete value={asset.isHarayureAvailable} names={MenuHaraYureLimitTypeNames}
-                                          labelOf={labelOf(HARA_LABEL_KEYS)}
-                                          onChange={(v) => set("isHarayureAvailable", v)}/>
-                        <Tooltip title={t('MenuAssetsEditor.isHarayureAvailable_tooltip')}>
-                            <QuestionCircleOutlined/>
-                        </Tooltip>
-                    </Row>
-                    <Row label={t('MenuAssetsEditor.skirt_phys')}>
-                        <NumberField value={asset.skirt_phys} precision={0} onChange={(v) => set("skirt_phys", v)}/>
-                        <Tooltip title={t('MenuAssetsEditor.skirt_phys_tooltip')}>
-                            <QuestionCircleOutlined/>
-                        </Tooltip>
-                    </Row>
-                    <Row label={t('MenuAssetsEditor.toeLockSlotId')}>
-                        <NullableStringInput value={asset.toeLockSlotId} onChange={(v) => set("toeLockSlotId", v)}/>
-                        <Tooltip title={t('MenuAssetsEditor.toeLockSlotId_tooltip')}>
-                            <QuestionCircleOutlined/>
-                        </Tooltip>
-                    </Row>
-                    <Row label={t('MenuAssetsEditor.exportModelFormTextureName')}>
-                        <NullableStringInput value={asset.exportModelFormTextureName} onChange={(v) => set("exportModelFormTextureName", v)}/>
-                        <Tooltip title={t('MenuAssetsEditor.exportModelFormTextureName_tooltip')}>
-                            <QuestionCircleOutlined/>
-                        </Tooltip>
-                    </Row>
-                </div>
-            ),
-        },
-        {
-            key: "advanced",
-            label: t('MenuAssetsEditor.advanced_fields'),
-            children: <MenuAdvancedForm asset={asset} onChange={onChange}/>,
-        },
     ];
 
-    return <Collapse size="small" defaultActiveKey={["basic", "commands"]} items={items}/>;
+    return (
+        <Collapse
+            size="small"
+            activeKey={activeKeys}
+            onChange={(keys) => setActiveKeys(keys as string[])}
+            items={items}
+            className={commandsOpen ? "menu-asset-collapse-fill" : undefined}
+        />
+    );
 };
 
 export default MenuAssetForm;

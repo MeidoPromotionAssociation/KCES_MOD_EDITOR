@@ -433,7 +433,116 @@
     "toeLockSlotId": "脚趾锁定槽位名",
     "toeLockSlotId_tooltip": "toeLockSlotId 动画播放期间锁定脚趾骨骼旋转的槽位名（TBody.SlotID 字符串形式），用于固定脚趾造型的部件防止动画变形（KCES2 1.36.0）",
     "exportModelFormTextureName_tooltip": "exportModelFormTextureName 发型制作模式使用的形状遮罩贴图文件名（不带扩展名）；非空即标记该部件支持发型制作，普通部件留空",
-    "exportModelFormTextureName": "发型制作模式的形状遮罩贴图名"
+    "exportModelFormTextureName": "发型制作模式的形状遮罩贴图名",
+    "parts_ver": "部件版本"
+  },
+  "MenuAdvanced": {
+    "colvariInfo": "颜色变体信息",
+    "colvariFileNameExp": "颜色变体文件名表达式",
+    "preMulTexDatas": "预设多重贴图数据",
+    "partsVer": {
+      "item1": "未知字符串",
+      "item2": "版本号"
+    },
+    "maskData": {
+      "name": "遮罩项名称",
+      "mask": "遮罩状态"
+    },
+    "partColDef": {
+      "part_name": "部件名",
+      "patternScale": "图案缩放",
+      "patternRot": "图案旋转",
+      "multi_col": "部件颜色"
+    },
+    "gradaColDef": {
+      "notUse": "未使用",
+      "gradaNum": "渐变控制点数",
+      "gradaRates": "控制点比率",
+      "gradaRateRanges": "控制点范围",
+      "multi_col": "渐变色"
+    },
+    "infColData": {
+      "infColType": "无限色类型",
+      "partsColorType": "配色部位",
+      "isIndependenceMultiColor": "独立多色设定",
+      "gradaIsMugen": "渐变使用无限色",
+      "colData": "颜色数据",
+      "partColDefs": "部件颜色定义",
+      "gradaColDef": "渐变色定义"
+    },
+    "infColorParam": {
+      "tag": "标识标签",
+      "infColType": "无限色类型",
+      "infColorId": "配色部位",
+      "isIndependenceMultiColor": "独立多色设定",
+      "idTexIsRGB": "ID 纹理为 RGB",
+      "gradaIsMugen": "渐变使用无限色",
+      "idTexName": "ID 纹理名",
+      "pc": "颜色数据",
+      "partCols": "部件颜色定义",
+      "gradeCols": "渐变色定义",
+      "gradaLines": "渐变线"
+    },
+    "maskParam": {
+      "maskTexName": "遮罩纹理名",
+      "linkMaskName": "链接遮罩图层名",
+      "linkMaskNo": "链接遮罩编号",
+      "shareRtTargetPart": "共享渲染目标部件",
+      "maskData": "遮罩数据",
+      "maskRanges": "遮罩范围"
+    },
+    "transTexData": {
+      "pos": "位置",
+      "scale": "缩放",
+      "rotDeg": "旋转角度",
+      "areaUV": "UV 范围",
+      "srcTexPixcel": "源纹理像素尺寸",
+      "defTrans": "默认变换"
+    },
+    "preMulTexData": {
+      "slotId": "槽位名",
+      "saveTag": "保存标签",
+      "f_strFileName": "纹理文件名",
+      "f_strPropName": "材质属性名",
+      "f_eBlendMode": "混合模式",
+      "preTexCompoTypeStr": "预合成方式",
+      "f_nMatNo": "材质编号",
+      "f_nLayerNo": "图层号",
+      "f_bTexGroup": "按组替换",
+      "f_nLayNoInGroup": "组内层号",
+      "f_fAlpha": "透明度",
+      "f_nTargetBodyTexSize": "目标身体纹理尺寸",
+      "posDefHokuroTatooSlotId": "痣/纹身位置定义槽位",
+      "version": "版本",
+      "maskParam": "遮罩参数",
+      "infColParam": "无限色参数",
+      "preMaskData": "预设遮罩数据",
+      "preTransTexData": "预设纹理变换",
+      "preInfColData": "预设无限色数据"
+    },
+    "colvariData": {
+      "mpn": "部件属性名（| 分隔）",
+      "layerName": "图层名",
+      "viewName": "显示名",
+      "colorType": "无限色类型",
+      "colorTypeSub": "无限色子类型",
+      "useType": "作用标志",
+      "alpha": "透明度",
+      "mamaFileName": "基础色纹理名",
+      "saveInfColDataLinkLayer": "链接无限色数据图层",
+      "version": "版本",
+      "colData": "颜色数据",
+      "maskData": "遮罩数据",
+      "partColDefs": "部件颜色定义",
+      "gradaColDef": "渐变色定义"
+    },
+    "colvari": {
+      "iconFileName": "图标文件名",
+      "reqDefine": "所需颜色定义标签",
+      "version": "版本",
+      "iconColor": "图标颜色",
+      "colvariDatas": "颜色变体数据"
+    }
   },
   "MaterialAssetsEditor": {
     "basic_info": "基本信息",

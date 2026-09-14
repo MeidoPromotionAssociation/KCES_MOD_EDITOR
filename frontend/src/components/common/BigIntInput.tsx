@@ -21,7 +21,7 @@ const BigIntInput: React.FC<{
 
     return (
         <Input
-            style={{maxWidth: 240, ...style}}
+            style={{maxWidth: 250, ...style}}
             status={invalid ? "error" : undefined}
             value={text}
             onChange={(e) => {

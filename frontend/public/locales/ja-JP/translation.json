@@ -433,7 +433,116 @@
     "toeLockSlotId": "つま先固定スロット名",
     "toeLockSlotId_tooltip": "toeLockSlotId はアニメーション再生中につま先ボーンの回転を固定するスロット名（TBody.SlotID の文字列形式）です。つま先の造形を固定するパーツがアニメーションで変形するのを防ぎます（KCES2 1.36.0）",
     "exportModelFormTextureName_tooltip": "exportModelFormTextureName は髪型作成モードで使う形状マスクテクスチャのファイル名（拡張子なし）です。空でないとパーツが髪型作成に対応していることを示し、通常のパーツは空のままにします",
-    "exportModelFormTextureName": "髪型作成モードの形状マスクテクスチャ名"
+    "exportModelFormTextureName": "髪型作成モードの形状マスクテクスチャ名",
+    "parts_ver": "パーツバージョン"
+  },
+  "MenuAdvanced": {
+    "colvariInfo": "色バリ情報",
+    "colvariFileNameExp": "色バリファイル名の式",
+    "preMulTexDatas": "プリセット多重テクスチャデータ",
+    "partsVer": {
+      "item1": "不明な文字列",
+      "item2": "バージョン番号"
+    },
+    "maskData": {
+      "name": "マスク項目名",
+      "mask": "マスク状態"
+    },
+    "partColDef": {
+      "part_name": "パーツ名",
+      "patternScale": "パターン拡大率",
+      "patternRot": "パターン回転",
+      "multi_col": "パーツ色"
+    },
+    "gradaColDef": {
+      "notUse": "未使用",
+      "gradaNum": "グラデ制御点の数",
+      "gradaRates": "制御点の比率",
+      "gradaRateRanges": "制御点の範囲",
+      "multi_col": "グラデ色"
+    },
+    "infColData": {
+      "infColType": "無限色タイプ",
+      "partsColorType": "配色部位",
+      "isIndependenceMultiColor": "独立マルチカラー設定",
+      "gradaIsMugen": "グラデに無限色を使用",
+      "colData": "カラーデータ",
+      "partColDefs": "パーツ色定義",
+      "gradaColDef": "グラデ色定義"
+    },
+    "infColorParam": {
+      "tag": "識別タグ",
+      "infColType": "無限色タイプ",
+      "infColorId": "配色部位",
+      "isIndependenceMultiColor": "独立マルチカラー設定",
+      "idTexIsRGB": "ID テクスチャは RGB",
+      "gradaIsMugen": "グラデに無限色を使用",
+      "idTexName": "ID テクスチャ名",
+      "pc": "カラーデータ",
+      "partCols": "パーツ色定義",
+      "gradeCols": "グラデ色定義",
+      "gradaLines": "グラデライン"
+    },
+    "maskParam": {
+      "maskTexName": "マスクテクスチャ名",
+      "linkMaskName": "リンク先マスクレイヤー名",
+      "linkMaskNo": "リンク先マスク番号",
+      "shareRtTargetPart": "共有レンダーターゲットのパーツ",
+      "maskData": "マスクデータ",
+      "maskRanges": "マスク範囲"
+    },
+    "transTexData": {
+      "pos": "位置",
+      "scale": "拡大率",
+      "rotDeg": "回転角度",
+      "areaUV": "UV 範囲",
+      "srcTexPixcel": "元テクスチャのピクセルサイズ",
+      "defTrans": "既定の変換"
+    },
+    "preMulTexData": {
+      "slotId": "スロット名",
+      "saveTag": "セーブタグ",
+      "f_strFileName": "テクスチャファイル名",
+      "f_strPropName": "マテリアルプロパティ名",
+      "f_eBlendMode": "ブレンドモード",
+      "preTexCompoTypeStr": "プリ合成方式",
+      "f_nMatNo": "マテリアル番号",
+      "f_nLayerNo": "レイヤー番号",
+      "f_bTexGroup": "グループ単位で置換",
+      "f_nLayNoInGroup": "グループ内レイヤー番号",
+      "f_fAlpha": "透明度",
+      "f_nTargetBodyTexSize": "対象ボディテクスチャサイズ",
+      "posDefHokuroTatooSlotId": "ほくろ・タトゥ位置定義スロット",
+      "version": "バージョン",
+      "maskParam": "マスクパラメータ",
+      "infColParam": "無限色パラメータ",
+      "preMaskData": "プリセットマスクデータ",
+      "preTransTexData": "プリセットテクスチャ変換",
+      "preInfColData": "プリセット無限色データ"
+    },
+    "colvariData": {
+      "mpn": "パーツプロパティ名（| 区切り）",
+      "layerName": "レイヤー名",
+      "viewName": "表示名",
+      "colorType": "無限色タイプ",
+      "colorTypeSub": "無限色サブタイプ",
+      "useType": "作用フラグ",
+      "alpha": "透明度",
+      "mamaFileName": "ベース色テクスチャ名",
+      "saveInfColDataLinkLayer": "リンクする無限色データレイヤー",
+      "version": "バージョン",
+      "colData": "カラーデータ",
+      "maskData": "マスクデータ",
+      "partColDefs": "パーツ色定義",
+      "gradaColDef": "グラデ色定義"
+    },
+    "colvari": {
+      "iconFileName": "アイコンファイル名",
+      "reqDefine": "必要なカラー定義タグ",
+      "version": "バージョン",
+      "iconColor": "アイコン色",
+      "colvariDatas": "色バリデータ"
+    }
   },
   "MaterialAssetsEditor": {
     "basic_info": "基本情報",

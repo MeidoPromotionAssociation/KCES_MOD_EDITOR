@@ -39,6 +39,12 @@ interface AssetContainerEditorProps {
     renderForm: (asset: any, updateAsset: (next: any) => void) => React.ReactNode;
     /** 新建资产模板 */
     newAsset: () => any;
+    /**
+     * 表单自己撑满并管理内部滚动（默认 false：右侧面板整体滚动）。
+     * menuassets 的命令编辑器要吃掉视口剩余高度、页面不出滚动条，需要右侧面板变成
+     * 不滚动的 flex 列把高度让给表单；materialassets 是普通长表单，仍走整体滚动。
+     */
+    fillHeight?: boolean;
 }
 
 const AssetContainerEditor: React.FC<AssetContainerEditorProps> = ({
@@ -47,6 +53,7 @@ const AssetContainerEditor: React.FC<AssetContainerEditorProps> = ({
                                                                        itemLabel,
                                                                        renderForm,
                                                                        newAsset,
+                                                                       fillHeight = false,
                                                                    }) => {
     const {t} = useTranslation();
     const {token} = theme.useToken();
@@ -209,11 +216,17 @@ const AssetContainerEditor: React.FC<AssetContainerEditorProps> = ({
                 </div>
             </Splitter.Panel>
 
-            {/* 右侧编辑面板 */}
-            <Splitter.Panel style={{overflow: "auto", minWidth: 0, paddingLeft: 8}}>
+            {/* 右侧编辑面板：fillHeight 时自身不滚动，把高度让给表单去撑满 */}
+            <Splitter.Panel
+                style={fillHeight
+                    ? {display: "flex", flexDirection: "column", minWidth: 0, minHeight: 0, paddingLeft: 8}
+                    : {overflow: "auto", minWidth: 0, paddingLeft: 8}}
+            >
                 {selectedAsset !== null && selectedIndex !== null ? (
-                    <div>
-                        <Space style={{marginBottom: 8}}>
+                    <div style={fillHeight
+                        ? {display: "flex", flexDirection: "column", flex: 1, minHeight: 0}
+                        : undefined}>
+                        <Space style={{marginBottom: 8, flexShrink: 0}}>
                             <Button
                                 size="small"
                                 icon={<CopyOutlined/>}

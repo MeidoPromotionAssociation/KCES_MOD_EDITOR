@@ -433,7 +433,116 @@
     "toeLockSlotId": "Toe Lock Slot Name",
     "toeLockSlotId_tooltip": "toeLockSlotId locks the toe bones' rotation on this slot (as a TBody.SlotID string) during animation playback, keeping a part that shapes the toes from being deformed by animations (KCES2 1.36.0)",
     "exportModelFormTextureName_tooltip": "exportModelFormTextureName is the shape-mask texture file name (without extension) used in hair-make mode; non-empty marks the part as supporting hair-make, ordinary parts leave it empty",
-    "exportModelFormTextureName": "Shape mask texture for hair-make mode"
+    "exportModelFormTextureName": "Shape mask texture for hair-make mode",
+    "parts_ver": "Parts Version"
+  },
+  "MenuAdvanced": {
+    "colvariInfo": "Color Variation Info",
+    "colvariFileNameExp": "Color Variation File Name Expression",
+    "preMulTexDatas": "Preset Multi-Texture Data",
+    "partsVer": {
+      "item1": "Unknown string",
+      "item2": "Version number"
+    },
+    "maskData": {
+      "name": "Mask entry name",
+      "mask": "Mask state"
+    },
+    "partColDef": {
+      "part_name": "Part name",
+      "patternScale": "Pattern scale",
+      "patternRot": "Pattern rotation",
+      "multi_col": "Part color"
+    },
+    "gradaColDef": {
+      "notUse": "Unused",
+      "gradaNum": "Gradient control points",
+      "gradaRates": "Control point ratios",
+      "gradaRateRanges": "Control point ranges",
+      "multi_col": "Gradient color"
+    },
+    "infColData": {
+      "infColType": "Infinity color type",
+      "partsColorType": "Color part",
+      "isIndependenceMultiColor": "Independent multi-color",
+      "gradaIsMugen": "Gradient uses infinity color",
+      "colData": "Color data",
+      "partColDefs": "Part color definitions",
+      "gradaColDef": "Gradient color definition"
+    },
+    "infColorParam": {
+      "tag": "Tag",
+      "infColType": "Infinity color type",
+      "infColorId": "Color part",
+      "isIndependenceMultiColor": "Independent multi-color",
+      "idTexIsRGB": "ID texture is RGB",
+      "gradaIsMugen": "Gradient uses infinity color",
+      "idTexName": "ID texture names",
+      "pc": "Color data",
+      "partCols": "Part color definitions",
+      "gradeCols": "Gradient color definition",
+      "gradaLines": "Gradient lines"
+    },
+    "maskParam": {
+      "maskTexName": "Mask texture name",
+      "linkMaskName": "Linked mask layer name",
+      "linkMaskNo": "Linked mask number",
+      "shareRtTargetPart": "Shared render target part",
+      "maskData": "Mask data",
+      "maskRanges": "Mask ranges"
+    },
+    "transTexData": {
+      "pos": "Position",
+      "scale": "Scale",
+      "rotDeg": "Rotation (deg)",
+      "areaUV": "UV area",
+      "srcTexPixcel": "Source texture pixel size",
+      "defTrans": "Default transform"
+    },
+    "preMulTexData": {
+      "slotId": "Slot name",
+      "saveTag": "Save tag",
+      "f_strFileName": "Texture file name",
+      "f_strPropName": "Material property name",
+      "f_eBlendMode": "Blend mode",
+      "preTexCompoTypeStr": "Pre-composite type",
+      "f_nMatNo": "Material number",
+      "f_nLayerNo": "Layer number",
+      "f_bTexGroup": "Replace by group",
+      "f_nLayNoInGroup": "Layer number in group",
+      "f_fAlpha": "Alpha",
+      "f_nTargetBodyTexSize": "Target body texture size",
+      "posDefHokuroTatooSlotId": "Mole/tattoo position slot",
+      "version": "Version",
+      "maskParam": "Mask parameters",
+      "infColParam": "Infinity color parameters",
+      "preMaskData": "Preset mask data",
+      "preTransTexData": "Preset texture transform",
+      "preInfColData": "Preset infinity color data"
+    },
+    "colvariData": {
+      "mpn": "Part property names (| separated)",
+      "layerName": "Layer name",
+      "viewName": "Display name",
+      "colorType": "Infinity color type",
+      "colorTypeSub": "Infinity color subtype",
+      "useType": "Effect flags",
+      "alpha": "Alpha",
+      "mamaFileName": "Base color texture name",
+      "saveInfColDataLinkLayer": "Linked infinity color data layer",
+      "version": "Version",
+      "colData": "Color data",
+      "maskData": "Mask data",
+      "partColDefs": "Part color definitions",
+      "gradaColDef": "Gradient color definition"
+    },
+    "colvari": {
+      "iconFileName": "Icon file name",
+      "reqDefine": "Required color define tags",
+      "version": "Version",
+      "iconColor": "Icon color",
+      "colvariDatas": "Color variation data"
+    }
   },
   "MaterialAssetsEditor": {
     "basic_info": "Basic Info",
