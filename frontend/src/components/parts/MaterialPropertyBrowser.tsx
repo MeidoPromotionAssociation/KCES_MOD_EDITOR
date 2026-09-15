@@ -2,7 +2,7 @@ import React, {useMemo, useRef, useState} from "react";
 import {Alert, Button, Divider, Empty, Input, Radio, theme, Typography} from "antd";
 import {DeleteOutlined, PlusOutlined} from "@ant-design/icons";
 import {useTranslation} from "react-i18next";
-import MaterialPropertyItem, {PropKinds} from "./MaterialPropertyItem";
+import MaterialPropertyItem, {fieldOf, PropKinds} from "./MaterialPropertyItem";
 import {MaterialPropKind, materialPropName} from "../../utils/kcesEnums";
 
 /**
@@ -86,13 +86,17 @@ const MaterialPropertyBrowser: React.FC<{
         }
     };
 
-    const updateItem = (field: string, index: number, next: any) => {
+    const updateItem = (kind: MaterialPropKind, index: number, next: any) => {
+        const field = fieldOf(kind);
+        if (!field) return;
         const items = [...(asset[field] ?? [])];
         items[index] = next;
         set(field, items);
     };
 
-    const removeItem = (kind: MaterialPropKind, field: string, index: number) => {
+    const removeItem = (kind: MaterialPropKind, index: number) => {
+        const field = fieldOf(kind);
+        if (!field) return;
         const items = [...(asset[field] ?? [])];
         items.splice(index, 1);
         set(field, items);
@@ -107,8 +111,8 @@ const MaterialPropertyBrowser: React.FC<{
         }
     };
 
-    // 筛到某个类别就新建到该类别，「全部」下默认建一条纹理属性；8 槽没有关键字属性的位置
-    const addKind: MaterialPropKind = filterKind === "all" ? "tex" : filterKind;
+    // 筛到具体类别才知道新项该进哪个数组，「全部」下不提供新增入口；8 槽没有关键字属性的位置
+    const addKind: MaterialPropKind | null = filterKind === "all" ? null : filterKind;
     const addLocked = addKind === "kw" && isLegacy;
 
     const addItem = () => {
@@ -116,7 +120,7 @@ const MaterialPropertyBrowser: React.FC<{
         if (!def) return;
         const items: any[] = asset[def.field] ?? [];
         set(def.field, [...items, def.newItem()]);
-        setSelected(rowKey(addKind, items.length));
+        setSelected(rowKey(def.kind, items.length));
     };
 
     const current = parseRowKey(selected);
@@ -205,7 +209,7 @@ const MaterialPropertyBrowser: React.FC<{
                                                 icon={<DeleteOutlined/>}
                                                 onClick={(e) => {
                                                     e.stopPropagation();
-                                                    removeItem(kind, field, index);
+                                                    removeItem(kind, index);
                                                 }}
                                             />
                                         </div>
@@ -215,7 +219,7 @@ const MaterialPropertyBrowser: React.FC<{
                         ))
                     )}
                 </div>
-                {addLocked ? (
+                {addKind !== null && (addLocked ? (
                     <>
                         <Alert type="info" showIcon title={t('MaterialAssetsEditor.layout_legacy_short')}/>
                         <Button block type="primary" onClick={onUpgradeLayout}>
@@ -226,7 +230,7 @@ const MaterialPropertyBrowser: React.FC<{
                     <Button block icon={<PlusOutlined/>} onClick={addItem}>
                         {`${t('MaterialAssetsEditor.add_prop')} · ${t(`MaterialAssetsEditor.${addKind}`)}`}
                     </Button>
-                )}
+                ))}
             </div>
 
             {/* 右侧：只渲染选中的那一条，属性项自身按 labeled 排布 */}
@@ -248,10 +252,11 @@ const MaterialPropertyBrowser: React.FC<{
                         )}
                         <MaterialPropertyItem
                             kind={current.kind}
+                            index={current.index}
                             item={currentItem}
                             layout="labeled"
-                            onChange={(next) => updateItem(currentDef.field, current.index, next)}
-                            onRemove={() => removeItem(current.kind, currentDef.field, current.index)}
+                            onChange={updateItem}
+                            onRemove={removeItem}
                         />
                     </div>
                 ) : (

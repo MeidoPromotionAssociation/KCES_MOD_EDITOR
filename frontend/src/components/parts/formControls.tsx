@@ -1,5 +1,5 @@
 import React from "react";
-import {AutoComplete, Cascader, Input, InputNumber, Typography} from "antd";
+import {AutoComplete, Cascader, Input, InputNumber, Tooltip, Typography} from "antd";
 import {numberToString} from "../../utils/losslessJson";
 
 /**
@@ -19,12 +19,16 @@ export const Row: React.FC<{ label: string; children: React.ReactNode }> = ({lab
 /**
  * NullableStringInput 可空字符串输入
  * 原值为 null 且清空时保持 null，避免把可空字段意外改成空字符串
+ *
+ * 悬停提示走 tooltip 参数由组件内部包 Tooltip：Tooltip 要挂到真实的输入节点上，
+ * 套在调用处时它拿到的是本组件而不是里面的 Input，提示不会出现
  */
 export const NullableStringInput: React.FC<{
     value: string | null | undefined;
     onChange: (value: string | null) => void;
     textarea?: boolean;
-}> = ({value, onChange, textarea}) => {
+    tooltip?: React.ReactNode;
+}> = ({value, onChange, textarea, tooltip}) => {
     const handleChange = (text: string) => {
         if (text === "" && (value === null || value === undefined)) {
             onChange(null);
@@ -32,21 +36,24 @@ export const NullableStringInput: React.FC<{
         }
         onChange(text);
     };
-    if (textarea) {
-        return (
-            <Input.TextArea
-                autoSize={{minRows: 1, maxRows: 4}}
-                value={value ?? ""}
-                onChange={(e) => handleChange(e.target.value)}
-            />
-        );
-    }
-    return <Input
-        value={value ?? ""}
-        onChange={(e) => handleChange(e.target.value)}/>;
+    const control = textarea ? (
+        <Input.TextArea
+            autoSize={{minRows: 1, maxRows: 4}}
+            value={value ?? ""}
+            onChange={(e) => handleChange(e.target.value)}
+        />
+    ) : (
+        <Input
+            value={value ?? ""}
+            onChange={(e) => handleChange(e.target.value)}/>
+    );
+    return tooltip ? <Tooltip title={tooltip}>{control}</Tooltip> : control;
 };
 
-/** NumberField 数值输入（int32/float32 安全范围） */
+/**
+ * NumberField 数值输入（int32/float32 安全范围）
+ * tooltip 与 NullableStringInput 同理，由内部包 Tooltip
+ */
 export const NumberField: React.FC<{
     value: number | undefined;
     onChange: (value: number) => void;
@@ -54,16 +61,20 @@ export const NumberField: React.FC<{
     precision?: number;
     width?: number;
     disabled?: boolean;
-}> = ({value, onChange, step, precision, width, disabled}) => (
-    <InputNumber
-        style={{width: width ?? 250}}
-        value={value}
-        step={step}
-        precision={precision}
-        disabled={disabled}
-        onChange={(newValue) => onChange((newValue ?? 0) as number)}
-    />
-);
+    tooltip?: React.ReactNode;
+}> = ({value, onChange, step, precision, width, disabled, tooltip}) => {
+    const control = (
+        <InputNumber
+            style={{width: width ?? 250}}
+            value={value}
+            step={step}
+            precision={precision}
+            disabled={disabled}
+            onChange={(newValue) => onChange((newValue ?? 0) as number)}
+        />
+    );
+    return tooltip ? <Tooltip title={tooltip}>{control}</Tooltip> : control;
+};
 
 /**
  * FlagsCascader [Flags] 枚举多选

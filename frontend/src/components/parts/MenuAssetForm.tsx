@@ -74,10 +74,10 @@ const MenuAssetForm: React.FC<{
             key: '1',
             label: t('MenuAssetsEditor.advanced_fields'),
             children: <div>
-                <Row label={t('MenuAssetsEditor.version')}>
+                <Row label={t('Common.version')}>
                     <Flex gap="small">
                         <NumberField value={asset.version} precision={0} onChange={(v) => set("version", v)}/>
-                        <Tooltip title={t('MenuAssetsEditor.version_tooltip')}>
+                        <Tooltip title={t('Common.version_tooltip')}>
                             <QuestionCircleOutlined/>
                         </Tooltip>
                     </Flex>
@@ -90,10 +90,10 @@ const MenuAssetForm: React.FC<{
                         </Tooltip>
                     </Flex>
                 </Row>
-                <Row label={t('MenuAssetsEditor.id')}>
+                <Row label={t('Common.id')}>
                     <Flex gap="small">
                         <BigIntInput value={asset.id} onChange={(v) => set("id", v)}/>
-                        <Tooltip title={t('MenuAssetsEditor.id_tooltip')}>
+                        <Tooltip title={t('Common.id_tooltip')}>
                             <QuestionCircleOutlined/>
                         </Tooltip>
                     </Flex>
@@ -201,10 +201,10 @@ const MenuAssetForm: React.FC<{
             label: t('MenuAssetsEditor.basic_info'),
             children: (
                 <div>
-                    <Row label={t('MenuAssetsEditor.file_name')}>
+                    <Row label={t('Common.file_name')}>
                         <Flex gap="small">
                             <NullableStringInput value={asset.fileName} onChange={(v) => set("fileName", v)}/>
-                            <Tooltip title={t('MenuAssetsEditor.file_name_tooltip')}>
+                            <Tooltip title={t('Common.file_name_tooltip')}>
                                 <QuestionCircleOutlined/>
                             </Tooltip>
                         </Flex>

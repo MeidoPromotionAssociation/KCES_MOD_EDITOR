@@ -45,6 +45,8 @@ interface AssetContainerEditorProps {
      * 不滚动的 flex 列把高度让给表单；materialassets 是普通长表单，仍走整体滚动。
      */
     fillHeight?: boolean;
+    /** 克隆/删除那一栏右侧的附加控件（materialassets 的版式选择器） */
+    toolbarExtra?: React.ReactNode;
 }
 
 const AssetContainerEditor: React.FC<AssetContainerEditorProps> = ({
@@ -54,6 +56,7 @@ const AssetContainerEditor: React.FC<AssetContainerEditorProps> = ({
                                                                        renderForm,
                                                                        newAsset,
                                                                        fillHeight = false,
+                                                                       toolbarExtra,
                                                                    }) => {
     const {t} = useTranslation();
     const {token} = theme.useToken();
@@ -226,7 +229,7 @@ const AssetContainerEditor: React.FC<AssetContainerEditorProps> = ({
                     <div style={fillHeight
                         ? {display: "flex", flexDirection: "column", flex: 1, minHeight: 0}
                         : undefined}>
-                        <Space style={{marginBottom: 8, flexShrink: 0}}>
+                        <Space wrap style={{marginBottom: 8, flexShrink: 0}}>
                             <Button
                                 size="small"
                                 icon={<CopyOutlined/>}
@@ -242,6 +245,7 @@ const AssetContainerEditor: React.FC<AssetContainerEditorProps> = ({
                             >
                                 {t('PartsEditor.delete_asset')}
                             </Button>
+                            {toolbarExtra}
                         </Space>
                         {renderForm(selectedAsset, (next) => updateAsset(selectedIndex, next))}
                     </div>

@@ -31,9 +31,11 @@ export const PropKinds: Array<{
     {kind: "col", field: "colorProps", newItem: () => ({type: 100, r: 1, g: 1, b: 1, a: 1})},
     {kind: "vec", field: "vectorProps", newItem: () => ({type: 0, x: 0, y: 0, z: 0, w: 0})},
     {kind: "f", field: "floatProps", newItem: () => ({type: 200, v: 0})},
-    // 新增关键字默认取枚举首项（_USE_LIGHT_MAP_TEX）并打开
     {kind: "kw", field: "keywordProps", newItem: () => ({type: 300, value: true})},
 ];
+
+/** 类别 → 该类别在文档里的数组字段名（PropKinds 是固定表，按类别写回单项时用它定位） */
+export const fieldOf = (kind: MaterialPropKind) => PropKinds.find((prop) => prop.kind === kind)?.field;
 
 /**
  * PropNameInput 属性名输入
@@ -48,57 +50,61 @@ const PropNameInput: React.FC<{
 }> = ({kind, type, onChange, width}) => {
     const nameOf = (value: number) => materialPropName(kind, value);
     const [text, setText] = useState(nameOf(type));
+    const {t} = useTranslation();
 
     useEffect(() => {
         setText(nameOf(type));
     }, [kind, type]);
 
     return (
-        <AutoComplete
-            style={{width}}
-            allowClear
-            value={text}
-            options={materialPropOptions(kind)}
-            onChange={(next) => {
-                setText(next);
-                const named = materialPropValue(kind, next);
-                if (named !== null) {
-                    onChange(named);
-                    return;
-                }
-                const trimmed = next.trim();
-                if (/^#?\d+$/.test(trimmed)) {
-                    onChange(Number(trimmed.replace(/^#/, "")));
-                }
-            }}
-        />
+        <Tooltip title={t('MaterialAssetsEditor.property_name')}>
+            <AutoComplete
+                style={{width}}
+                allowClear
+                value={text}
+                options={materialPropOptions(kind)}
+                onChange={(next) => {
+                    setText(next);
+                    const named = materialPropValue(kind, next);
+                    if (named !== null) {
+                        onChange(named);
+                        return;
+                    }
+                    const trimmed = next.trim();
+                    if (/^#?\d+$/.test(trimmed)) {
+                        onChange(Number(trimmed.replace(/^#/, "")));
+                    }
+                }}
+            />
+        </Tooltip>
     );
 };
 
 const MaterialPropertyItem: React.FC<{
     kind: MaterialPropKind;
+    /** 在本类别数组里的下标。回调按「类别 + 下标」定位，父组件的回调才能保持稳定引用 */
+    index: number;
     item: any;
     layout: MaterialFormLayout;
-    onChange: (next: any) => void;
-    onRemove: () => void;
-}> = ({kind, item, layout, onChange, onRemove}) => {
+    /** 稳定引用：改本项（由父组件按类别与下标写回） */
+    onChange: (kind: MaterialPropKind, index: number, next: any) => void;
+    /** 稳定引用：删本项 */
+    onRemove: (kind: MaterialPropKind, index: number) => void;
+}> = ({kind, index, item, layout, onChange, onRemove}) => {
     const {t} = useTranslation();
 
-    const set = (field: string, value: any) => onChange({...item, [field]: value});
+    const set = (field: string, value: any) => onChange(kind, index, {...item, [field]: value});
+    const remove = () => onRemove(kind, index);
 
     const numberBox = (field: string, label: string, step = 0.01, width = 90) => (
-        <Tooltip title={label} key={field}>
-            <span>
-                <NumberField width={width} step={step} value={item[field]}
-                             onChange={(v) => set(field, v)}/>
-            </span>
-        </Tooltip>
+        <NumberField key={field} tooltip={label} width={width} step={step} value={item[field]}
+                     onChange={(v) => set(field, v)}/>
     );
 
     const colorPicker = (
         <ColorPickerSync
             r={item.r ?? 1} g={item.g ?? 1} b={item.b ?? 1} a={item.a ?? 1}
-            onChange={(r, g, b, a) => onChange({...item, r, g, b, a})}
+            onChange={(r, g, b, a) => onChange(kind, index, {...item, r, g, b, a})}
         />
     );
 
@@ -116,7 +122,8 @@ const MaterialPropertyItem: React.FC<{
                 <div style={{flex: 1, minWidth: 0}}>
                     {kind === "tex" && (
                         <Space wrap size={4}>
-                            <NullableStringInput value={item.fileName} onChange={(v) => set("fileName", v)}/>
+                            <NullableStringInput value={item.fileName} onChange={(v) => set("fileName", v)}
+                                                 tooltip={t('MaterialAssetsEditor.texture_file')}/>
                             {numberBox("ox", t('MaterialAssetsEditor.offsetX'))}
                             {numberBox("oy", t('MaterialAssetsEditor.offsetY'))}
                             {numberBox("sx", t('MaterialAssetsEditor.scaleX'))}
@@ -143,7 +150,7 @@ const MaterialPropertyItem: React.FC<{
                     {kind === "f" && numberBox("v", t('MaterialAssetsEditor.number'), 0.01, 140)}
                     {kind === "kw" && keywordSwitch}
                 </div>
-                <Button size="small" type="text" danger icon={<DeleteOutlined/>} onClick={onRemove}/>
+                <Button size="small" type="text" danger icon={<DeleteOutlined/>} onClick={remove}/>
             </div>
         );
     }
@@ -161,13 +168,14 @@ const MaterialPropertyItem: React.FC<{
                 <Space>
                     <PropNameInput kind={kind} type={item.type ?? 0} onChange={(type) => set("type", type)}
                                    width={240}/>
-                    <Button size="small" type="text" danger icon={<DeleteOutlined/>} onClick={onRemove}/>
+                    <Button size="small" type="text" danger icon={<DeleteOutlined/>} onClick={remove}/>
                 </Space>
             </Row>
             {kind === "tex" && (
                 <>
                     <Row label={t('MaterialAssetsEditor.texture_file')}>
-                        <NullableStringInput value={item.fileName} onChange={(v) => set("fileName", v)}/>
+                        <NullableStringInput value={item.fileName} tooltip={t('MaterialAssetsEditor.texture_file')}
+                                             onChange={(v) => set("fileName", v)}/>
                     </Row>
                     <Row label={t('MaterialAssetsEditor.offset_scale')}>
                         <Space wrap size={4}>
@@ -226,4 +234,8 @@ const MaterialPropertyItem: React.FC<{
     );
 };
 
-export default MaterialPropertyItem;
+/**
+ * memo：属性项动辄几十条，回填一次颜色要重建整个表单，若每条都跟着重渲染会明显掉帧。
+ * 配合父组件按「类别 + 下标」传的稳定回调，未改动的项整支跳过渲染。
+ */
+export default React.memo(MaterialPropertyItem);
