@@ -15,7 +15,7 @@
     "style1": "样式 1（结构化表单）",
     "style2": "样式 2（JSON 编辑）",
     "file_name": "文件名",
-    "file_name_tooltip": "fileName 该资产的文件名，游戏按它计算 ID 并查找资源。菜单需要 .menu 后缀，材质需要 .mate 后缀",
+    "file_name_tooltip": "fileName 该资产的文件名，游戏按它计算 ID 并查找资源。菜单需要 .menu 后缀，材质需要 .mate 后缀，PMat 需要 .pmat 后缀",
     "id": "ID",
     "id_tooltip": "id 文件名的小写 FNV-1a 哈希值，ID 相同的资产会被拒绝注册，是所有资产字典（assetList）的 key，游戏用它查找资源、资产之间也用它相互引用。KCES MOD EDITOR 写出时会默认重算，可在设置中更改（KCES 1.36.0）",
     "version": "文件版本",
@@ -570,7 +570,7 @@
     "keyword_on": "已启用",
     "keyword_off": "已关闭",
     "render_queue": "渲染顺序",
-    "render_queue_tooltip": "Render Queue  0 表示沿用 shader 默认渲染队列（游戏仅在大于 0 时套用），仅 KCES2 的 mate 有此字段",
+    "render_queue_tooltip": "renderQueue 手动指定该材质的渲染顺序，直接覆盖 UnityEngine.Material.renderQueue，仅当值大于 0 时生效；0 或负数视为“未指定”，此时沿用 shader 默认顺序，若该材质存在匹配的 .pmat，则 .pmat 的值优先",
     "indexedArrayWidth": "索引数组宽度",
     "indexedArrayWidth_tooltip": "indexedArrayWidth 不是 mate 里带的字段，只是解码时记录的线格式宽度，因为 KISS 改了文件布局但是没改版本号",
     "layout_legacy": "KCES（8 槽）",
@@ -652,5 +652,11 @@
     "group_wind": "风",
     "group_spring": "弹簧（仅 BoneSpring 生效）",
     "group_scene": "构建与场景设置（加载时不生效）"
+  },
+  "PMatAssetsEditor": {
+    "render_queue": "渲染顺序",
+    "render_queue_tooltip": "renderQueue 外部覆盖目标材质的渲染队列，与 .mate 不同，本值没有 0 值保护：即使为 0 也会写入，等于把队列还原成 shader 默认值，并且会覆盖 .mate 中设置的 renderQueue，同时会写入着色器属性 _SetManualRenderQueue，该属性会随游戏自身的 URP 转换一起复制",
+    "target_id": "目标 ID",
+    "target_id_tooltip": "targetId 目标 ID 需与目标 .mate 的 ID 一致，且 .pmat 的文件名必须与该材质名相同，两者都满足才会应用，请注意 KCES MOD EDITOR 会在保存后重算 ID，修改文件名后请重新打开 mate 文件确认最新 ID"
   }
 }

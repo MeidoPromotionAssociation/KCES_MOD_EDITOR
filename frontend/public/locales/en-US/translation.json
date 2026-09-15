@@ -15,7 +15,7 @@
     "style1": "Style 1 (Structured Form)",
     "style2": "Style 2 (JSON Editor)",
     "file_name": "File Name",
-    "file_name_tooltip": "fileName — the asset's file name; the game derives the ID from it and looks the resource up by it. Menus require the .menu extension and materials require the .mate extension.",
+    "file_name_tooltip": "fileName — the asset's file name; the game derives the ID from it and looks the resource up by it. Menus require the .menu extension and materials require the .mate extension, PMat requires the .pmat extension.",
     "id": "ID",
     "id_tooltip": "id — the lowercase FNV-1a hash of the file name; assets with duplicate IDs are rejected from registration, and it is the key of the whole asset dictionary (assetList) — the game looks resources up by it and assets reference each other through it. KCES MOD EDITOR recomputes it on write by default, configurable in settings (KCES 1.36.0)",
     "version": "File Version",
@@ -570,7 +570,7 @@
     "keyword_on": "Enabled",
     "keyword_off": "Disabled",
     "render_queue": "Render Queue",
-    "render_queue_tooltip": "Render Queue — 0 keeps the shader default render queue; the game applies the value only when it is greater than 0. Only KCES2 materials have this field.",
+    "render_queue_tooltip": "renderQueue manually sets this material's render order, directly overriding UnityEngine.Material.renderQueue, and takes effect only when the value is greater than 0; 0 or a negative value counts as “unset”, in which case the shader default order is kept — if the material has a matching .pmat, the .pmat value takes precedence",
     "indexedArrayWidth": "Indexed Array Width",
     "indexedArrayWidth_tooltip": "indexedArrayWidth is not a field carried in the mate file — it is the wire-format array width recorded while decoding.",
     "layout_legacy": "KCES (8 slots)",
@@ -652,5 +652,11 @@
     "group_wind": "Wind",
     "group_spring": "Spring (BoneSpring only)",
     "group_scene": "Build and scene settings (no effect on load)"
+  },
+  "PMatAssetsEditor": {
+    "render_queue": "Render Queue",
+    "render_queue_tooltip": "renderQueue overrides the render queue of the target material from the outside. Unlike .mate, this value has no zero guard: even 0 is written, which restores the queue to the shader default, and it also overrides the renderQueue set in .mate. It additionally writes the shader property _SetManualRenderQueue, which is copied along with the game's own URP conversion",
+    "target_id": "Target ID",
+    "target_id_tooltip": "targetId — the target ID must match the ID of the target .mate, and the .pmat file name must be identical to that material's name; both must match for the override to apply. Note that KCES MOD EDITOR recomputes IDs when saving, so after renaming a file, reopen the mate file to confirm the latest ID."
   }
 }

@@ -15,7 +15,7 @@
     "style1": "スタイル 1（構造化フォーム）",
     "style2": "スタイル 2（JSON エディター）",
     "file_name": "ファイル名",
-    "file_name_tooltip": "fileName このアセットのファイル名。ゲームはこれを基に ID を計算し、この名前でリソースを探します。メニューは .menu 拡張子、マテリアルは .mate 拡張子が必要です",
+    "file_name_tooltip": "fileName このアセットのファイル名。ゲームはこれを基に ID を計算し、この名前でリソースを探します。メニューは .menu 拡張子、マテリアルは .mate 拡張子が必要です、PMatには.pmatという拡張子が必要です",
     "id": "ID",
     "id_tooltip": "id はファイル名の小文字 FNV-1a ハッシュ値で、重複する ID のアセットは登録を拒否されます。全アセット辞書（assetList）のキーであり、ゲームがリソースの検索に使い、アセット間の参照にも使われます。KCES MOD EDITOR が書き出し時に再計算します（設定で変更可）（KCES 1.36.0）",
     "version": "ファイルバージョン",
@@ -570,7 +570,7 @@
     "keyword_on": "有効",
     "keyword_off": "無効",
     "render_queue": "レンダーキュー",
-    "render_queue_tooltip": "Render Queue  0 はシェーダー既定のレンダーキューを使う意味です（ゲームは 0 より大きいときだけ適用します）。KCES2 のマテリアルにのみ存在するフィールドです",
+    "render_queue_tooltip": "renderQueue はこのマテリアルのレンダー順を手動で指定し、UnityEngine.Material.renderQueue を直接上書きします。値が 0 より大きいときだけ有効で、0 または負の値は「未指定」とみなされ、shader 既定の順序を使います。その場合、このマテリアルに一致する .pmat があれば .pmat の値が優先されます",
     "indexedArrayWidth": "インデックス配列幅",
     "indexedArrayWidth_tooltip": "indexedArrayWidth は mate に含まれるフィールドではなく、デコード時に記録したワイヤ形式の配列幅です，KISSはファイルレイアウトを変更したが、バージョン番号は変更しなかったからだ。",
     "layout_legacy": "KCES（8 スロット）",
@@ -652,5 +652,11 @@
     "group_wind": "風",
     "group_spring": "スプリング（BoneSpring のみ有効）",
     "group_scene": "構築・シーン設定（読み込み時は無効）"
+  },
+  "PMatAssetsEditor": {
+    "render_queue": "レンダーキュー",
+    "render_queue_tooltip": "renderQueue は対象マテリアルのレンダーキューを外部から上書きします。.mate と違い、この値には 0 値の保護がありません：0 でもそのまま書き込まれ、キューを shader 既定値に戻したうえで、.mate で設定した renderQueue も上書きします。さらにシェーダープロパティ _SetManualRenderQueue も書き込まれ、このプロパティはゲーム自身の URP 変換と一緒にコピーされます",
+    "target_id": "対象 ID",
+    "target_id_tooltip": "targetId 対象 ID は対象 .mate の ID と一致している必要があり、さらに .pmat のファイル名がそのマテリアル名と同じでなければなりません。両方を満たしたときだけ適用されます。KCES MOD EDITOR は保存時に ID を再計算するため、ファイル名を変更したら mate ファイルを開き直して最新の ID を確認してください"
   }
 }
