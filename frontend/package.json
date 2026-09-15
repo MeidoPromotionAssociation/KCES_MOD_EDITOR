@@ -29,9 +29,11 @@
     "react-router-dom": "7.18.2"
   },
   "devDependencies": {
+    "@rolldown/plugin-babel": "^0.2.4",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.5",
     "@vitejs/plugin-react": "^6.1.1",
+    "babel-plugin-react-compiler": "^1.0.0",
     "typescript": "^7.0.2",
     "vite": "^8.2.2"
   }
