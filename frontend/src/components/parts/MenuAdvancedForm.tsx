@@ -46,6 +46,29 @@ const MenuAdvancedForm: React.FC<{
 
     const items = [
         {
+            key: "partsVer",
+            label: (
+                <Space>
+                    <Typography.Text strong>{t('MenuAssetsEditor.parts_ver')}</Typography.Text>
+                    <Typography.Text type="secondary">
+                        {partsVer ? `${partsVer.item1 ?? ""} / ${partsVer.item2 ?? 0}` : t('FieldForm.unset')}
+                    </Typography.Text>
+                </Space>
+            ),
+            children: (
+                <div>
+                    <div style={{marginBottom: 8}}>
+                        <NullToggle isSet={!!partsVer}
+                                    onToggle={(enabled) => set("partsVer", enabled ? newPartsVer() : null)}/>
+                    </div>
+                    {partsVer && (
+                        <ObjectFields value={partsVer} spec={partsVerSpec()}
+                                      onChange={(next) => set("partsVer", next)}/>
+                    )}
+                </div>
+            ),
+        },
+        {
             key: "colvariInfo",
             label: (
                 <Space>
@@ -107,29 +130,6 @@ const MenuAdvancedForm: React.FC<{
                     newKey={() => placeholderKey(preMulTexDatas)}
                     onChange={(next) => set("preMulTexDatas", next)}
                 />
-            ),
-        },
-        {
-            key: "partsVer",
-            label: (
-                <Space>
-                    <Typography.Text strong>{t('MenuAssetsEditor.parts_ver')}</Typography.Text>
-                    <Typography.Text type="secondary">
-                        {partsVer ? `${partsVer.item1 ?? ""} / ${partsVer.item2 ?? 0}` : t('FieldForm.unset')}
-                    </Typography.Text>
-                </Space>
-            ),
-            children: (
-                <div>
-                    <div style={{marginBottom: 8}}>
-                        <NullToggle isSet={!!partsVer}
-                                    onToggle={(enabled) => set("partsVer", enabled ? newPartsVer() : null)}/>
-                    </div>
-                    {partsVer && (
-                        <ObjectFields value={partsVer} spec={partsVerSpec()}
-                                      onChange={(next) => set("partsVer", next)}/>
-                    )}
-                </div>
             ),
         },
     ];
