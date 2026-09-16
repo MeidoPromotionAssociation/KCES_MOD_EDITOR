@@ -346,6 +346,7 @@ const Texture2DEditor = forwardRef<FormatEditorRef, Texture2DEditorProps>((props
                 />
             )}
 
+            <div style={{textAlign: "right"}}>
             <Space wrap style={{marginBottom: 8}}>
                 <Tooltip title={filePath
                     ? t('Texture2DEditor.quick_export_tip', {path: getFileName(quickTarget)})
@@ -394,10 +395,11 @@ const Texture2DEditor = forwardRef<FormatEditorRef, Texture2DEditorProps>((props
                     {t('Texture2DEditor.reload')}
                 </Button>
                 {/* 「选择替换图像」这类按钮光看名字看不出用途，用途说明挂在这个问号上 */}
-                <Tooltip title={<div style={{maxWidth: 420}}>{t('Texture2DEditor.usage')}</div>}>
+                <Tooltip placement="left" title={<div style={{maxWidth: 420}}>{t('Texture2DEditor.usage')}</div>}>
                     <QuestionCircleOutlined style={{color: token.colorTextDescription, cursor: "help"}}/>
                 </Tooltip>
             </Space>
+            </div>
 
             {pendingImage && (
                 <Alert
