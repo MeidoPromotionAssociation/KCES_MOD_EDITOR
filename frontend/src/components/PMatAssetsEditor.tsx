@@ -73,7 +73,8 @@ const PMatTable: React.FC<{ data: any; setData: (value: any) => void }> = ({data
 
     const columns = [
         {
-            title: <Flex gap="small">{t('Common.file_name')} <Tooltip title={t('Common.file_name_tooltip')}><QuestionCircleOutlined/></Tooltip></Flex>,
+            title: <Flex gap="small">{t('Common.file_name')} <Tooltip
+                title={t('Common.file_name_tooltip')}><QuestionCircleOutlined/></Tooltip></Flex>,
             width: 320,
             render: (_: any, record: { asset: any; index: number }) => (
                 <NullableStringInput value={record.asset?.fileName}
@@ -81,7 +82,8 @@ const PMatTable: React.FC<{ data: any; setData: (value: any) => void }> = ({data
             ),
         },
         {
-            title: <Flex gap="small">{t('PMatAssetsEditor.render_queue')} <Tooltip title={t('PMatAssetsEditor.render_queue_tooltip')}><QuestionCircleOutlined/></Tooltip></Flex>,
+            title: <Flex gap="small">{t('PMatAssetsEditor.render_queue')} <Tooltip
+                title={t('PMatAssetsEditor.render_queue_tooltip')}><QuestionCircleOutlined/></Tooltip></Flex>,
             width: 140,
             render: (_: any, record: { asset: any; index: number }) => (
                 <NumberField width={120} value={record.asset?.renderQueue}
@@ -89,7 +91,8 @@ const PMatTable: React.FC<{ data: any; setData: (value: any) => void }> = ({data
             ),
         },
         {
-            title: <Flex gap="small">{t('PMatAssetsEditor.target_id')} <Tooltip title={t('PMatAssetsEditor.target_id_tooltip')}><QuestionCircleOutlined/></Tooltip></Flex>,
+            title: <Flex gap="small">{t('PMatAssetsEditor.target_id')} <Tooltip
+                title={t('PMatAssetsEditor.target_id_tooltip')}><QuestionCircleOutlined/></Tooltip></Flex>,
             width: 220,
             render: (_: any, record: { asset: any; index: number }) => (
                 <BigIntInput value={record.asset?.targetId}
@@ -105,7 +108,8 @@ const PMatTable: React.FC<{ data: any; setData: (value: any) => void }> = ({data
             ),
         },
         {
-            title: <Flex gap="small">{t('Common.version')} <Tooltip title={t('Common.version_tooltip')}><QuestionCircleOutlined/></Tooltip></Flex>,
+            title: <Flex gap="small">{t('Common.version')} <Tooltip
+                title={t('Common.version_tooltip')}><QuestionCircleOutlined/></Tooltip></Flex>,
             width: 100,
             render: (_: any, record: { asset: any; index: number }) => (
                 <NumberField width={80} precision={0} value={record.asset?.version}

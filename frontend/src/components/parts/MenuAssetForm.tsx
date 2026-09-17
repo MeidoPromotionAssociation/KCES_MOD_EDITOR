@@ -176,7 +176,7 @@ const MenuAssetForm: React.FC<{
                 <Row label={t('MenuAssetsEditor.toeLockSlotId')}>
                     <Flex gap="small">
                         <NullableStringInput value={asset.toeLockSlotId} onChange={(v) => set("toeLockSlotId", v)}/>
-                        <Tooltip  placement="left"  title={t('MenuAssetsEditor.toeLockSlotId_tooltip')}>
+                        <Tooltip placement="left" title={t('MenuAssetsEditor.toeLockSlotId_tooltip')}>
                             <QuestionCircleOutlined/>
                         </Tooltip>
                     </Flex>
@@ -185,7 +185,7 @@ const MenuAssetForm: React.FC<{
                     <Flex gap="small">
                         <NullableStringInput value={asset.exportModelFormTextureName}
                                              onChange={(v) => set("exportModelFormTextureName", v)}/>
-                        <Tooltip  placement="left"  title={t('MenuAssetsEditor.exportModelFormTextureName_tooltip')}>
+                        <Tooltip placement="left" title={t('MenuAssetsEditor.exportModelFormTextureName_tooltip')}>
                             <QuestionCircleOutlined/>
                         </Tooltip>
                     </Flex>
@@ -220,7 +220,7 @@ const MenuAssetForm: React.FC<{
                     <Row label={t('MenuAssetsEditor.icon_file_name')}>
                         <Flex gap="small">
                             <NullableStringInput value={asset.iconFileName} onChange={(v) => set("iconFileName", v)}/>
-                            <Tooltip  placement="left"  title={t('MenuAssetsEditor.icon_file_name_tooltip')}>
+                            <Tooltip placement="left" title={t('MenuAssetsEditor.icon_file_name_tooltip')}>
                                 <QuestionCircleOutlined/>
                             </Tooltip>
                         </Flex>
@@ -228,7 +228,7 @@ const MenuAssetForm: React.FC<{
                     <Row label={t('MenuAssetsEditor.info_text')}>
                         <Flex gap="small">
                             <NullableStringInput textarea value={asset.infoText} onChange={(v) => set("infoText", v)}/>
-                            <Tooltip  placement="left"  title={t('MenuAssetsEditor.info_text_tooltip')}>
+                            <Tooltip placement="left" title={t('MenuAssetsEditor.info_text_tooltip')}>
                                 <QuestionCircleOutlined/>
                             </Tooltip>
                         </Flex>

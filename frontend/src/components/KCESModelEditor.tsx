@@ -185,23 +185,24 @@ const KCESModelEditor = forwardRef<FormatEditorRef, Omit<BaseFormatEditorProps, 
                                             <Flex gap="small">
                                                 <NullableStringInput value={data?.meshFileName}
                                                                      onChange={(v) => set("meshFileName", v)}/>
-                                                <Tooltip  placement="left"  title={t('ModelEditor.mesh_file_name_tooltip')}>
+                                                <Tooltip placement="left"
+                                                         title={t('ModelEditor.mesh_file_name_tooltip')}>
                                                     <QuestionCircleOutlined/>
                                                 </Tooltip>
                                             </Flex>
                                         </Row>
                                         <Row label={t('ModelEditor.modelName')}>
                                             <Flex gap="small">
-                                            <NullableStringInput value={data?.modelName}
-                                                                 onChange={(v) => set("modelName", v)}/>
-                                                <Tooltip  placement="left"  title={t('ModelEditor.modelName_tooltip')}>
+                                                <NullableStringInput value={data?.modelName}
+                                                                     onChange={(v) => set("modelName", v)}/>
+                                                <Tooltip placement="left" title={t('ModelEditor.modelName_tooltip')}>
                                                     <QuestionCircleOutlined/>
                                                 </Tooltip>
                                             </Flex>
                                         </Row>
                                         <Row label={t('Common.id')}>
                                             <Flex gap="small">
-                                            <BigIntInput value={data?.id} onChange={(v) => set("id", v)}/>
+                                                <BigIntInput value={data?.id} onChange={(v) => set("id", v)}/>
                                                 <Tooltip title={t('ModelEditor.id_tooltip')}>
                                                     <QuestionCircleOutlined/>
                                                 </Tooltip>
@@ -209,8 +210,8 @@ const KCESModelEditor = forwardRef<FormatEditorRef, Omit<BaseFormatEditorProps, 
                                         </Row>
                                         <Row label={t('Common.version')}>
                                             <Flex gap="small">
-                                            <NumberField precision={0} value={data?.version}
-                                                         onChange={(v) => set("version", v)}/>
+                                                <NumberField precision={0} value={data?.version}
+                                                             onChange={(v) => set("version", v)}/>
                                                 <Tooltip title={t('Common.version_tooltip')}>
                                                     <QuestionCircleOutlined/>
                                                 </Tooltip>

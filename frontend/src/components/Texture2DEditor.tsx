@@ -347,58 +347,58 @@ const Texture2DEditor = forwardRef<FormatEditorRef, Texture2DEditorProps>((props
             )}
 
             <div style={{textAlign: "right"}}>
-            <Space wrap style={{marginBottom: 8}}>
-                <Tooltip title={filePath
-                    ? t('Texture2DEditor.quick_export_tip', {path: getFileName(quickTarget)})
-                    : t('Texture2DEditor.quick_export_hint')}>
-                    <Button type="primary" icon={<ThunderboltOutlined/>}
-                            disabled={!filePath || (!openedImage && !canExport)}
-                            onClick={handleQuickExport}>
-                        {t('Texture2DEditor.quick_export')}
+                <Space wrap style={{marginBottom: 8}}>
+                    <Tooltip title={filePath
+                        ? t('Texture2DEditor.quick_export_tip', {path: getFileName(quickTarget)})
+                        : t('Texture2DEditor.quick_export_hint')}>
+                        <Button type="primary" icon={<ThunderboltOutlined/>}
+                                disabled={!filePath || (!openedImage && !canExport)}
+                                onClick={handleQuickExport}>
+                            {t('Texture2DEditor.quick_export')}
+                        </Button>
+                    </Tooltip>
+                    <Tooltip title={t('Texture2DEditor.pick_image_tip')}>
+                        <Button icon={<FileImageOutlined/>} onClick={handlePickImage}>
+                            {t('Texture2DEditor.pick_image')}
+                        </Button>
+                    </Tooltip>
+                    <Tooltip title={t('Texture2DEditor.write_back_tip')}>
+                        <Button icon={<SaveOutlined/>} disabled={!pendingImage || openedImage}
+                                onClick={handleWriteBack}>
+                            {t('Texture2DEditor.write_back')}
+                        </Button>
+                    </Tooltip>
+                    <Tooltip title={t('Texture2DEditor.export_format_tip')}>
+                        <Radio.Group
+                            size="small"
+                            optionType="button"
+                            buttonStyle="solid"
+                            value={exportFormat}
+                            options={[{label: "PNG", value: "png"}, {label: "DDS", value: "dds"}]}
+                            onChange={(e) => {
+                                setExportFormat(e.target.value);
+                                localStorage.setItem(Texture2DExportFormatKey, e.target.value);
+                            }}
+                        />
+                    </Tooltip>
+                    <Button icon={<ExportOutlined/>} disabled={!canExport} onClick={handleExportImage}>
+                        {t('Texture2DEditor.export_image')}
                     </Button>
-                </Tooltip>
-                <Tooltip title={t('Texture2DEditor.pick_image_tip')}>
-                    <Button icon={<FileImageOutlined/>} onClick={handlePickImage}>
-                        {t('Texture2DEditor.pick_image')}
-                    </Button>
-                </Tooltip>
-                <Tooltip title={t('Texture2DEditor.write_back_tip')}>
-                    <Button icon={<SaveOutlined/>} disabled={!pendingImage || openedImage}
-                            onClick={handleWriteBack}>
-                        {t('Texture2DEditor.write_back')}
-                    </Button>
-                </Tooltip>
-                <Tooltip title={t('Texture2DEditor.export_format_tip')}>
-                    <Radio.Group
-                        size="small"
-                        optionType="button"
-                        buttonStyle="solid"
-                        value={exportFormat}
-                        options={[{label: "PNG", value: "png"}, {label: "DDS", value: "dds"}]}
-                        onChange={(e) => {
-                            setExportFormat(e.target.value);
-                            localStorage.setItem(Texture2DExportFormatKey, e.target.value);
+                    <Button
+                        icon={<ReloadOutlined/>}
+                        disabled={!filePath}
+                        onClick={() => {
+                            setPendingImage(isSourceImage(filePath ?? "") ? filePath : null);
+                            void loadFile(filePath);
                         }}
-                    />
-                </Tooltip>
-                <Button icon={<ExportOutlined/>} disabled={!canExport} onClick={handleExportImage}>
-                    {t('Texture2DEditor.export_image')}
-                </Button>
-                <Button
-                    icon={<ReloadOutlined/>}
-                    disabled={!filePath}
-                    onClick={() => {
-                        setPendingImage(isSourceImage(filePath ?? "") ? filePath : null);
-                        void loadFile(filePath);
-                    }}
-                >
-                    {t('Texture2DEditor.reload')}
-                </Button>
-                {/* 「选择替换图像」这类按钮光看名字看不出用途，用途说明挂在这个问号上 */}
-                <Tooltip placement="left" title={<div style={{maxWidth: 420}}>{t('Texture2DEditor.usage')}</div>}>
-                    <QuestionCircleOutlined style={{color: token.colorTextDescription, cursor: "help"}}/>
-                </Tooltip>
-            </Space>
+                    >
+                        {t('Texture2DEditor.reload')}
+                    </Button>
+                    {/* 「选择替换图像」这类按钮光看名字看不出用途，用途说明挂在这个问号上 */}
+                    <Tooltip placement="left" title={<div style={{maxWidth: 420}}>{t('Texture2DEditor.usage')}</div>}>
+                        <QuestionCircleOutlined style={{color: token.colorTextDescription, cursor: "help"}}/>
+                    </Tooltip>
+                </Space>
             </div>
 
             {pendingImage && (
