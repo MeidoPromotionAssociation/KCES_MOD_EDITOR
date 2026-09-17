@@ -8,6 +8,7 @@ import {DragDropProvider} from "@dnd-kit/react";
 import {isSortable, useSortable} from "@dnd-kit/react/sortable";
 import {SortableKeyboardPlugin} from "@dnd-kit/dom/sortable";
 import {csvColumnCount} from "../../utils/csv";
+import {arrayMove} from "../../utils/utils";
 
 /**
  * NeiTableEditor .nei 表格视图
@@ -32,13 +33,6 @@ const HeaderHeight = 38; // 表头行高
  * 所以只保留键盘排序插件，落点预览改由下方 DropIndicator 自己画。
  */
 const SortablePlugins = [SortableKeyboardPlugin];
-
-/** 把 from 处的元素移到 to，语义与 @dnd-kit/helpers 的 move() 对无 id 数组的处理一致 */
-function arrayMove<T>(list: T[], from: number, to: number): T[] {
-    const next = list.slice();
-    next.splice(to, 0, next.splice(from, 1)[0]);
-    return next;
-}
 
 interface NeiRowProps {
     rowIndex: number;

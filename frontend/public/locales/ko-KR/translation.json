@@ -623,7 +623,21 @@
     "metadata": "모델 메타데이터",
     "add_material": "머티리얼 추가",
     "data_stats": "데이터 통계",
-    "mesh_data_hint": "본 변환·모프·스킨 두께 등 메시 데이터는 JSON 모드에서 편집하세요"
+    "mesh_data_hint": "본 변환·모프·스킨 두께 등 메시 데이터는 JSON 모드에서 편집하세요",
+    "modelName": "모델 이름",
+    "shadowModeFlags": "그림자 투영 방식",
+    "material_file_name": "머티리얼 파일 이름",
+    "drag_material": "끌어서 머티리얼 순서 변경",
+    "file_name_tooltip": "fileName 로딩 시에는 전혀 읽지 않으며 GameObject 이름과 일부 자동 생성 본 이름에만 사용됩니다. .model 확장자가 필요합니다",
+    "mesh_file_name": "mesh 파일 이름",
+    "mesh_file_name_tooltip": "meshFileName 메시 리소스 이름. KCES model에는 메시 데이터가 없으므로 여기서 해당 메시 파일을 읽습니다. .mmesh 또는 .kcmodel 확장자가 필요합니다",
+    "modelName_tooltip": "modelName transData[]에서 SkinnedMeshRenderer 부착점이 되는 노드의 이름. transData의 name 중 하나와 정확히 일치해야 하며, 일치하지 않으면 게임이 충돌합니다. 이름에 콜론(:)은 사용할 수 없습니다",
+    "shadowModeFlags_tooltip": "shadowModeFlags 그림자 투영 방식 0=Default 기본, 1=CastShadow 그림자 투영, 2=NoCastShadow 그림자 투영 안 함",
+    "shadow_mode_default": "기본값 유지",
+    "shadow_mode_cast_shadow": "그림자 투영",
+    "shadow_mode_no_cast_shadow": "그림자 투영 안 함",
+    "material_file_name_tooltip": "materialFileName 로드할 mate 파일 이름으로 .mate 확장자가 필요합니다. 순서가 subMesh와 대응하므로 임의로 바꾸지 마세요. KCES model에는 머티리얼 데이터가 없으므로 mate 파일이 반드시 필요합니다",
+    "id_tooltip": "id 파일 이름의 FNV-1a 해시값이지만, model의 id는 게임에서 사용되지 않습니다"
   },
   "PskEditor": {
     "panier_params": "파니에 파라미터",

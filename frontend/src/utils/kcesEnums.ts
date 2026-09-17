@@ -404,6 +404,9 @@ export const PartHideTypeNames: string[] = ["TYPE_SLOT_VISIBLE", "TYPE_BONE_WEIG
 /** TMorphSkin.BaseBlendValue.Tag，meshmorph 的第一参数；MAX 是哨兵不列入 */
 export const MeshMorphTagNames: string[] = ["パンツ", "靴下"];
 
+/** Model.ShadowMode（Parts/Model.cs:170），model 的 shadowModeFlags 字段；游戏用 HasFlag 判断，取值互斥 */
+export const ShadowModeNames: string[] = ["Default", "CastShadow", "NoCastShadow"];
+
 /** Menu.DEFINE（Menu.cs:595）[Flags] ulong，defineTagNames 为各标签按位或，也用于 ifdef / elseifdef 的 DEFINE 条件 */
 export const MenuDefineNames: string[] = ["NONE", "COLOR_MAMA", "COLOR_MUGEN", "COLOR_BUBUN", "COLOR_GRADA"];
 

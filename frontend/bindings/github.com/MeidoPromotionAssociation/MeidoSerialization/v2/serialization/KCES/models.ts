@@ -5709,12 +5709,12 @@ export class Material {
     "floatProps": (FloatProp | null)[];
 
     /**
-     * 可空着色器关键字属性对象数组 / Array of nullable shader-keyword property objects
+     * 可空着色器关键字属性对象数组 KCES2 新增 / Array of nullable shader-keyword property objects
      */
     "keywordProps": (KeywordProp | null)[];
 
     /**
-     * Unity 渲染队列 / Unity render queue
+     * Unity 渲染队列 KCES2 新增  / Unity render queue
      */
     "renderQueue": number;
 

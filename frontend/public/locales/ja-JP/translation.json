@@ -623,7 +623,21 @@
     "metadata": "モデルメタデータ",
     "add_material": "マテリアルを追加",
     "data_stats": "データ統計",
-    "mesh_data_hint": "ボーン変換・モーフ・スキン厚などのメッシュデータは JSON モードで編集してください"
+    "mesh_data_hint": "ボーン変換・モーフ・スキン厚などのメッシュデータは JSON モードで編集してください",
+    "modelName": "モデル名",
+    "shadowModeFlags": "シャドウ投射方式",
+    "material_file_name": "マテリアルファイル名",
+    "drag_material": "ドラッグしてマテリアルの順序を変更",
+    "file_name_tooltip": "fileName 読み込み時には一切参照されず、GameObject の名前といくつかの自動生成ボーンの名前にのみ使われます。.model 拡張子が必要です",
+    "mesh_file_name": "mesh ファイル名",
+    "mesh_file_name_tooltip": "meshFileName メッシュリソース名。KCES の model はメッシュデータを含まないため、ここで対応するメッシュファイルを読み込みます。.mmesh または .kcmodel 拡張子が必要です",
+    "modelName_tooltip": "modelName transData[] の中で SkinnedMeshRenderer のアタッチポイントとなるノードの名前。transData のいずれかの name に完全一致しないとゲームがクラッシュします。名前にコロン : は使えません",
+    "shadowModeFlags_tooltip": "shadowModeFlags 影の投射方式 0=Default 既定, 1=CastShadow 影を落とす, 2=NoCastShadow 影を落とさない",
+    "shadow_mode_default": "既定のまま",
+    "shadow_mode_cast_shadow": "影を落とす",
+    "shadow_mode_no_cast_shadow": "影を落とさない",
+    "material_file_name_tooltip": "materialFileName 読み込む mate ファイル名。.mate 拡張子が必要で、順序は subMesh に対応するため勝手に変更しないでください。KCES の model はマテリアルデータを含まないため、mate ファイルが必須です",
+    "id_tooltip": "id ファイル名の FNV-1a ハッシュ値ですが、model の id はゲームでは使用されません"
   },
   "PskEditor": {
     "panier_params": "パニエパラメータ",

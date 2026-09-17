@@ -623,7 +623,21 @@
     "metadata": "模型元数据",
     "add_material": "添加材质",
     "data_stats": "数据统计",
-    "mesh_data_hint": "骨骼变换、变形与皮肤厚度等网格级数据请使用 JSON 模式编辑"
+    "mesh_data_hint": "骨骼变换、变形与皮肤厚度等网格级数据请使用 JSON 模式编辑",
+    "modelName": "模型名",
+    "shadowModeFlags": "阴影投射方式",
+    "material_file_name": "材质文件名",
+    "drag_material": "拖动调整材质顺序",
+    "file_name_tooltip": "fileName 加载时完全不读它，只用于 GameObject 命名以及一些自生成动骨骼的名字，需要带 .model 扩展名",
+    "mesh_file_name": "mesh 文件名",
+    "mesh_file_name_tooltip": "meshFileName 网格资源名，KCES 的 model 不含网格数据，这里读取对应的网格文件，必须带扩展名 .mmesh 或 .kcmodel",
+    "modelName_tooltip": "modelName  transData[] 里作为 SkinnedMeshRenderer 挂载点的那个节点的名字，必须精确命中 transData 的某个 name，没有则游戏崩溃，名称不可包含 : 冒号",
+    "shadowModeFlags_tooltip": "shadowModeFlags 阴影投射方式 0=Default 默认, 1=CastShadow 投射阴影, 2=NoCastShadow 不投射阴影",
+    "shadow_mode_default": "跟随默认",
+    "shadow_mode_cast_shadow": "投射阴影",
+    "shadow_mode_no_cast_shadow": "不投射阴影",
+    "material_file_name_tooltip": "materialFileName 要加载的 mate 文件名，需要带 .mate 后缀，顺序和 subMesh 对应，不应该随意更改；KCES 的 model 不含材质数据，必须使用 mate 文件",
+    "id_tooltip": "id 文件名的 FNV-1a 哈希值，但是 model 的 id 没有被游戏使用"
   },
   "PskEditor": {
     "panier_params": "裙撑参数",

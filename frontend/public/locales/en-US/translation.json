@@ -623,7 +623,21 @@
     "metadata": "Model Metadata",
     "add_material": "Add Material",
     "data_stats": "Data Stats",
-    "mesh_data_hint": "Edit mesh-level data (bone transforms, morphs, skin thickness) in JSON mode"
+    "mesh_data_hint": "Edit mesh-level data (bone transforms, morphs, skin thickness) in JSON mode",
+    "modelName": "Model Name",
+    "shadowModeFlags": "Shadow Mode",
+    "material_file_name": "Material file name",
+    "drag_material": "Drag to reorder materials",
+    "file_name_tooltip": "fileName — never read when loading; used only for the GameObject name and some auto-generated bone names. Must carry the .model extension.",
+    "mesh_file_name": "Mesh file name",
+    "mesh_file_name_tooltip": "meshFileName — the mesh resource name. A KCES model contains no mesh data; the loader reads the referenced mesh file here. Must carry the .mmesh or .kcmodel extension.",
+    "modelName_tooltip": "modelName — the name of the node that serves as the SkinnedMeshRenderer attach point among transData[]. It must exactly match one of the transData names, or the game crashes. The name cannot contain a colon (:).",
+    "shadowModeFlags_tooltip": "shadowModeFlags — shadow casting mode: 0=Default, 1=CastShadow, 2=NoCastShadow",
+    "shadow_mode_default": "Default",
+    "shadow_mode_cast_shadow": "Cast Shadow",
+    "shadow_mode_no_cast_shadow": "No Cast Shadow",
+    "material_file_name_tooltip": "materialFileName — the .mate file names to load, with the .mate suffix. The order corresponds to the sub-meshes and should not be changed casually. A KCES model contains no material data, so .mate files are required.",
+    "id_tooltip": "id — the FNV-1a hash of the file name, but a model's id is not used by the game."
   },
   "PskEditor": {
     "panier_params": "Panier Parameters",
