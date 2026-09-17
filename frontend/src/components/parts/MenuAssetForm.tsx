@@ -176,7 +176,7 @@ const MenuAssetForm: React.FC<{
                 <Row label={t('MenuAssetsEditor.toeLockSlotId')}>
                     <Flex gap="small">
                         <NullableStringInput value={asset.toeLockSlotId} onChange={(v) => set("toeLockSlotId", v)}/>
-                        <Tooltip title={t('MenuAssetsEditor.toeLockSlotId_tooltip')}>
+                        <Tooltip  placement="left"  title={t('MenuAssetsEditor.toeLockSlotId_tooltip')}>
                             <QuestionCircleOutlined/>
                         </Tooltip>
                     </Flex>
@@ -185,7 +185,7 @@ const MenuAssetForm: React.FC<{
                     <Flex gap="small">
                         <NullableStringInput value={asset.exportModelFormTextureName}
                                              onChange={(v) => set("exportModelFormTextureName", v)}/>
-                        <Tooltip title={t('MenuAssetsEditor.exportModelFormTextureName_tooltip')}>
+                        <Tooltip  placement="left"  title={t('MenuAssetsEditor.exportModelFormTextureName_tooltip')}>
                             <QuestionCircleOutlined/>
                         </Tooltip>
                     </Flex>
@@ -204,7 +204,7 @@ const MenuAssetForm: React.FC<{
                     <Row label={t('Common.file_name')}>
                         <Flex gap="small">
                             <NullableStringInput value={asset.fileName} onChange={(v) => set("fileName", v)}/>
-                            <Tooltip title={t('Common.file_name_tooltip')}>
+                            <Tooltip placement="left" title={t('Common.file_name_tooltip')}>
                                 <QuestionCircleOutlined/>
                             </Tooltip>
                         </Flex>
@@ -212,7 +212,7 @@ const MenuAssetForm: React.FC<{
                     <Row label={t('MenuAssetsEditor.item_name')}>
                         <Flex gap="small">
                             <NullableStringInput value={asset.itemName} onChange={(v) => set("itemName", v)}/>
-                            <Tooltip title={t('MenuAssetsEditor.item_name_tooltip')}>
+                            <Tooltip placement="left" title={t('MenuAssetsEditor.item_name_tooltip')}>
                                 <QuestionCircleOutlined/>
                             </Tooltip>
                         </Flex>
@@ -220,7 +220,7 @@ const MenuAssetForm: React.FC<{
                     <Row label={t('MenuAssetsEditor.icon_file_name')}>
                         <Flex gap="small">
                             <NullableStringInput value={asset.iconFileName} onChange={(v) => set("iconFileName", v)}/>
-                            <Tooltip title={t('MenuAssetsEditor.icon_file_name_tooltip')}>
+                            <Tooltip  placement="left"  title={t('MenuAssetsEditor.icon_file_name_tooltip')}>
                                 <QuestionCircleOutlined/>
                             </Tooltip>
                         </Flex>
@@ -228,7 +228,7 @@ const MenuAssetForm: React.FC<{
                     <Row label={t('MenuAssetsEditor.info_text')}>
                         <Flex gap="small">
                             <NullableStringInput textarea value={asset.infoText} onChange={(v) => set("infoText", v)}/>
-                            <Tooltip title={t('MenuAssetsEditor.info_text_tooltip')}>
+                            <Tooltip  placement="left"  title={t('MenuAssetsEditor.info_text_tooltip')}>
                                 <QuestionCircleOutlined/>
                             </Tooltip>
                         </Flex>
