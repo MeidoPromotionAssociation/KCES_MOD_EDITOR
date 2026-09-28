@@ -60,15 +60,19 @@ export const NumberField: React.FC<{
     step?: number;
     precision?: number;
     width?: number;
+    min?: number;
+    max?: number;
     disabled?: boolean;
     tooltip?: React.ReactNode;
-}> = ({value, onChange, step, precision, width, disabled, tooltip}) => {
+}> = ({value, onChange, step, precision, width, min, max, disabled, tooltip}) => {
     const control = (
         <InputNumber
             style={{width: width ?? 250}}
             value={value}
             step={step}
             precision={precision}
+            min={min}
+            max={max}
             disabled={disabled}
             onChange={(newValue) => onChange((newValue ?? 0) as number)}
         />

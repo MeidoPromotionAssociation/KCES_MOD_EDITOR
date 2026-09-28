@@ -1,6 +1,6 @@
 import React from "react";
-import {Button, Collapse, InputNumber, Select, Space, Switch, Table, Typography} from "antd";
-import {DeleteOutlined, PlusOutlined} from "@ant-design/icons";
+import {Button, Collapse, Flex, InputNumber, Select, Space, Switch, Table, Tooltip, Typography} from "antd";
+import {DeleteOutlined, PlusOutlined, QuestionCircleOutlined} from "@ant-design/icons";
 import {useTranslation} from "react-i18next";
 import {NullableStringInput, NumberField, Row} from "../parts/formControls";
 import JsonObjectForm from "../common/JsonObjectForm";
@@ -9,14 +9,32 @@ import JsonObjectForm from "../common/JsonObjectForm";
  * 碰撞体载荷表单（dbcol/dslcol/ikcol/ikcol.bytes/limbcol）
  * 对标 COM3D2 ColEditor 的 Style1：碰撞体列表 + 按类型的专用字段编辑
  * union 类型：0=Plane, 1=Capsule, 2=Sphere, 3=MaidProp（对应游戏 ANativeColliderStatus 的 Union 标记）
+ * 字段语义 / 默认值 / 枚举以游戏源码 kt.Physics.*ColliderStatus 为准
  */
 
-const ColliderTypeNames: Record<number, string> = {
-    0: "Plane",
-    1: "Capsule",
-    2: "Sphere",
-    3: "MaidProp",
+// 碰撞体类型的 i18n 标签键（选项 value 保持数字枚举，展示用翻译名 + 编号）
+const ColliderTypeLabelKeys: Record<number, string> = {
+    0: "ColliderEditor.type_plane",
+    1: "ColliderEditor.type_capsule",
+    2: "ColliderEditor.type_sphere",
+    3: "ColliderEditor.type_maidprop",
 };
+
+// 标签行 + 控件 + 右侧问号 tooltip；定义在组件外，避免每次渲染都生成新组件类型导致输入失焦
+const LabeledRow: React.FC<{ label: string; tip: React.ReactNode; children: React.ReactNode }> = ({
+                                                                                                      label,
+                                                                                                      tip,
+                                                                                                      children
+                                                                                                  }) => (
+    <Row label={label}>
+        <Flex gap="small" align="center">
+            {children}
+            <Tooltip placement="left" title={tip}>
+                <QuestionCircleOutlined/>
+            </Tooltip>
+        </Flex>
+    </Row>
+);
 
 // 各类型的新建模板（按游戏构造默认值）
 function newCollider(type: number): any {
@@ -31,22 +49,22 @@ function newCollider(type: number): any {
         bound: 0,
     };
     switch (type) {
-        case 0:
+        case 0: // Plane
             return {...base, direction: 1, isDirectionInverse: false};
-        case 2:
-            return {...base, radius: 0.1};
-        case 3:
+        case 2: // Sphere
+            return {...base, radius: 0.5};
+        case 3: // MaidProp（继承 Capsule，FixVersion 为 1002）
             return {
-                ...base, direction: 0, isDirectionInverse: false,
-                startRadius: 0.1, endRadius: 0.1, height: 0.2,
+                ...base, version: 1002, direction: 1, isDirectionInverse: false,
+                startRadius: 0.5, endRadius: 0.5, height: 0,
                 centerMpnList: [], centerRateMax: {x: 0, y: 0, z: 0},
                 startRadiusMpnList: [], maxStartRadius: 1,
                 endRadiusMpnList: [], maxEndRadius: 1,
                 centerMpnNameList: [], startRadiusMpnNameList: [], endRadiusMpnNameList: [],
             };
-        case 1:
+        case 1: // Capsule
         default:
-            return {...base, direction: 0, isDirectionInverse: false, startRadius: 0.1, endRadius: 0.1, height: 0.2};
+            return {...base, direction: 1, isDirectionInverse: false, startRadius: 0.5, endRadius: 0.5, height: 0};
     }
 }
 
@@ -86,78 +104,100 @@ export const ColliderFields: React.FC<{
 
     return (
         <div>
-            <Row label="parentName">
+            <LabeledRow label={t('ColliderEditor.parentName')} tip={t('ColliderEditor.parentName_tip')}>
                 <NullableStringInput value={collider.parentName} onChange={(v) => set("parentName", v)}/>
-            </Row>
-            <Row label="selfName">
+            </LabeledRow>
+            <LabeledRow label={t('ColliderEditor.selfName')} tip={t('ColliderEditor.selfName_tip')}>
                 <NullableStringInput value={collider.selfName} onChange={(v) => set("selfName", v)}/>
-            </Row>
-            <Row label="localPosition">
+            </LabeledRow>
+            <LabeledRow label={t('ColliderEditor.localPosition')} tip={t('ColliderEditor.localPosition_tip')}>
                 <VectorFields value={collider.localPosition} axes={["x", "y", "z"]}
                               onChange={(v) => set("localPosition", v)}/>
-            </Row>
-            <Row label="localRotation">
+            </LabeledRow>
+            <LabeledRow label={t('ColliderEditor.localRotation')} tip={t('ColliderEditor.localRotation_tip')}>
                 <VectorFields value={collider.localRotation} axes={["x", "y", "z", "w"]}
                               onChange={(v) => set("localRotation", v)}/>
-            </Row>
-            <Row label="localScale">
+            </LabeledRow>
+            <LabeledRow label={t('ColliderEditor.localScale')} tip={t('ColliderEditor.localScale_tip')}>
                 <VectorFields value={collider.localScale} axes={["x", "y", "z"]}
                               onChange={(v) => set("localScale", v)}/>
-            </Row>
-            <Row label="center">
+            </LabeledRow>
+            <LabeledRow label={t('ColliderEditor.center')} tip={t('ColliderEditor.center_tip')}>
                 <VectorFields value={collider.center} axes={["x", "y", "z"]}
                               onChange={(v) => set("center", v)}/>
-            </Row>
-            <Row label={t('ColliderEditor.bound')}>
+            </LabeledRow>
+            <LabeledRow label={t('ColliderEditor.bound')} tip={t('ColliderEditor.bound_tip')}>
                 <Select
                     size="small"
                     style={{width: 160}}
                     value={collider.bound ?? 0}
-                    options={[{label: "Outside (0)", value: 0}, {label: "Inside (1)", value: 1}]}
+                    options={[
+                        {label: t('ColliderEditor.bound_outside'), value: 0},
+                        {label: t('ColliderEditor.bound_inside'), value: 1},
+                    ]}
                     onChange={(v) => set("bound", v)}
                 />
-            </Row>
-            <Row label="version">
+            </LabeledRow>
+            <LabeledRow label={t('ColliderEditor.version')} tip={t('ColliderEditor.version_tip')}>
                 <NumberField precision={0} value={collider.version} onChange={(v) => set("version", v)}/>
-            </Row>
+            </LabeledRow>
 
             {(type === 0 || type === 1 || type === 3) && (
-                <Row label="direction">
-                    <Space>
-                        <NumberField precision={0} width={90} value={collider.direction}
-                                     onChange={(v) => set("direction", v)}/>
-                        <span>isDirectionInverse</span>
+                <>
+                    <LabeledRow label={t('ColliderEditor.direction')} tip={t('ColliderEditor.direction_tip')}>
+                        <Select
+                            size="small"
+                            style={{width: 160}}
+                            value={collider.direction ?? 1}
+                            options={[
+                                {label: t('ColliderEditor.direction_x'), value: 0},
+                                {label: t('ColliderEditor.direction_y'), value: 1},
+                                {label: t('ColliderEditor.direction_z'), value: 2},
+                            ]}
+                            onChange={(v) => set("direction", v)}
+                        />
+                    </LabeledRow>
+                    <LabeledRow label={t('ColliderEditor.isDirectionInverse')}
+                                tip={t('ColliderEditor.isDirectionInverse_tip')}>
                         <Switch size="small" checked={!!collider.isDirectionInverse}
                                 onChange={(checked) => set("isDirectionInverse", checked)}/>
-                    </Space>
-                </Row>
+                    </LabeledRow>
+                </>
             )}
             {(type === 1 || type === 3) && (
-                <Row label={t('ColliderEditor.capsule_size')}>
-                    <Space size={4} wrap>
-                        <InputNumber size="small" style={{width: 130}} step={0.01} prefix="start"
-                                     value={collider.startRadius}
-                                     onChange={(v) => set("startRadius", (v ?? 0) as number)}/>
-                        <InputNumber size="small" style={{width: 130}} step={0.01} prefix="end"
-                                     value={collider.endRadius}
-                                     onChange={(v) => set("endRadius", (v ?? 0) as number)}/>
-                        <InputNumber size="small" style={{width: 140}} step={0.01} prefix="height"
-                                     value={collider.height}
-                                     onChange={(v) => set("height", (v ?? 0) as number)}/>
-                    </Space>
-                </Row>
+                <>
+                    <LabeledRow label={t('ColliderEditor.startRadius')} tip={t('ColliderEditor.startRadius_tip')}>
+                        <NumberField step={0.01} value={collider.startRadius}
+                                     onChange={(v) => set("startRadius", v)}/>
+                    </LabeledRow>
+                    <LabeledRow label={t('ColliderEditor.endRadius')} tip={t('ColliderEditor.endRadius_tip')}>
+                        <NumberField step={0.01} value={collider.endRadius}
+                                     onChange={(v) => set("endRadius", v)}/>
+                    </LabeledRow>
+                    <LabeledRow label={t('ColliderEditor.height')} tip={t('ColliderEditor.height_tip')}>
+                        <NumberField step={0.01} value={collider.height}
+                                     onChange={(v) => set("height", v)}/>
+                    </LabeledRow>
+                </>
             )}
             {type === 2 && (
-                <Row label="radius">
+                <LabeledRow label={t('ColliderEditor.radius')} tip={t('ColliderEditor.radius_tip')}>
                     <NumberField step={0.01} value={collider.radius} onChange={(v) => set("radius", v)}/>
-                </Row>
+                </LabeledRow>
             )}
             {type === 3 && (
                 <Collapse
                     size="small"
                     items={[{
                         key: "maidprop",
-                        label: t('ColliderEditor.maidprop_extras'),
+                        label: (
+                            <Space>
+                                {t('ColliderEditor.maidprop_extras')}
+                                <Tooltip title={t('ColliderEditor.maidprop_extras_tip')}>
+                                    <QuestionCircleOutlined/>
+                                </Tooltip>
+                            </Space>
+                        ),
                         children: (
                             <JsonObjectForm
                                 value={Object.fromEntries(maidPropExtras.map((key) => [key, collider[key] ?? null]))}
@@ -185,7 +225,7 @@ export const ColliderRefList: React.FC<{
         label: (
             <Space>
                 <Typography.Text strong>
-                    {ColliderTypeNames[ref?.type] ?? `#${ref?.type}`}
+                    {ColliderTypeLabelKeys[ref?.type] ? t(ColliderTypeLabelKeys[ref?.type]) : `#${ref?.type}`}
                 </Typography.Text>
                 <Typography.Text type="secondary">
                     {ref?.collider?.selfName || ref?.collider?.parentName || `#${index}`}
@@ -219,10 +259,10 @@ export const ColliderRefList: React.FC<{
             <Space style={{marginBottom: 8}}>
                 <Select
                     size="small"
-                    style={{width: 140}}
+                    style={{width: 200}}
                     value={addType}
-                    options={Object.entries(ColliderTypeNames).map(([value, label]) => ({
-                        label: `${label} (${value})`,
+                    options={Object.keys(ColliderTypeLabelKeys).map((value) => ({
+                        label: t(ColliderTypeLabelKeys[Number(value)]),
                         value: Number(value),
                     }))}
                     onChange={setAddType}
@@ -261,18 +301,18 @@ export const ColliderPackageForm: React.FC<{
 
     return (
         <div style={{textAlign: "left"}}>
-            <Row label="version">
+            <LabeledRow label={t('ColliderEditor.version')} tip={t('ColliderEditor.version_tip')}>
                 <NumberField precision={0} value={value?.version} onChange={(v) => set("version", v)}/>
-            </Row>
+            </LabeledRow>
             <Typography.Title level={5} style={{textAlign: "left"}}>
-                colliders ({(value?.colliders ?? []).length})
+                {t('ColliderEditor.colliders_title', {count: (value?.colliders ?? []).length})}
             </Typography.Title>
             <ColliderRefList colliders={value?.colliders ?? []} onChange={(next) => set("colliders", next)}/>
 
             {value?.limbEnableList !== undefined && value?.limbEnableList !== null && (
                 <>
                     <Typography.Title level={5} style={{textAlign: "left", marginTop: 12}}>
-                        limbEnableList ({limbStates.length})
+                        {t('ColliderEditor.limb_enable_list_title', {count: limbStates.length})}
                     </Typography.Title>
                     <Table
                         size="small"
@@ -283,7 +323,14 @@ export const ColliderPackageForm: React.FC<{
                         dataSource={limbStates.map((_, index) => ({__rowKey: index}))}
                         columns={[
                             {
-                                title: "limbType",
+                                title: (
+                                    <Space>
+                                        {t('ColliderEditor.limbType')}
+                                        <Tooltip title={t('ColliderEditor.limbType_tip')}>
+                                            <QuestionCircleOutlined/>
+                                        </Tooltip>
+                                    </Space>
+                                ),
                                 width: 120,
                                 render: (_: any, __: any, index: number) => (
                                     <InputNumber size="small" precision={0} value={limbStates[index]?.limbType}
@@ -291,7 +338,7 @@ export const ColliderPackageForm: React.FC<{
                                 ),
                             },
                             {
-                                title: "isEnable",
+                                title: t('ColliderEditor.isEnable'),
                                 width: 100,
                                 render: (_: any, __: any, index: number) => (
                                     <Switch size="small" checked={!!limbStates[index]?.isEnable}
@@ -299,7 +346,7 @@ export const ColliderPackageForm: React.FC<{
                                 ),
                             },
                             {
-                                title: "version",
+                                title: t('ColliderEditor.version'),
                                 width: 110,
                                 render: (_: any, __: any, index: number) => (
                                     <InputNumber size="small" precision={0} value={limbStates[index]?.version}
