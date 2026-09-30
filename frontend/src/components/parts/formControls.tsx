@@ -133,8 +133,10 @@ export const EnumAutoComplete: React.FC<{
     labelOf?: (name: string) => string | null;
     onChange: (value: number) => void;
     width?: number;
-}> = ({value, names, labelOf, onChange, width}) => {
-    const nameOf = (v: number | undefined) => (v === undefined ? "" : names[v] ?? "");
+    size?: "small" | "medium" | "large";
+}> = ({value, names, labelOf, onChange, width, size}) => {
+    // 枚举外的编号原样显示数字：文件里已有的值不能被藏成空白，否则用户看不出它是什么
+    const nameOf = (v: number | undefined) => (v === undefined ? "" : names[v] ?? String(v));
     const [text, setText] = React.useState(nameOf(value));
 
     React.useEffect(() => {
@@ -144,6 +146,7 @@ export const EnumAutoComplete: React.FC<{
     return (
         <AutoComplete
             style={{width: width ?? 250}}
+            size={size}
             allowClear
             value={text}
             options={names.map((name, idx) => {

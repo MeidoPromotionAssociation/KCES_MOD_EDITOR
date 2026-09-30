@@ -441,6 +441,26 @@ export const MenuHaraYureLimitTypeNames: string[] = ["None", "YureAvailable", "Y
 /** bonemorph 的 9 参数形式的类型标记（PartsMenuManager.cs:1310-1360，比较前会 ToLower） */
 export const BoneMorphTypeNames: string[] = ["pos", "rot", "scl"];
 
+/* ==========================================================================
+ *  碰撞体（dbcol / dslcol / limbcol / ikcol）相关枚举
+ * ========================================================================== */
+
+/**
+ * LimbColliderMgr.LimbType（LimbColliderMgr.cs:206-216），下标即枚举值。
+ * 游戏侧 DynamicYureBone.InitLimbColiders 按 Enum.GetValues 顺序给每个肢体各建一个碰撞体，
+ * 再整体存进 limbEnableList，所以真实文件里的 limbType 只会是这 8 个值。
+ */
+export const LimbTypeNames: string[] = [
+    "UpperArm_L", // 0
+    "Forearm_L",  // 1
+    "UpperArm_R", // 2
+    "Forearm_R",  // 3
+    "Thigh_L",    // 4
+    "Calf_L",     // 5
+    "Thigh_R",    // 6
+    "Calf_R",     // 7
+];
+
 
 export enum MPN {
     null_mpn = 0,
@@ -784,3 +804,25 @@ export const MPNOptionsWithId = Object.entries(MPN)
         value: name,
         label: `${name} (${val})`,
     }));
+
+/**
+ * MPN 枚举值 → 名称
+ *
+ * 未知值返回纯数字字符串，与游戏侧 `mpn.ToString()` 的写法一致——碰撞体的
+ * `*MpnNameList` 是游戏用 ToString() 生成的，而游戏加载时用 `Enum.TryParse` 反解，
+ * 写成 `#9` 这种带修饰的形式会解析失败并被静默丢弃。
+ */
+export function mpnName(value: number): string {
+    return (MPN as Record<number, string | undefined>)[value] ?? String(value);
+}
+
+/** MPN 名称 → 枚举值；不是已知枚举名时返回 null */
+export function mpnValue(name: string): number | null {
+    const value = (MPN as Record<string, unknown>)[name];
+    return typeof value === "number" ? value : null;
+}
+
+/** MPN 多选控件用的选项（值是枚举编号，标签是名字 + 编号） */
+export const MPNNumberOptions: Array<{ value: number; label: string }> = MPNOptionsWithId
+    .map((option) => ({value: mpnValue(option.value), label: option.label}))
+    .filter((option): option is { value: number; label: string } => option.value !== null);
