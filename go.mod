@@ -3,8 +3,8 @@ module github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR
 go 1.27
 
 require (
-	github.com/MeidoPromotionAssociation/MeidoSerialization/v2 v2.3.1
-	github.com/wailsapp/wails/v3 v3.0.0-beta.22
+	github.com/MeidoPromotionAssociation/MeidoSerialization/v2 v2.3.2
+	github.com/wailsapp/wails/v3 v3.0.0-beta.26
 	golang.org/x/sys v0.48.0
 )
 
@@ -17,9 +17,9 @@ require (
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/mattn/go-colorable v0.1.15 // indirect
 	github.com/mattn/go-isatty v0.0.24 // indirect
-	github.com/pierrec/lz4/v4 v4.1.30 // indirect
+	github.com/pierrec/lz4/v4 v4.1.31 // indirect
 	github.com/qmuntal/gltf v0.29.0 // indirect
 	github.com/ugorji/go/codec v1.3.2 // indirect
-	github.com/ulikunitz/xz v0.5.16 // indirect
+	github.com/ulikunitz/xz v0.5.17 // indirect
 	golang.org/x/text v0.42.0 // indirect
 )
