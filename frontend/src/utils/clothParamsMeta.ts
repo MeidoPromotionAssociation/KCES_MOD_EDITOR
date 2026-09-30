@@ -54,11 +54,18 @@ const EnumTables: Record<string, Record<number, string>> = {
 /** 枚举选项缓存，避免每次渲染都重新排序 */
 const enumOptionCache = new Map<string, Array<{ label: string; value: number }>>();
 
-/** 取字段对应的枚举选项，非枚举字段返回 undefined */
-export function clothEnumOptionsFor(field: string): Array<{ label: string; value: number }> | undefined {
+/** 取字段对应的枚举选项，非枚举字段返回 undefined；labelOf 用来把枚举名换成当前语言的译名 */
+export function clothEnumOptionsFor(
+    field: string,
+    labelOf?: (name: string) => string | null,
+): Array<{ label: string; value: number }> | undefined {
     const table = EnumTables[field];
     if (!table) {
         return undefined;
+    }
+    // 有 labelOf（依赖当前语言）时不走缓存
+    if (labelOf) {
+        return numberEnumOptions(table, labelOf);
     }
     let options = enumOptionCache.get(field);
     if (!options) {
@@ -66,6 +73,11 @@ export function clothEnumOptionsFor(field: string): Array<{ label: string; value
         enumOptionCache.set(field, options);
     }
     return options;
+}
+
+/** 枚举取值名 → i18n key（ClothParamsEditor.enum_<枚举名>），用于给下拉选项加译名 */
+export function clothEnumLabelKey(name: string): string {
+    return `ClothParamsEditor.enum_${name}`;
 }
 
 /* -----------------------------

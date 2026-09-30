@@ -198,7 +198,9 @@ export const CurveDataField: React.FC<{
                 <RangedNumber value={value?.value} meta={meta}
                               onChange={(next) => onChange({...value, value: next})}/>
                 <Space size={4}>
-                    <Typography.Text type="secondary">useCurve</Typography.Text>
+                    <Typography.Text type="secondary">
+                        {t('MagicaClothEditor.use_curve_label', {defaultValue: 'useCurve'})}
+                    </Typography.Text>
                     <Switch
                         size="small"
                         checked={useCurve}
@@ -211,12 +213,9 @@ export const CurveDataField: React.FC<{
                         <QuestionCircleOutlined style={{opacity: 0.55, cursor: "help"}}/>
                     </Tooltip>
                 </Space>
-                <Button size="small" type="link" onClick={() => setExpanded((prev) => !prev)}>
+                <Button size="small"onClick={() => setExpanded((prev) => !prev)}>
                     {expanded ? t('MagicaClothEditor.hide_curve') : t('MagicaClothEditor.show_curve')}
                 </Button>
-                {!useCurve && (
-                    <Typography.Text type="secondary">{t('MagicaClothEditor.curve_unused')}</Typography.Text>
-                )}
             </Space>
             {expanded && (
                 <UnityCurveField value={value?.curve} onChange={(next) => onChange({...value, curve: next})}/>

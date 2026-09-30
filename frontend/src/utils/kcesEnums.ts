@@ -340,13 +340,22 @@ export const ColvariUseTypeFlags: Array<{ label: string; bit: number }> = [
 ];
 
 /**
- * 数值枚举表 → Select 选项，标签形如 NAME (值)
+ * 数值枚举表 → Select 选项，标签形如 NAME (值)；给了 labelOf 则变成「译名 NAME (值)」
  * 按数值升序排：对象字面量里 -1 这类负数键属于普通字符串键，Object.entries 会把它排在
  * 0 起的整数索引键之后，不排一下 NONE 会跑到列表末尾
  */
-export function numberEnumOptions(table: Record<number, string>): Array<{ label: string; value: number }> {
+export function numberEnumOptions(
+    table: Record<number, string>,
+    labelOf?: (name: string) => string | null,
+): Array<{ label: string; value: number }> {
     return Object.entries(table)
-        .map(([value, label]) => ({label: `${label} (${value})`, value: Number(value)}))
+        .map(([value, label]) => {
+            const translated = labelOf?.(label) ?? null;
+            return {
+                label: translated ? `${translated} ${label} (${value})` : `${label} (${value})`,
+                value: Number(value),
+            };
+        })
         .sort((a, b) => a.value - b.value);
 }
 

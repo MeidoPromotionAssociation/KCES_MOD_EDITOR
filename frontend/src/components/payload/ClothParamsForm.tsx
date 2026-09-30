@@ -1,11 +1,13 @@
 import React from "react";
-import {Collapse, Select, Switch, Tag, Tooltip, Typography} from "antd";
+import {Collapse, Select, Space, Switch, Tag, Tooltip, Typography} from "antd";
+import {QuestionCircleOutlined} from "@ant-design/icons";
 import {useTranslation} from "react-i18next";
 import BezierParamField, {isBezierParam} from "./BezierParamField";
 import {isVector, Vector3Field} from "./magicaClothFields";
 import {NumberField} from "../parts/formControls";
 import JsonObjectForm from "../common/JsonObjectForm";
 import {
+    clothEnumLabelKey,
     clothEnumOptionsFor,
     clothNumberDefaultFor,
     isClothGroupActive,
@@ -56,7 +58,10 @@ const ValueControl: React.FC<{
         return <Switch size="small" checked={value} onChange={(checked) => onChange(checked)}/>;
     }
     if (typeof value === "number") {
-        const options = clothEnumOptionsFor(field);
+        const options = clothEnumOptionsFor(field, (name) => {
+            const key = clothEnumLabelKey(name);
+            return t(key, {defaultValue: ""}) || null;
+        });
         if (options) {
             // 数据里出现枚举外的值时补一个选项，避免下拉框显示空白把原值悄悄改掉
             const withUnknown = options.some((option) => option.value === value)
@@ -94,24 +99,40 @@ const ValueControl: React.FC<{
 
 /**
  * FieldRow 一行「字段名 + 控件」
+ * 标签走 ClothParamsEditor.<字段名> 翻译，没有翻译的字段（落在 other 组的未知成员）回退成原始字段名；
+ * 说明挂在标签后面的问号图标上 —— 不能用 Typography 的 ellipsis tooltip，
+ * 那个只在文字被截断时才启用，短标签永远看不到
  * memo：改一个成员只让这一行的 value 变化，其余行跳过重渲染
  */
 const FieldRow = React.memo<{
     field: string;
     value: any;
 }>(({field, value}) => {
+    const {t} = useTranslation();
     const setField = React.useContext(SetterContext);
     // field 与 setField 都稳定，所以这个回调也稳定，子控件不会因为父级重渲染而失效
     const onChange = React.useCallback((next: any) => setField(field, next), [setField, field]);
 
+    const label = t(`ClothParamsEditor.${field}`, {defaultValue: field});
+    const tip = t(`ClothParamsEditor.${field}_tip`, {defaultValue: ""});
+
     return (
         <div style={{display: "flex", alignItems: "flex-start", gap: 8, minHeight: 28, marginBottom: 2}}>
-            <Typography.Text
-                style={{width: 260, flexShrink: 0, textAlign: "left", paddingTop: 3}}
-                ellipsis={{tooltip: field}}
-            >
-                {field}
-            </Typography.Text>
+            <div style={{width: 260, flexShrink: 0, textAlign: "left", paddingTop: 3}}>
+                <Space size={4}>
+                    {/* 标签的 tooltip 只在自己被截断时显示完整标签名（与 formControls 的 Row 一致）；
+                        字段说明一律只在问号图标上，避免同一段说明在两处各弹一次 */}
+                    <Typography.Text ellipsis={{tooltip: label}}
+                                     style={{maxWidth: 260 - (tip ? 22 : 0)}}>
+                        {label}
+                    </Typography.Text>
+                    {tip && (
+                        <Tooltip title={tip} styles={{root: {maxWidth: 400}}}>
+                            <QuestionCircleOutlined style={{color: "rgba(128,128,128,0.85)", cursor: "help"}}/>
+                        </Tooltip>
+                    )}
+                </Space>
+            </div>
             <div style={{flex: 1, minWidth: 0, textAlign: "left"}}>
                 <ValueControl field={field} value={value} onChange={onChange}/>
             </div>
