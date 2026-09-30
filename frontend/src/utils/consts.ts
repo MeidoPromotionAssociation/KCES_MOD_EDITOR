@@ -52,12 +52,12 @@ export const KCESFormats: KCESFormatDef[] = [
     {key: "pmatassets", fileType: "pmatassets", suffixes: [".pmatassets"], group: "assets"},
     // 物理 / Physics
     {key: "dbconf", fileType: "dbconf", suffixes: [".dbconf"], group: "physics"},
-    {key: "dbcol", fileType: "dbcol", suffixes: [".dbcol"], group: "physics"},
     {key: "db2conf", fileType: "db2conf", suffixes: [".db2conf"], group: "physics"},
     {key: "dsbconf", fileType: "dsbconf", suffixes: [".dsbconf"], group: "physics"},
     {key: "dsb2conf", fileType: "dsb2conf", suffixes: [".dsb2conf"], group: "physics"},
     {key: "dslconf", fileType: "dslconf", suffixes: [".dslconf"], group: "physics"},
     {key: "dsl2conf", fileType: "dsl2conf", suffixes: [".dsl2conf"], group: "physics"},
+    {key: "dbcol", fileType: "dbcol", suffixes: [".dbcol"], group: "physics"},
     {key: "dslcol", fileType: "dslcol", suffixes: [".dslcol"], group: "physics"},
     // 其他 / Other
     {
@@ -70,10 +70,10 @@ export const KCESFormats: KCESFormatDef[] = [
     {key: "model", fileType: "model", suffixes: [".model"], group: "other"},
     {key: "preset", fileType: "preset", suffixes: [".preset", ".perset"], group: "other"},
     // 数据 / Data
+    {key: "nei", fileType: "nei", suffixes: [".nei"], altSuffixes: [".csv"], group: "data"},
     {key: "nson", fileType: "nson", suffixes: [".nson"], group: "data"},
     {key: "undressdat", fileType: "undressdat", suffixes: [".undressdat"], group: "data"},
     {key: "undresspdat", fileType: "undresspdat", suffixes: [".undresspdat"], group: "data"},
-    {key: "nei", fileType: "nei", suffixes: [".nei"], altSuffixes: [".csv"], group: "data"},
 ];
 
 export const KCESFormatGroups: KCESFormatGroup[] = ["assets", "other", "physics", "data"];
