@@ -6,7 +6,7 @@ import {
     ColorPicker,
     Dropdown,
     Layout,
-    List,
+    Listy,
     MenuProps,
     Row,
     Segmented,
@@ -39,6 +39,37 @@ import {
     SetSingleInstance
 } from "../../bindings/github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR/internal/app.ts";
 import {appMessage as message} from "../utils/feedback";
+
+/**
+ * SettingsRow 设置项的一行：左边标题（带问号说明图标），右边控件
+ * 原先用 antd 的 List + List.Item 的 actions 实现，但 List 在 v6 已废弃（下一个大版本会移除），
+ * 官方建议换 Listy。Listy 是虚拟列表、没有 List.Item 的 actions 布局，所以这里自己排一行。
+ */
+const SettingsRow: React.FC<{
+    title: string;
+    tooltip?: string;
+    children?: React.ReactNode;
+}> = ({title, tooltip, children}) => (
+    <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16}}>
+        <Space>
+            <span>{title}</span>
+            {tooltip ? (
+                <Tooltip title={tooltip}>
+                    <QuestionCircleOutlined style={{color: '#aaa'}}/>
+                </Tooltip>
+            ) : null}
+        </Space>
+        {children}
+    </div>
+);
+
+/**
+ * Listy 的 item 默认带下边框和较大的内边距，这里按原来 List split={false} 的样子覆盖掉；
+ * 悬停背景是组件自带的（样式表里的 :hover，行内样式盖不掉），保留它当作 hover 反馈
+ */
+const settingsListyStyles = {
+    item: {padding: '16px 0', borderBottom: 'none'},
+};
 
 const SettingsPage: React.FC = () => {
     const {t, i18n} = useTranslation();
@@ -114,8 +145,8 @@ const SettingsPage: React.FC = () => {
 
     const languageMenu: MenuProps = {
         items: [
-            {label: '简体中文 (Simplified Chinese)', key: "zh-CN"},
             {label: 'English (American English)', key: "en-US"},
+            {label: '简体中文 (Simplified Chinese)', key: "zh-CN"},
             {label: '日本語 (Japanese)', key: "ja-JP"},
             {label: '韓國語 (Korean)', key: "ko-KR"},
         ],
@@ -157,9 +188,10 @@ const SettingsPage: React.FC = () => {
                             title={<Typography.Title level={5}>{t('SettingsPage.general_settings')}</Typography.Title>}
                             style={{borderRadius: 8}}
                         >
-                            <List
-                                split={false}
-                                dataSource={[
+                            <Listy
+                                rowKey="title"
+                                styles={settingsListyStyles}
+                                items={[
                                     {
                                         title: t('SettingsPage.file_type_strict_mode'),
                                         tooltip: t('SettingsPage.file_type_strict_mode_tip'),
@@ -190,68 +222,54 @@ const SettingsPage: React.FC = () => {
                                         type: 'themeColor'
                                     }
                                 ]}
-                                renderItem={(item: any) => (
-                                    <List.Item
-                                        style={{padding: '16px 0'}}
-                                        actions={[
-                                            item.type === 'switch' ? (
-                                                <Switch
-                                                    key="switch"
-                                                    checked={item.checked}
-                                                    onChange={item.onChange}
-                                                />
-                                            ) : item.type === 'theme' ? (
-                                                <Segmented
-                                                    key="theme"
-                                                    value={themeMode}
-                                                    onChange={(value) => setThemeMode(value as ThemeMode)}
-                                                    options={[
-                                                        {label: t('SettingsPage.theme_system'), value: 'system'},
-                                                        {label: t('SettingsPage.theme_light'), value: 'light'},
-                                                        {label: t('SettingsPage.theme_dark'), value: 'dark'},
-                                                    ]}
-                                                />
-                                            ) : item.type === 'themeColor' ? (
-                                                <Space key="themeColor">
-                                                    {themeColor ? (
-                                                        <Button size="small" onClick={() => setThemeColor(null)}>
-                                                            {t('SettingsPage.theme_color_reset')}
-                                                        </Button>
-                                                    ) : null}
-                                                    <ColorPicker
-                                                        value={themeColor ?? DefaultThemeColor}
-                                                        showText
-                                                        disabledAlpha
-                                                        presets={[{
-                                                            label: t('SettingsPage.theme_color_presets'),
-                                                            colors: [...new Set([
-                                                                DefaultThemeColor, '#1890ff', '#f5222d', '#fa541c', '#fa8c16',
-                                                                '#faad14', '#a0d911', '#52c41a', '#13c2c2',
-                                                                '#2f54eb', '#722ed1', '#eb2f96', '#8c8c8c', '#389E0D',
-                                                            ])],
-                                                        }]}
-                                                        onChangeComplete={(color) => setThemeColor(color.toHexString())}
-                                                    />
-                                                </Space>
-                                            ) : (
-                                                <Dropdown key="language" menu={languageMenu} placement="bottomRight">
-                                                    <Button>
-                                                        {languageLabel(item.value)} <TranslationOutlined/>
-                                                        <DownOutlined style={{marginLeft: 8}}/>
+                                itemRender={(item: any) => (
+                                    <SettingsRow title={item.title} tooltip={item.tooltip}>
+                                        {item.type === 'switch' ? (
+                                            <Switch
+                                                checked={item.checked}
+                                                onChange={item.onChange}
+                                            />
+                                        ) : item.type === 'theme' ? (
+                                            <Segmented
+                                                value={themeMode}
+                                                onChange={(value) => setThemeMode(value as ThemeMode)}
+                                                options={[
+                                                    {label: t('SettingsPage.theme_system'), value: 'system'},
+                                                    {label: t('SettingsPage.theme_light'), value: 'light'},
+                                                    {label: t('SettingsPage.theme_dark'), value: 'dark'},
+                                                ]}
+                                            />
+                                        ) : item.type === 'themeColor' ? (
+                                            <Space>
+                                                {themeColor ? (
+                                                    <Button size="small" onClick={() => setThemeColor(null)}>
+                                                        {t('SettingsPage.theme_color_reset')}
                                                     </Button>
-                                                </Dropdown>
-                                            )
-                                        ]}
-                                    >
-                                        <Space>
-                                            <span>{item.title}</span>
-                                            {item.tooltip ? (
-                                                <Tooltip title={item.tooltip}>
-                                                    <QuestionCircleOutlined style={{color: '#aaa'}}/>
-                                                </Tooltip>
-                                            ) : null}
-                                        </Space>
-                                    </List.Item>
+                                                ) : null}
+                                                <ColorPicker
+                                                    value={themeColor ?? DefaultThemeColor}
+                                                    showText
+                                                    disabledAlpha
+                                                    presets={[{
+                                                        label: t('SettingsPage.theme_color_presets'),
+                                                        colors: [...new Set([
+                                                            DefaultThemeColor, '#1890ff', '#f5222d', '#fa541c', '#fa8c16',
+                                                            '#faad14', '#a0d911', '#52c41a', '#13c2c2',
+                                                            '#2f54eb', '#722ed1', '#eb2f96', '#8c8c8c', '#389E0D',
+                                                        ])],
+                                                    }]}
+                                                    onChangeComplete={(color) => setThemeColor(color.toHexString())}
+                                                />
+                                            </Space>
+                                        ) : (
+                                            <Dropdown menu={languageMenu} placement="bottomRight">
+                                                <Button>
+                                                    {languageLabel(item.value)} <TranslationOutlined/>
+                                                    <DownOutlined style={{marginLeft: 8}}/>
+                                                </Button>
+                                            </Dropdown>
+                                        )}
+                                    </SettingsRow>
                                 )}
                             />
                         </Card>
@@ -263,9 +281,10 @@ const SettingsPage: React.FC = () => {
                             title={<Typography.Title level={5}>{t('SettingsPage.update_settings')}</Typography.Title>}
                             style={{borderRadius: 8}}
                         >
-                            <List
-                                split={false}
-                                dataSource={[
+                            <Listy
+                                rowKey="title"
+                                styles={settingsListyStyles}
+                                items={[
                                     {
                                         title: t('SettingsPage.is_check_update'),
                                         tooltip: t('SettingsPage.is_check_update_tip'),
@@ -288,37 +307,23 @@ const SettingsPage: React.FC = () => {
                                         onClick: () => checkForUpdatesWithMessage()
                                     },
                                 ]}
-                                renderItem={(item: any) => (
-                                    <List.Item
-                                        style={{padding: '16px 0'}}
-                                        actions={[
-                                            item.type === 'switch' ? (
-                                                <Switch
-                                                    key="switch"
-                                                    checked={item.checked}
-                                                    onChange={item.onChange}
-                                                />
-                                            ) : (
-                                                <Button
-                                                    key="button"
-                                                    icon={item.icon}
-                                                    onClick={item.onClick}
-                                                    style={{borderRadius: 4}}
-                                                >
-                                                    {item.title}
-                                                </Button>
-                                            )
-                                        ]}
-                                    >
-                                        <Space>
-                                            <span>{item.title}</span>
-                                            {item.tooltip ? (
-                                                <Tooltip title={item.tooltip}>
-                                                    <QuestionCircleOutlined style={{color: '#aaa'}}/>
-                                                </Tooltip>
-                                            ) : null}
-                                        </Space>
-                                    </List.Item>
+                                itemRender={(item: any) => (
+                                    <SettingsRow title={item.title} tooltip={item.tooltip}>
+                                        {item.type === 'switch' ? (
+                                            <Switch
+                                                checked={item.checked}
+                                                onChange={item.onChange}
+                                            />
+                                        ) : (
+                                            <Button
+                                                icon={item.icon}
+                                                onClick={item.onClick}
+                                                style={{borderRadius: 4}}
+                                            >
+                                                {item.title}
+                                            </Button>
+                                        )}
+                                    </SettingsRow>
                                 )}
                             />
                         </Card>
@@ -331,9 +336,10 @@ const SettingsPage: React.FC = () => {
                             title={<Typography.Title level={5}>{t('SettingsPage.launch_settings')}</Typography.Title>}
                             style={{borderRadius: 8}}
                         >
-                            <List
-                                split={false}
-                                dataSource={[
+                            <Listy
+                                rowKey="title"
+                                styles={settingsListyStyles}
+                                items={[
                                     {
                                         title: t('SettingsPage.single_instance'),
                                         tooltip: t('SettingsPage.single_instance_tip'),
@@ -347,45 +353,32 @@ const SettingsPage: React.FC = () => {
                                         type: 'protocol'
                                     },
                                 ]}
-                                renderItem={(item: any) => (
-                                    <List.Item
-                                        style={{padding: '16px 0'}}
-                                        actions={[
-                                            item.type === 'switch' ? (
-                                                <Switch
-                                                    key="switch"
-                                                    checked={item.checked}
-                                                    onChange={item.onChange}
-                                                />
-                                            ) : (
-                                                <Space key="protocol" wrap>
-                                                    {/* 复制出来的是可直接补上路径的前缀，外部工具接的就是这一段 */}
-                                                    {/* Copying yields the prefix a path can be appended to, which is what external tools consume */}
-                                                    <Typography.Text
-                                                        code
-                                                        copyable={protocolScheme ? {text: `${protocolScheme}://open?path=`} : false}
-                                                    >
-                                                        {protocolScheme ? `${protocolScheme}://` : '-'}
-                                                    </Typography.Text>
-                                                    {/* 只在确知没注册时报警：非 Windows 平台查不到注册情况，不能反过来断言已注册 */}
-                                                    {/* Warning only when we know it is missing: registration is unqueryable outside Windows, so the opposite cannot be claimed */}
-                                                    {protocolScheme && !protocolRegistered ? (
-                                                        <Tag
-                                                            color="orange">{t('SettingsPage.url_protocol_unregistered')}</Tag>
-                                                    ) : null}
-                                                </Space>
-                                            )
-                                        ]}
-                                    >
-                                        <Space>
-                                            <span>{item.title}</span>
-                                            {item.tooltip ? (
-                                                <Tooltip title={item.tooltip}>
-                                                    <QuestionCircleOutlined style={{color: '#aaa'}}/>
-                                                </Tooltip>
-                                            ) : null}
-                                        </Space>
-                                    </List.Item>
+                                itemRender={(item: any) => (
+                                    <SettingsRow title={item.title} tooltip={item.tooltip}>
+                                        {item.type === 'switch' ? (
+                                            <Switch
+                                                checked={item.checked}
+                                                onChange={item.onChange}
+                                            />
+                                        ) : (
+                                            <Space wrap>
+                                                {/* 复制出来的是可直接补上路径的前缀，外部工具接的就是这一段 */}
+                                                {/* Copying yields the prefix a path can be appended to, which is what external tools consume */}
+                                                <Typography.Text
+                                                    code
+                                                    copyable={protocolScheme ? {text: `${protocolScheme}://open?path=`} : false}
+                                                >
+                                                    {protocolScheme ? `${protocolScheme}://` : '-'}
+                                                </Typography.Text>
+                                                {/* 只在确知没注册时报警：非 Windows 平台查不到注册情况，不能反过来断言已注册 */}
+                                                {/* Warning only when we know it is missing: registration is unqueryable outside Windows, so the opposite cannot be claimed */}
+                                                {protocolScheme && !protocolRegistered ? (
+                                                    <Tag
+                                                        color="orange">{t('SettingsPage.url_protocol_unregistered')}</Tag>
+                                                ) : null}
+                                            </Space>
+                                        )}
+                                    </SettingsRow>
                                 )}
                             />
                         </Card>
