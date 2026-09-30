@@ -213,7 +213,7 @@ export const CurveDataField: React.FC<{
                         <QuestionCircleOutlined style={{opacity: 0.55, cursor: "help"}}/>
                     </Tooltip>
                 </Space>
-                <Button size="small"onClick={() => setExpanded((prev) => !prev)}>
+                <Button size="small" onClick={() => setExpanded((prev) => !prev)}>
                     {expanded ? t('MagicaClothEditor.hide_curve') : t('MagicaClothEditor.show_curve')}
                 </Button>
             </Space>

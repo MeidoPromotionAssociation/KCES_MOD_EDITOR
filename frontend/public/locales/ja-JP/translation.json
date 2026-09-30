@@ -836,7 +836,12 @@
     "bezier_curveValue": "カーブ",
     "bezier_curveValue_tip": "カーブ値（curveValue）；始点から終点までの曲がり具合、-1〜1。0 は直線、正の値は中ほどを始点値側へ、負の値は終点値側へ膨らませる。「終点を使用」と「カーブを使用」の両方がオンで有効",
     "bezier_useCurveValue": "カーブを使用",
-    "bezier_useCurveValue_tip": "カーブ値を使用（useCurveValue）；オフにすると curveValue を無視し、始点から終点まで直線補間になる"
+    "bezier_useCurveValue_tip": "カーブ値を使用（useCurveValue）；オフにすると curveValue を無視し、始点から終点まで直線補間になる",
+    "bezier_show_curve": "カーブを展開",
+    "bezier_hide_curve": "カーブを折りたたむ",
+    "bezier_curve_hint": "制御点をドラッグして値を変更：左端 = 始点値、右端 = 終点値、中央 = カーブ値。破線は直線の基準で、カーブが離れるほど曲がりが強くなる。縦軸はこのパラメータの推奨範囲",
+    "bezier_axis_fixed": "固定端",
+    "bezier_axis_moving": "可動端"
   },
   "ColliderEditor": {
     "colliders_title": "コライダー（{{count}}）",

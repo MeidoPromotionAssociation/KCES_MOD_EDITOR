@@ -836,7 +836,12 @@
     "bezier_curveValue": "곡률",
     "bezier_curveValue_tip": "곡률값(curveValue); 시작에서 끝까지의 굽힘 강도로 -1~1입니다. 0이면 직선이고, 양수는 중간을 시작값 쪽으로, 음수는 끝값 쪽으로 부풀립니다. 「끝값 사용」과 「곡률 사용」이 모두 켜져야 적용됩니다",
     "bezier_useCurveValue": "곡률 사용",
-    "bezier_useCurveValue_tip": "곡률값 사용(useCurveValue); 끄면 curveValue를 무시하고 시작에서 끝까지 직선 보간합니다"
+    "bezier_useCurveValue_tip": "곡률값 사용(useCurveValue); 끄면 curveValue를 무시하고 시작에서 끝까지 직선 보간합니다",
+    "bezier_show_curve": "곡선 펼치기",
+    "bezier_hide_curve": "곡선 접기",
+    "bezier_curve_hint": "제어점을 끌어 값을 바꿉니다: 왼쪽 = 시작값, 오른쪽 = 끝값, 가운데 = 곡률값. 점선은 직선 기준이며 곡선이 멀수록 곡률이 커집니다. 세로축은 이 파라미터의 권장 범위입니다",
+    "bezier_axis_fixed": "고정단",
+    "bezier_axis_moving": "가동단"
   },
   "ColliderEditor": {
     "colliders_title": "콜라이더 ({{count}})",

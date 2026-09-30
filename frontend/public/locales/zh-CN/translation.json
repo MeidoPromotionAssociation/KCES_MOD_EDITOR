@@ -836,7 +836,12 @@
     "bezier_curveValue": "曲率",
     "bezier_curveValue_tip": "曲率值（curveValue）；起点到终点的弯曲强度，取值 -1~1。0 是直线，正值把中段往起点值方向鼓、负值往终点值方向鼓。要「启用终点」和「启用曲率」都打开才生效",
     "bezier_useCurveValue": "启用曲率",
-    "bezier_useCurveValue_tip": "启用曲率值（useCurveValue）；关掉时忽略 curveValue，起点到终点按直线插值"
+    "bezier_useCurveValue_tip": "启用曲率值（useCurveValue）；关掉时忽略 curveValue，起点到终点按直线插值",
+    "bezier_show_curve": "展开曲线",
+    "bezier_hide_curve": "收起曲线",
+    "bezier_curve_hint": "拖动控制点直接改值：左端 = 起点值，右端 = 终点值，中段 = 曲率值。虚线是直线参考，曲线离它越远曲率越大；纵轴是参数的建议取值范围",
+    "bezier_axis_fixed": "固定端",
+    "bezier_axis_moving": "可动端"
   },
   "ColliderEditor": {
     "colliders_title": "碰撞体（{{count}}）",

@@ -52,7 +52,7 @@ const ValueControl: React.FC<{
         );
     }
     if (isBezierParam(value)) {
-        return <BezierParamField value={value} onChange={onChange}/>;
+        return <BezierParamField field={field} value={value} onChange={onChange}/>;
     }
     if (typeof value === "boolean") {
         return <Switch size="small" checked={value} onChange={(checked) => onChange(checked)}/>;

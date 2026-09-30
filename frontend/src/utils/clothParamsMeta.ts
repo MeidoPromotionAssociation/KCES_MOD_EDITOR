@@ -135,6 +135,71 @@ export function clothNumberDefaultFor(field: string): ClothNumberDefault | undef
 }
 
 /* -----------------------------
+ * BezierParam 曲线参数的参考范围
+ * ----------------------------- */
+
+/**
+ * 数值曲线参数（BezierParam 的 startValue / endValue）的参考范围
+ *
+ * ⚠️ 游戏侧对 BezierParam **不做任何 clamp**（ClothParams 没有 DataValidate，加载时写什么就是什么），
+ * 所以这里不是"游戏强制的边界"，而是**界面用的参考范围**：
+ * - 曲线图的纵轴以它为准（数据超出时会自动放宽，保证超范围的值也画得出来）
+ * - 拖拽控制点时把值限制在里面，避免拖出荒唐的数
+ * 取值依据逐条记在下面；真实样本里出现过的值都落在范围内（已校验）
+ */
+export interface BezierRange {
+    min: number;
+    max: number;
+}
+
+const BezierRanges: Record<string, BezierRange> = {
+    // 粒子半径（m）：0.2 已经很大了
+    radius: {min: 0, max: 0.2},
+    // 粒子质量：样本里出现过 10
+    mass: {min: 0, max: 20},
+    // 重力加速度（m/s²）
+    gravity: {min: -30, max: 30},
+    // 空气阻力：代码里是 math.pow(1 - drag, ...)，drag > 1 会让底数变负
+    drag: {min: 0, max: 1},
+    // 速度上限（m/s）：默认 3
+    maxVelocity: {min: 0, max: 10},
+    // 世界移动 / 旋转影响：比例
+    worldMoveInfluence: {min: 0, max: 1},
+    worldRotationInfluence: {min: 0, max: 1},
+    // 位置限制距离（m）
+    clampPositionLength: {min: 0, max: 0.5},
+    // 旋转限制角度（度）
+    clampRotationAngle: {min: 0, max: 180},
+    // 各种刚度 / 复原力 / 衰减比例：都是 0~1 的比例量
+    structDistanceStiffness: {min: 0, max: 1},
+    bendDistanceStiffness: {min: 0, max: 1},
+    nearDistanceStiffness: {min: 0, max: 1},
+    nearDistanceLength: {min: 0, max: 0.5},
+    restoreRotation: {min: 0, max: 0.5},
+    springDirectionAtten: {min: 0, max: 1},
+    springDistanceAtten: {min: 0, max: 1},
+    triangleBend: {min: 0, max: 1},
+    volumeStretchStiffness: {min: 0, max: 1},
+    volumeShearStiffness: {min: 0, max: 1},
+    // 穿透相关的距离（m）：样本里到过 1
+    penetrationConnectDistance: {min: 0, max: 0.5},
+    penetrationDistance: {min: 0, max: 0.5},
+    penetrationRadius: {min: 0, max: 2},
+};
+
+/** 取曲线参数的参考范围，没有记录则返回 undefined（此时界面不加限制） */
+export function bezierRangeFor(field: string): BezierRange | undefined {
+    return BezierRanges[field];
+}
+
+/**
+ * curveValue 的权威范围
+ * BezierParam.AutoSetup 里是 Mathf.Clamp(curveVal, -1f, 1f)；
+ * 超出这个范围时控制点会跑到两端之外，曲线会剧烈外翻
+ */
+export const BezierCurveValueRange: BezierRange = {min: -1, max: 1};
+
+/* -----------------------------
  * 分组
  * 组与组内顺序沿用 ClothParams 的 Set* 方法结构：每组以 use* 开关领头，随后是它启用的参数
  * ----------------------------- */

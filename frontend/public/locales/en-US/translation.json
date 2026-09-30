@@ -822,7 +822,12 @@
     "bezier_curveValue": "Curve",
     "bezier_curveValue_tip": "Curve value (curveValue); the bend strength between start and end, from -1 to 1. 0 is a straight line, positive bows the middle toward the start value and negative toward the end value. Needs both Use End and Use Curve on",
     "bezier_useCurveValue": "Use Curve",
-    "bezier_useCurveValue_tip": "Use curve value (useCurveValue); when off, curveValue is ignored and the curve interpolates straight from start to end"
+    "bezier_useCurveValue_tip": "Use curve value (useCurveValue); when off, curveValue is ignored and the curve interpolates straight from start to end",
+    "bezier_show_curve": "Expand curve",
+    "bezier_hide_curve": "Collapse curve",
+    "bezier_curve_hint": "Drag a control point to edit the value: left end = start value, right end = end value, middle = curve value. The dashed line is the straight reference — the further the curve sits from it, the stronger the curvature. The vertical axis is the suggested range for this parameter",
+    "bezier_axis_fixed": "Fixed end",
+    "bezier_axis_moving": "Moving end"
   },
   "ColliderEditor": {
     "colliders_title": "Colliders ({{count}})",
