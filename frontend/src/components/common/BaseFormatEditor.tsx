@@ -330,22 +330,26 @@ const BaseFormatEditor = forwardRef<FormatEditorRef, BaseFormatEditorProps>((pro
                     </div>
                 )}
 
-                <div style={{marginBottom: 5, marginTop: 0, flexShrink: 0}}>
-                    <Radio.Group
-                        block
-                        value={viewMode}
-                        onChange={(e) => {
-                            setViewMode(e.target.value);
-                            localStorage.setItem(editorViewModeKey(format.key), e.target.value.toString());
-                        }}
-                        options={[
-                            {label: props.style1Label ?? t('Common.style1'), value: 1, disabled: !hasStyle1},
-                            {label: props.style2Label ?? t('Common.style2'), value: 2},
-                        ]}
-                        optionType="button"
-                        buttonStyle="solid"
-                    />
-                </div>
+                {/* 只有一个视图时不显示样式切换：去掉结构化表单的格式（nson/undressdat/undresspdat）
+                    只剩 JSON，留一个灰掉的「样式1」按钮没有意义 */}
+                {hasStyle1 && (
+                    <div style={{marginBottom: 5, marginTop: 0, flexShrink: 0}}>
+                        <Radio.Group
+                            block
+                            value={viewMode}
+                            onChange={(e) => {
+                                setViewMode(e.target.value);
+                                localStorage.setItem(editorViewModeKey(format.key), e.target.value.toString());
+                            }}
+                            options={[
+                                {label: props.style1Label ?? t('Common.style1'), value: 1},
+                                {label: props.style2Label ?? t('Common.style2'), value: 2},
+                            ]}
+                            optionType="button"
+                            buttonStyle="solid"
+                        />
+                    </div>
+                )}
 
                 {data === null || data === undefined ? (
                     <Empty
