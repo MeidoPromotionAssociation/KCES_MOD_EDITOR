@@ -20,8 +20,13 @@ const KcesEncoding = "UTF-8";
  * NeiHeader 表格规模与单元格编码
  * 纯 ASCII 的表格无法从内容判断编码，库会报告为 Shift-JIS，此时写出与 UTF-8 字节一致，
  * 因此只有表格真的含非 ASCII 文本时才提示编码问题。
+ * extra 为右侧操作区（CSV 导入/导出按钮），与左侧信息同一行、右对齐
  */
-const NeiHeader: React.FC<{ data: any; setData: (value: any) => void }> = ({data, setData}) => {
+const NeiHeader: React.FC<{
+    data: any;
+    setData: (value: any) => void;
+    extra?: React.ReactNode;
+}> = ({data, setData, extra}) => {
     const {t} = useTranslation();
     const rows: string[][] = Array.isArray(data?.Data) ? data.Data : [];
     const encoding: string = data?.TextEncoding ?? "";
@@ -33,8 +38,12 @@ const NeiHeader: React.FC<{ data: any; setData: (value: any) => void }> = ({data
     );
 
     return (
-        <div style={{marginTop: 8, textAlign: "left"}}>
-            <Space wrap>
+        // 不再自带 marginTop：顶部间距直接由 BaseFormatEditor 的 padding(10) 提供，
+        // 避免叠出 18px 的空档；底部补 8px，与下方样式切换/表格分开
+        <div style={{marginBottom: 8, textAlign: "left"}}>
+            {/* 左侧信息与右侧按钮同一行；按钮用 marginLeft:auto 顶到行尾，
+                窄窗口换行后按钮仍靠右 */}
+            <div style={{display: "flex", alignItems: "center", flexWrap: "wrap", gap: 8}}>
                 <span>{t('NeiEditor.table_size_colon')}{rows.length} × {csvColumnCount(rows)}</span>
                 <Space.Compact>
                     <Space.Addon>{t('NeiEditor.text_encoding')}</Space.Addon>
@@ -50,7 +59,10 @@ const NeiHeader: React.FC<{ data: any; setData: (value: any) => void }> = ({data
                 <Tooltip title={t('NeiEditor.text_encoding_tip')}>
                     <QuestionCircleOutlined/>
                 </Tooltip>
-            </Space>
+                {extra && (
+                    <div style={{marginLeft: "auto", flexShrink: 0}}>{extra}</div>
+                )}
+            </div>
             {encoding !== KcesEncoding && hasNonAscii && (
                 <Alert
                     type="warning"
@@ -110,9 +122,21 @@ const NeiEditor = forwardRef<FormatEditorRef, Omit<BaseFormatEditorProps, "rende
         }
     };
 
-    // 表格规模与单元格编码
+    // CSV 导入/导出按钮，交给 NeiHeader 渲染在表格规模那一行的右侧
+    const csvButtons = (
+        <Space>
+            <Button size="small" icon={<ExportOutlined/>} onClick={handleExportCsv}>
+                {t('NeiEditor.export_csv')}
+            </Button>
+            <Button size="small" icon={<ImportOutlined/>} onClick={handleImportCsv}>
+                {t('NeiEditor.import_csv')}
+            </Button>
+        </Space>
+    );
+
+    // 表格规模与单元格编码（右侧为 CSV 导入/导出按钮）
     const renderHeader = (data: any, setData: (value: any) => void) => (
-        <NeiHeader data={data} setData={setData}/>
+        <NeiHeader data={data} setData={setData} extra={csvButtons}/>
     );
 
     const renderStyle1 = (data: any, setData: (value: any) => void) => (
@@ -131,14 +155,6 @@ const NeiEditor = forwardRef<FormatEditorRef, Omit<BaseFormatEditorProps, "rende
 
     return (
         <div style={{display: "flex", flexDirection: "column", flex: 1, minHeight: 0}}>
-            <Space style={{margin: "8px 0 0 10px", alignSelf: "flex-start", flexShrink: 0}}>
-                <Button size="small" icon={<ExportOutlined/>} onClick={handleExportCsv}>
-                    {t('NeiEditor.export_csv')}
-                </Button>
-                <Button size="small" icon={<ImportOutlined/>} onClick={handleImportCsv}>
-                    {t('NeiEditor.import_csv')}
-                </Button>
-            </Space>
             <BaseFormatEditor
                 {...props}
                 ref={innerRef}
