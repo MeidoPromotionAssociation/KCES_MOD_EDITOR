@@ -55,7 +55,7 @@ const defineLanguages = (monacoInstance: any) => {
 
 /**
  * 树形缩进格式下定位光标所在位置的语义：
- * 无缩进行是命令名，`\t` 开头的行是它的第 n 个参数，空行分隔命令。
+ * 无缩进行是命令名，\t 开头的行是它的第 n 个参数，空行分隔命令。
  * 解析规则与 MenuCommandsEditor 的 parseTextAsTreeIndent 保持一致。
  */
 const resolveTreeIndentContext = (
@@ -195,7 +195,7 @@ function customShortcut(monacoInstance: any) {
 /**
  * 自动补全（只做树形缩进格式）
  * - 无缩进行：补全全部 74 个命令名，按 snippet 一次铺出必填参数骨架
- * - `\t` 开头行：按所属命令与参数序号补全该位置的枚举候选
+ * - \t 开头行：按所属命令与参数序号补全该位置的枚举候选
  */
 const defineAutocomplete = (monacoInstance: any) => {
     const languageId = "menuTreeIndent";

@@ -17,10 +17,10 @@ import {
 /**
  * KCES menu 命令的参数规格表（KCES2 1.36.0）
  *
- * 逐条对照 `KCES2 1.36.0/Assembly-CSharp/PartsMenuManager.cs` 的 `Exec`（233-1819 行）
+ * 逐条对照 KCES2 1.36.0/Assembly-CSharp/PartsMenuManager.cs 的 Exec（233-1819 行）
  * 以及它调用到的 TBody / TBodySkin / MaterialMgr / Maid 方法写成。
  * 只描述「参数在第几位、叫什么、能填什么」，供 Monaco 自动补全与 snippet 使用；
- * 参数的语义说明放在 i18n 的 `MenuAssetsEditor.commands.<命令名>` 里。
+ * 参数的语义说明放在 i18n 的 MenuAssetsEditor.commands.<命令名> 里。
  */
 
 /** 单个参数的规格 */
@@ -48,7 +48,7 @@ export interface MenuCommandSpec {
 }
 
 /* -----------------------------
- *   候选值集合
+ * 候选值集合
  * ----------------------------- */
 
 const slot = SlotIDNames;
@@ -58,14 +58,14 @@ const colorType = Object.values(ColorTypeNames);
 const blendMode = SystemMaterialNames;
 const texProp = Object.values(TexturePropNames);
 
-/** tex / テクスチャ変更 的 args[4]，PARTS_COLOR 名，GRADA_COLOR 可再接 `|MUGEN_COLOR` 副类型 */
+/** tex / テクスチャ変更 的 args[4]，PARTS_COLOR 名，GRADA_COLOR 可再接 |MUGEN_COLOR 副类型 */
 const texPartsColor = [...partsColor, "GRADA_COLOR|MUGEN_COLOR"];
 
 /** tex / テクスチャ変更 的 args[5]，决定 args[6] 按哪套颜色系统解析 */
 const colorReference = ["mugen", "grada", "grada|mugen"];
 
 /* -----------------------------
- *   规格表
+ * 规格表
  * ----------------------------- */
 
 const a = (placeholder: string, values?: string[]): MenuArgSpec => ({placeholder, values});
@@ -80,7 +80,7 @@ const optRep = (placeholder: string, values?: string[]): MenuArgSpec => ({
 
 const form = (args: MenuArgSpec[], label?: string): MenuCommandForm => ({label, args});
 
-/** 合成类命令共用：`del` 或 `hash <ulong>` */
+/** 合成类命令共用：del 或 hash <ulong> */
 const hashForms: MenuCommandForm[] = [
     form([a("hash-marker", ["hash"]), a("hash-value")], "hash"),
     form([a("del-marker", ["del"])], "del"),

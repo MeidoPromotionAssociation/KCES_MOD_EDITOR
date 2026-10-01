@@ -26,11 +26,11 @@ export type KCESFormatGroup = "assets" | "other" | "physics" | "data";
 
 /**
  * KCESFormatDef 描述一个 KCES 编辑器支持的格式页面
- * - key: 内部标识，同时用于路由（`/${key}-editor`）、i18n（`EditorNavBar.${key}`）与视图模式存储
+ * - key: 内部标识，同时用于路由（/${key}-editor）、i18n（EditorNavBar.${key}）与视图模式存储
  * - fileType: 后端 DetermineFileType 返回的 FileType 名称
  * - suffixes: 原生文件后缀（小写），用于扩展名回退与保存校验
- * - altSuffixes: 同一编辑器可直接读写的其他明文后缀（如 .nei 的 .csv），没有 `.json` 编辑变体
- * - noJsonVariant: 该格式没有编辑 JSON 变体（如贴图），选择对话框不追加 `*.xxx.json`
+ * - altSuffixes: 同一编辑器可直接读写的其他明文后缀（如 .nei 的 .csv），没有 .json 编辑变体
+ * - noJsonVariant: 该格式没有编辑 JSON 变体（如贴图），选择对话框不追加 *.xxx.json
  */
 export interface KCESFormatDef {
     key: string;
@@ -90,7 +90,7 @@ export function formatByFileType(fileType: string): KCESFormatDef | undefined {
 
 /**
  * 按文件路径的扩展名回退匹配格式（用于类型识别失败时）
- * 支持原生后缀、`.json` 编辑后缀与 altSuffixes（如 .csv），`.ikcol.bytes` 优先于 `.bytes`
+ * 支持原生后缀、.json 编辑后缀与 altSuffixes（如 .csv），.ikcol.bytes 优先于 .bytes
  * 图像文件交给 Texture2D 编辑器，作为「图像 → 贴图」方向的输入
  */
 export function formatByPath(path: string): KCESFormatDef | undefined {
@@ -130,7 +130,7 @@ export function selectPattern(format: KCESFormatDef): string {
             patterns.push(`${prefix}${suffix}.json`);
         }
     }
-    // altSuffixes 是明文格式，没有 `.json` 编辑变体
+    // altSuffixes 是明文格式，没有 .json 编辑变体
     for (const suffix of format.altSuffixes ?? []) {
         patterns.push(`*${suffix}`);
     }

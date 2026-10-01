@@ -83,7 +83,7 @@ export const NumberField: React.FC<{
 /**
  * FlagsCascader [Flags] 枚举多选
  * 底层是 ulong（只有低位有定义），存储值为各标签按位或；options 的 value 是标签名，
- * 展示为 `标签（翻译名）[位值]`（位值为 0 的项如 NONE 不列入选项，什么都不选即 0）
+ * 展示为 标签（翻译名）[位值]（位值为 0 的项如 NONE 不列入选项，什么都不选即 0）
  */
 export const FlagsCascader: React.FC<{
     value: any; // number 或 LosslessNumber
@@ -124,7 +124,7 @@ export const FlagsCascader: React.FC<{
 
 /**
  * EnumAutoComplete 单选枚举文本选择
- * 存储数值编号（names 的下标即枚举数值），显示 `名字（翻译名）[数值]`；
+ * 存储数值编号（names 的下标即枚举数值），显示 名字（翻译名）[数值]；
  * 允许直接输入名字，也兼容纯数字编号
  */
 export const EnumAutoComplete: React.FC<{

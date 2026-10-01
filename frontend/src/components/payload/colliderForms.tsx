@@ -113,10 +113,10 @@ const VectorFields: React.FC<{
  * MaidProp 扩展字段的三组「滑条 → 尺寸」参数（ColliderMaidProp 的 Key 16-24）
  *
  * 游戏侧语义（NativeMaidPropCollider.cs:40-88）：把列表里每个 MPN 滑条按
- * InverseLerp(min, max, value) 归一化到 0..1，取其中**最大值**当插值系数 t，于是
- *   中心   = Vector3.Lerp(center, centerRateMax, t)
- *   起点半径 = Mathf.Lerp(startRadius, maxStartRadius, t)
- *   终点半径 = Mathf.Lerp(endRadius, maxEndRadius, t)
+ * InverseLerp(min, max, value) 归一化到 0..1，取其中最大值当插值系数 t，于是
+ * 中心   = Vector3.Lerp(center, centerRateMax, t)
+ * 起点半径 = Mathf.Lerp(startRadius, maxStartRadius, t)
+ * 终点半径 = Mathf.Lerp(endRadius, maxEndRadius, t)
  * 列表为空或滑条都是 0 时 t=0，退化成 center / startRadius / endRadius。
  */
 const MaidPropGroups: Array<{

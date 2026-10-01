@@ -6,15 +6,15 @@ import {numberEnumOptions} from "./kcesEnums.ts";
  * 全部取自游戏内的 MagicaClothV2 源码，KCES2 1.36.0 与 COM3D2_5 3.49.2 的两份 ClothSerializeData.cs
  * 逐字节相同，下列出处按 KCES2 1.36.0 的 MagicaClothV2/MagicaCloth2/ 记：
  * - 枚举取值：ClothProcess.ClothType、ClothMeshWriteMode、ClothSerializeData.PaintMode、
- *   RenderSetupData.BoneConnectionMode、ClothUpdateMode、NormalAlignmentSettings.AlignmentMode、
- *   CullingSettings.CameraCullingMode / CameraCullingMethod、ClothNormalAxis、
- *   InertiaConstraint.TeleportMode、ColliderCollisionConstraint.Mode、SelfCollisionConstraint.SelfCollisionMode
+ * RenderSetupData.BoneConnectionMode、ClothUpdateMode、NormalAlignmentSettings.AlignmentMode、
+ * CullingSettings.CameraCullingMode / CameraCullingMethod、ClothNormalAxis、
+ * InertiaConstraint.TeleportMode、ColliderCollisionConstraint.Mode、SelfCollisionConstraint.SelfCollisionMode
  * - min/max：各 DataValidate() 里的 Mathf.Clamp / Mathf.Clamp01 / Mathf.Max，即游戏实际接受的边界
  * - sliderMin/sliderMax：字段上的 [Range] 特性（Inspector 拖动条范围），与 min/max 不同才写
  * - def：字段初始化器或 SerializeData 构造函数里的出厂默认值
  *
  * 另外记录 ignored：ClothSerializeData.ImportJson 的流程是
- * `new TempBuffer(this)` → `JsonUtility.FromJsonOverwrite(json, this)` → `tempBuffer.Pop(this)`，
+ * new TempBuffer(this) → JsonUtility.FromJsonOverwrite(json, this) → tempBuffer.Pop(this)，
  * TempBuffer 在反序列化前抓下场景里的现值、之后再写回去，所以 Pop 覆盖到的成员
  * 无论文件里写什么都不生效。三个格式的读取入口（DynamicYureBone.LoadMagica2Setting、
  * DynamicKCES2SkirtBone.LoadMagica2Params、DynamicSleeveBone.LoadMagica2Params）都走 ImportJson。

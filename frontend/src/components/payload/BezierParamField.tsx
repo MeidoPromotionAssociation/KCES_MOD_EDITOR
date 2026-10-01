@@ -12,7 +12,7 @@ import {BezierCurveValueRange, bezierRangeFor, type BezierRange} from "../../uti
  * 五个子字段都是 BezierParam 自己的成员，不属于 ClothParams 的顶层字段，
  * 所以文案用独立的 ClothParamsEditor.bezier_* 键；说明里带上原始字段名方便对着源码看
  *
- * BezierParam 里**没有关键帧**（不像 MagicaCloth2 的 CurveSerializeData），
+ * BezierParam 里没有关键帧（不像 MagicaCloth2 的 CurveSerializeData），
  * 曲线完全由 start / end / curve 三个数决定，所以展开后给的是「拖三个控制点」的图，
  * 而不是关键帧编辑器。
  */
@@ -84,7 +84,7 @@ function bezierPreview(item: any) {
 /**
  * curveAxis 纵轴量程
  *
- * **有界面参考范围时直接拿它当量程**（两侧留 2% 边距，免得贴边的控制点被裁掉），
+ * 有界面参考范围时直接拿它当量程（两侧留 2% 边距，免得贴边的控制点被裁掉），
  * 数据超出范围时再放宽到能容下数据 —— 这样"框"就是允许范围：
  * 一眼看得出当前值落在范围的哪个位置，也才有地方可拖。
  * 反过来按当前值自动适配的话，曲线永远刚好填满图，框就失去意义了。
@@ -129,10 +129,10 @@ type Handle = "start" | "end" | "curve";
  * 端点/曲率未启用时对应的控制点置灰不可拖，和右侧数值框的置灰规则一致
  *
  * 三个细节都为了手感：
- * - 纵轴量程在按下时**冻结**，拖完才重算。量程随值重算的话，值一变量程跟着变，
- *   控制点会在光标下跳走，而且越拖量程越大
+ * - 纵轴量程在按下时冻结，拖完才重算。量程随值重算的话，值一变量程跟着变，
+ * 控制点会在光标下跳走，而且越拖量程越大
  * - pointermove 用 requestAnimationFrame 合并成一帧一次，并跳过"吸附后值没变"的提交；
- *   尺寸只在按下时量一次，避免每次移动都 getBoundingClientRect 强制同步布局
+ * 尺寸只在按下时量一次，避免每次移动都 getBoundingClientRect 强制同步布局
  * - 拖拽值限制在参数参考范围内；控制点画到边界就停住，不会跑出图外
  */
 const BezierParamCurveEditor: React.FC<{
@@ -398,7 +398,7 @@ const BezierParamField: React.FC<{
     const tip = (name: string) => t(`ClothParamsEditor.bezier_${name}_tip`, {defaultValue: name});
 
     /**
-     * 输入框的上下界：**只有 curveValue 加硬边界** —— 游戏侧 BezierParam.AutoSetup 会把它
+     * 输入框的上下界：只有 curveValue 加硬边界 —— 游戏侧 BezierParam.AutoSetup 会把它
      * clamp 到 -1~1，这个范围是权威的；并且把当前值一并并进来，免得文件里已有的超范围值
      * 被 antd 在失焦时悄悄改掉。
      * startValue / endValue 不加边界：参考范围只是界面的默认量程，游戏侧对它们不做任何 clamp，

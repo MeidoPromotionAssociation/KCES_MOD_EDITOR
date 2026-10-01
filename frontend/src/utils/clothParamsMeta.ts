@@ -141,8 +141,8 @@ export function clothNumberDefaultFor(field: string): ClothNumberDefault | undef
 /**
  * 数值曲线参数（BezierParam 的 startValue / endValue）的参考范围
  *
- * ⚠️ 游戏侧对 BezierParam **不做任何 clamp**（ClothParams 没有 DataValidate，加载时写什么就是什么），
- * 所以这里不是"游戏强制的边界"，而是**界面用的参考范围**：
+ * 游戏侧对 BezierParam 不做任何 clamp（ClothParams 没有 DataValidate，加载时写什么就是什么），
+ * 所以这里不是"游戏强制的边界"，而是界面用的参考范围：
  * - 曲线图的纵轴以它为准（数据超出时会自动放宽，保证超范围的值也画得出来）
  * - 拖拽控制点时把值限制在里面，避免拖出荒唐的数
  * 取值依据逐条记在下面；真实样本里出现过的值都落在范围内（已校验）

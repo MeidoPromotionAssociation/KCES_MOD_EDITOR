@@ -203,7 +203,7 @@ export const FloatPropNames: Record<number, string> = {
 /**
  * Material.PropertType 关键字枚举（300 起，KCES2 1.36.0 新增）
  *
- * 游戏按 `keywordProp.type.ToString()` 直接取关键字名（PartsMaterialManager 里 EnableKeyword / DisableKeyword），
+ * 游戏按 keywordProp.type.ToString() 直接取关键字名（PartsMaterialManager 里 EnableKeyword / DisableKeyword），
  * 所以名字必须与枚举拼写完全一致——304 的 USE_NYURIN 在源码里就没有前导下划线，不要「修正」成 _USE_NYURIN。
  */
 export const KeywordPropNames: Record<number, string> = {
@@ -276,8 +276,8 @@ export function materialPropOptions(kind: MaterialPropKind): Array<{ label: stri
 }
 
 /* ==========================================================================
- *  颜色变体（Colvari）与贴图预合成（PreMulTexDatas）相关枚举
- *  取值全部照 KCES2 1.36.0 反编译源码逐个核对，注释里标出出处
+ * 颜色变体（Colvari）与贴图预合成（PreMulTexDatas）相关枚举
+ * 取值全部照 KCES2 1.36.0 反编译源码逐个核对，注释里标出出处
  * ========================================================================== */
 
 /** InfinityColorTexMgr2.InfColData.COLOR_TYPE，用于 colorType / colorTypeSub / infColType */
@@ -365,7 +365,7 @@ export function stringEnumOptions(names: string[]): Array<{ label: string; value
 }
 
 /* ==========================================================================
- *  menu 命令参数用到的枚举（KCES2 1.36.0）
+ * menu 命令参数用到的枚举（KCES2 1.36.0）
  * ========================================================================== */
 
 /**
@@ -395,7 +395,7 @@ export const SlotIDNames: string[] = [
     ...Array.from({length: 72}, (_, i) => `accAcc${i + 1}`),
 ];
 
-/** MaterialMgr.ALPHA_TYPE（MaterialMgr.cs:2095），用于 tex / partcolor 系列的 `名称:类型=百分比` 后缀 */
+/** MaterialMgr.ALPHA_TYPE（MaterialMgr.cs:2095），用于 tex / partcolor 系列的 名称:类型=百分比 后缀 */
 export const AlphaTypeNames: string[] = ["ALPHA_NONE", "ALPHA_TEX", "ALPHA_MAT"];
 
 /** TBodySkin.CHIKUBI_STATE（TBodySkin.cs:1528），用于 乳首 命令 */
@@ -404,7 +404,7 @@ export const ChikubiStateNames: string[] = ["None", "固定凸", "基本凹"];
 /** TBodySkin.CHINKO_STATE（TBodySkin.cs:1535），用于 ちんこ 命令 */
 export const ChinkoStateNames: string[] = ["None", "しまう"];
 
-/** TBody.MOVE_HIDE_MODE（TBody.cs:4365）[Flags]，parthidemove 用 `&` 连接，走 Enum.Parse 区分大小写 */
+/** TBody.MOVE_HIDE_MODE（TBody.cs:4365）[Flags]，parthidemove 用 & 连接，走 Enum.Parse 区分大小写 */
 export const MoveHideModeNames: string[] = ["NONE", "MOVE", "HIDE"];
 
 /** TBody.PART_HIDE_TYPE（TBody.cs:4372），用于 parthidemove */
@@ -451,7 +451,7 @@ export const MenuHaraYureLimitTypeNames: string[] = ["None", "YureAvailable", "Y
 export const BoneMorphTypeNames: string[] = ["pos", "rot", "scl"];
 
 /* ==========================================================================
- *  碰撞体（dbcol / dslcol / limbcol / ikcol）相关枚举
+ * 碰撞体（dbcol / dslcol / limbcol / ikcol）相关枚举
  * ========================================================================== */
 
 /**
@@ -817,9 +817,9 @@ export const MPNOptionsWithId = Object.entries(MPN)
 /**
  * MPN 枚举值 → 名称
  *
- * 未知值返回纯数字字符串，与游戏侧 `mpn.ToString()` 的写法一致——碰撞体的
- * `*MpnNameList` 是游戏用 ToString() 生成的，而游戏加载时用 `Enum.TryParse` 反解，
- * 写成 `#9` 这种带修饰的形式会解析失败并被静默丢弃。
+ * 未知值返回纯数字字符串，与游戏侧 mpn.ToString() 的写法一致——碰撞体的
+ * *MpnNameList 是游戏用 ToString() 生成的，而游戏加载时用 Enum.TryParse 反解，
+ * 写成 #9 这种带修饰的形式会解析失败并被静默丢弃。
  */
 export function mpnName(value: number): string {
     return (MPN as Record<number, string | undefined>)[value] ?? String(value);

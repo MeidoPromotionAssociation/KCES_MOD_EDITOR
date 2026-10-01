@@ -39,7 +39,7 @@ export const fieldOf = (kind: MaterialPropKind) => PropKinds.find((prop) => prop
 
 /**
  * PropNameInput 属性名输入
- * 枚举名（忽略大小写，与游戏侧 Enum.TryParse(ignoreCase: true) 一致）或 `#数字` / 纯数字会被提交；
+ * 枚举名（忽略大小写，与游戏侧 Enum.TryParse(ignoreCase: true) 一致）或 #数字 / 纯数字会被提交；
  * 认不出的文本留在框里不提交，免得把数据改成没意义的取值
  */
 const PropNameInput: React.FC<{

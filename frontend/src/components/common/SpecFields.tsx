@@ -13,7 +13,7 @@ import BigIntInput from "./BigIntInput";
 
 /**
  * 所有字段共有的描述
- * name 是库里的 JSON 键，既是数据路径也是缺省显示名，**不能翻译**；
+ * name 是库里的 JSON 键，既是数据路径也是缺省显示名，不能翻译；
  * 显示名另走 label（i18n key），没给的字段就照旧显示 JSON 键
  */
 type SpecBase = { name: string; label?: string };
