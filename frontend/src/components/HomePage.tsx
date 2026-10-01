@@ -1,5 +1,5 @@
 // frontend/src/components/HomePage.tsx
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import {Button, FloatButton, Layout, Space} from "antd";
 import NavBar from "./NavBar";
@@ -24,9 +24,6 @@ const HomePage: React.FC = () => {
     const hasUpdate = useVersionCheck();
     const {handleSelectFile, handleSaveFile} = useFileHandlers();
     const navigate = useNavigate();
-    const [language] = useState(() => {
-        return localStorage.getItem('i18nextLng');
-    });
 
     // 设置窗口标题
     useEffect(() => {
@@ -120,12 +117,11 @@ const HomePage: React.FC = () => {
                         <GithubOutlined/>
                     </Button>
 
-                    {language === "zh-CN" && (
-                        <Button type='text'
-                                onClick={() => Browser.OpenURL(ChineseMODGuideUrl)}>
-                            <p>简明 MOD 教程</p>
-                        </Button>
-                    )}
+                    {/* 教程正文只有中文，其他语言的文案里带「中文」字样提示 */}
+                    <Button type='text'
+                            onClick={() => Browser.OpenURL(ChineseMODGuideUrl)}>
+                        <p>{t('HomePage.chinese_mod_guide')}</p>
+                    </Button>
 
                     <Button type="text" size="large" style={{color: "#666"}}
                             onClick={() => Browser.OpenURL(GitHubUrl)}>

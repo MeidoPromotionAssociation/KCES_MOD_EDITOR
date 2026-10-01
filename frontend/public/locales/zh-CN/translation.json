@@ -120,7 +120,8 @@
     "nei": "NEI 数据表 (.nei)"
   },
   "HomePage": {
-    "new_version_button": "有新版本可用，点击前往下载"
+    "new_version_button": "有新版本可用，点击前往下载",
+    "chinese_mod_guide": "简明 MOD 教程"
   },
   "SettingsPage": {
     "general_settings": "通用设置",

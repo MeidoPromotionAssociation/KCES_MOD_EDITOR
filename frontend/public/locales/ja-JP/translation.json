@@ -120,7 +120,8 @@
     "nei": "NEI データテーブル (.nei)"
   },
   "HomePage": {
-    "new_version_button": "新しいバージョンがあります。クリックしてダウンロード"
+    "new_version_button": "新しいバージョンがあります。クリックしてダウンロード",
+    "chinese_mod_guide": "シンプル中国語 MOD ガイド"
   },
   "SettingsPage": {
     "general_settings": "一般設定",

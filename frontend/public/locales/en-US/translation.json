@@ -120,7 +120,8 @@
     "nei": "NEI data table (.nei)"
   },
   "HomePage": {
-    "new_version_button": "A new version is available, click to download"
+    "new_version_button": "A new version is available, click to download",
+    "chinese_mod_guide": "Simple Chinese MOD Guide"
   },
   "SettingsPage": {
     "general_settings": "General Settings",
