@@ -1,14 +1,16 @@
-import React, {useRef, useState} from "react";
+import React, {useCallback, useRef, useState} from "react";
 import {Button, Empty, Input, theme, Tooltip} from "antd";
 import {DeleteOutlined, HolderOutlined, PlusOutlined} from "@ant-design/icons";
 import {useTranslation} from "react-i18next";
 import {useVirtualizer} from "@tanstack/react-virtual";
+import {Resizable} from "react-resizable";
 import type {DragEndEvent, DragOverEvent, DragStartEvent} from "@dnd-kit/react";
 import {DragDropProvider} from "@dnd-kit/react";
 import {isSortable, useSortable} from "@dnd-kit/react/sortable";
 import {SortableKeyboardPlugin} from "@dnd-kit/dom/sortable";
 import {csvColumnCount} from "../../utils/csv";
 import {arrayMove} from "../../utils/utils";
+import {NeiColumnWidthsKey} from "../../utils/LocalStorageKeys";
 
 /**
  * NeiTableEditor .nei 表格视图
@@ -19,12 +21,48 @@ import {arrayMove} from "../../utils/utils";
  * 而不开虚拟滚动的话上千行 × 每格一个 Input 会卡死。
  * 因此改成自绘表格：行由 @tanstack/react-virtual 虚拟化，拖动排序由 @dnd-kit/react 负责。
  * 每次修改都同步回 Rows/Cols，避免保存时行列数与实际数据不一致。
+ *
+ * 列宽可拖拽调整（基于 react-resizable，与 PresetRecordTable 同一套做法）：
+ * .nei 各列宽度差异很大（有的存路径、有的只存 0/1），固定 200px 总要横向滚动。
+ * 宽度按「列序号」存在 localStorage 里跨会话保留，详见 readStoredColumnWidths。
  */
 
-const CellWidth = 200;   // 数据列宽
-const HeadWidth = 108;   // 行首列宽（拖拽手柄 + 行号 + 删除按钮），横向滚动时固定在左侧
-const RowHeight = 33;    // 行高，固定值，虚拟滚动按它预估
-const HeaderHeight = 38; // 表头行高
+const DefaultCellWidth = 200; // 数据列宽默认值
+const MinCellWidth = 60;      // 列宽下限：再窄输入框就没法用了
+const MaxCellWidth = 900;     // 列宽上限：避免一列拖满整屏把别的列挤没
+const HeadWidth = 108;        // 行首列宽（拖拽手柄 + 行号 + 删除按钮），横向滚动时固定在左侧
+const RowHeight = 33;         // 行高，固定值，虚拟滚动按它预估
+const HeaderHeight = 38;      // 表头行高
+
+/**
+ * 读取上次拖动后的列宽表（key = 列序号，从 0 开始）。
+ *
+ * 为什么按「列序号」而不是列名存：.nei 表头就是 列 1 / 列 2 ...，没有稳定标识，
+ * 序号是这里唯一可用的键。代价是删除中间某列后，右侧列的序号会整体左移、
+ * 从而继承前一列的宽度 —— 列宽只是显示偏好，这个偏差可以接受，不值得为它做迁移逻辑。
+ *
+ * 越界值一律丢弃并回落到默认宽，避免手改 localStorage 后把某列撑成 0 或几千像素。
+ */
+function readStoredColumnWidths(): Record<number, number> {
+    try {
+        const raw = localStorage.getItem(NeiColumnWidthsKey);
+        if (!raw) return {};
+        const parsed = JSON.parse(raw);
+        if (!parsed || typeof parsed !== "object") return {};
+        const result: Record<number, number> = {};
+        for (const [key, value] of Object.entries(parsed)) {
+            const index = Number(key);
+            const width = Number(value);
+            if (!Number.isInteger(index) || index < 0) continue;
+            if (!Number.isFinite(width) || width < MinCellWidth || width > MaxCellWidth) continue;
+            result[index] = width;
+        }
+        return result;
+    } catch {
+        // localStorage 里是脏数据（手改过、被别的版本写过）就当作没存过
+        return {};
+    }
+}
 
 /**
  * dnd-kit 默认的 OptimisticSortingPlugin 是靠 insertAdjacentElement 真的挪 DOM 节点来做
@@ -37,7 +75,8 @@ const SortablePlugins = [SortableKeyboardPlugin];
 interface NeiRowProps {
     rowIndex: number;
     cells: string[];
-    colCount: number;
+    /** 各列当前生效的宽度，长度与列数一致 */
+    columnWidths: number[];
     /** 虚拟滚动算出的行顶端偏移 */
     top: number;
     dragLabel: string;
@@ -54,7 +93,7 @@ interface NeiRowProps {
 const NeiRow: React.FC<NeiRowProps> = ({
                                            rowIndex,
                                            cells,
-                                           colCount,
+                                           columnWidths,
                                            top,
                                            dragLabel,
                                            deleteLabel,
@@ -65,10 +104,11 @@ const NeiRow: React.FC<NeiRowProps> = ({
     const {ref, handleRef, isDragging} = useSortable({id: rowIndex, index: rowIndex, plugins: SortablePlugins});
 
     const border = `1px solid ${token.colorBorderSecondary}`;
-    const cellStyle: React.CSSProperties = {
+    // 行的总宽必须与表头逐列一致（都取 columnWidths），否则表体与表头会错位
+    const rowWidth = HeadWidth + columnWidths.reduce((sum, width) => sum + width, 0);
+    const baseCellStyle: React.CSSProperties = {
         display: "flex",
         alignItems: "center",
-        flex: `0 0 ${CellWidth}px`,
         padding: "0 4px",
         borderRight: border,
         borderBottom: border,
@@ -85,14 +125,14 @@ const NeiRow: React.FC<NeiRowProps> = ({
                 left: 0,
                 display: "flex",
                 height: RowHeight,
-                width: HeadWidth + colCount * CellWidth,
+                width: rowWidth,
                 background: isDragging ? token.controlItemBgActive : token.colorBgContainer,
             }}
         >
             <div
                 role="rowheader"
                 style={{
-                    ...cellStyle,
+                    ...baseCellStyle,
                     position: "sticky",
                     left: 0,
                     zIndex: 1,
@@ -131,8 +171,9 @@ const NeiRow: React.FC<NeiRowProps> = ({
                             icon={<DeleteOutlined/>} onClick={() => onDeleteRow(rowIndex)}/>
                 </Tooltip>
             </div>
-            {Array.from({length: colCount}, (_, colIndex) => (
-                <div key={colIndex} role="cell" style={cellStyle}>
+            {Array.from({length: columnWidths.length}, (_, colIndex) => (
+                <div key={colIndex} role="cell"
+                     style={{...baseCellStyle, flex: `0 0 ${columnWidths[colIndex]}px`}}>
                     <Input
                         size="small"
                         value={cells[colIndex] ?? ""}
@@ -154,7 +195,39 @@ const NeiTableEditor: React.FC<{
 
     const rows: string[][] = Array.isArray(data?.Data) ? data.Data : [];
     const colCount = Math.max(1, csvColumnCount(rows));
-    const totalWidth = HeadWidth + colCount * CellWidth;
+
+    /**
+     * 各列宽度。初始值从 localStorage 读入，没存过的列回落到 DefaultCellWidth。
+     *
+     * 宽度由本组件自己持有，而不是写回 data —— 列宽是显示偏好，不属于 .nei 文件内容，
+     * 塞进 data 会被序列化进文件、还会让保存时的 diff 出现噪声。
+     */
+    const [columnWidths, setColumnWidths] = useState<Record<number, number>>(readStoredColumnWidths);
+
+    /** 当前生效的逐列宽度数组，长度对齐 colCount */
+    const widths = React.useMemo(
+        () => Array.from({length: colCount}, (_, colIndex) => columnWidths[colIndex] ?? DefaultCellWidth),
+        [colCount, columnWidths],
+    );
+
+    /** 表格内容总宽（行首列 + 各数据列），表头、每行与拖动指示线都用它 */
+    const totalWidth = HeadWidth + widths.reduce((sum, width) => sum + width, 0);
+
+    /**
+     * 拖动中的连续更新只改 state，松手时（onResizeStop）才落 localStorage ——
+     * 拖拽每秒触发几十次，每次都写 localStorage 是同步 I/O，会拖慢拖动本身。
+     */
+    const resizeColumn = useCallback((colIndex: number, nextWidth: number) => {
+        setColumnWidths((prev) => (prev[colIndex] === nextWidth ? prev : {...prev, [colIndex]: nextWidth}));
+    }, []);
+
+    const persistColumnWidths = useCallback((next: Record<number, number>) => {
+        try {
+            localStorage.setItem(NeiColumnWidthsKey, JSON.stringify(next));
+        } catch {
+            // 隐私模式 / 配额满时写不进去，列宽降级为「本次会话有效」，不影响编辑
+        }
+    }, []);
 
     const virtualizer = useVirtualizer({
         count: rows.length,
@@ -243,10 +316,96 @@ const NeiTableEditor: React.FC<{
     const headerCellStyle: React.CSSProperties = {
         display: "flex",
         alignItems: "center",
-        flex: `0 0 ${CellWidth}px`,
         padding: "0 4px 0 8px",
         borderRight: border,
         borderBottom: border,
+    };
+
+    /**
+     * 表头单元格的可拖拽内容（react-resizable）。
+     *
+     * 与 PresetRecordTable 的 ResizableHeaderCell 同一套做法，但这里不是 antd Table，
+     * 所以不存在「全局注册的 header.cell 会被每一列复用」的问题，直接把内容包一层即可。
+     *
+     * 包的是内层 div 而不是外层那个 flex 单元格：Resizable 会给子元素注入
+     * style={{width}}，包外层会把单元格宽度从 flex 布局手里抢走，和 flex: 0 0 Npx 打架。
+     * 包内层就只影响内容区，实际列宽仍由 widths 驱动。
+     *
+     * 内层 div 必须自带 position: relative：把手是 position: absolute; right: -3px，
+     * 靠这个定位上下文才能贴在本列右边线上。库自带的 .react-resizable{position:relative}
+     * 本项目没引入（react-resizable/css/styles.css 未被 import），少了它把手会一路向上
+     * 找到表格内容容器，于是每列的把手都堆到整张表右边缘 —— 表现为「看不到把手」。
+     */
+    const renderHeaderCellContent = (colIndex: number) => {
+        const currentWidth = widths[colIndex];
+        return (
+            <Resizable
+                width={currentWidth}
+                height={0}
+                axis="x"
+                // 只留右边一个把手：列宽调整只该从右边界拖
+                resizeHandles={["e"]}
+                minConstraints={[MinCellWidth, 0]}
+                maxConstraints={[MaxCellWidth, Infinity]}
+                onResize={(_e, data) => resizeColumn(colIndex, Math.round(data.size.width))}
+                onResizeStop={(_e, data) => {
+                    const nextWidth = Math.round(data.size.width);
+                    setColumnWidths((prev) => {
+                        const next = {...prev, [colIndex]: nextWidth};
+                        persistColumnWidths(next);
+                        return next;
+                    });
+                }}
+                // 双击把手恢复默认列宽
+                handle={(handleAxis, ref) => (
+                    <span
+                        ref={ref as React.Ref<HTMLSpanElement>}
+                        className={`nei-col-resizer nei-col-resizer-${handleAxis}`}
+                        role="separator"
+                        aria-orientation="vertical"
+                        title={t('NeiEditor.resize_column_tip')}
+                        onDoubleClick={(event) => {
+                            // 不让双击冒泡到表头，否则会和别的点击行为打架
+                            event.stopPropagation();
+                            setColumnWidths((prev) => {
+                                const next = {...prev};
+                                delete next[colIndex];
+                                persistColumnWidths(next);
+                                return next;
+                            });
+                        }}
+                    />
+                )}
+            >
+                {/* 内边距与定位上下文都放在这一层：把手才能贴到单元格真正的右边线上 */}
+                <div className="nei-col-resizer-inner" style={{
+                    position: "relative",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    gap: 4,
+                    width: "100%",
+                    height: "100%",
+                    paddingInline: 8,
+                    boxSizing: "border-box",
+                    overflow: "hidden",
+                }}>
+                    <span style={{overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap"}}>
+                        {`${t('NeiEditor.column')} ${colIndex + 1}`}
+                    </span>
+                    <Tooltip title={t('NeiEditor.delete_column')}>
+                        <Button
+                            type="text"
+                            size="small"
+                            danger
+                            aria-label={t('NeiEditor.delete_column')}
+                            icon={<DeleteOutlined/>}
+                            onClick={() => handleDeleteColumn(colIndex)}
+                        />
+                    </Tooltip>
+                </div>
+            </Resizable>
+        );
     };
 
     return (
@@ -298,22 +457,14 @@ const NeiTableEditor: React.FC<{
                                         #
                                     </div>
                                     {Array.from({length: colCount}, (_, colIndex) => (
-                                        <div key={colIndex} role="columnheader" style={{
+                                        // padding 归零后交给内层 div，把手才能贴到单元格右边线上；
+                                        // 表头单元格默认的 overflow 不能裁掉向右溢出的把手（见 style.css）
+                                        <div key={colIndex} role="columnheader" className="nei-header-cell" style={{
                                             ...headerCellStyle,
-                                            justifyContent: "space-between",
-                                            gap: 4,
+                                            padding: 0,
+                                            flex: `0 0 ${widths[colIndex]}px`,
                                         }}>
-                                            <span>{`${t('NeiEditor.column')} ${colIndex + 1}`}</span>
-                                            <Tooltip title={t('NeiEditor.delete_column')}>
-                                                <Button
-                                                    type="text"
-                                                    size="small"
-                                                    danger
-                                                    aria-label={t('NeiEditor.delete_column')}
-                                                    icon={<DeleteOutlined/>}
-                                                    onClick={() => handleDeleteColumn(colIndex)}
-                                                />
-                                            </Tooltip>
+                                            {renderHeaderCellContent(colIndex)}
                                         </div>
                                     ))}
                                 </div>
@@ -325,7 +476,7 @@ const NeiTableEditor: React.FC<{
                                         key={row.key}
                                         rowIndex={row.index}
                                         cells={rows[row.index] ?? []}
-                                        colCount={colCount}
+                                        columnWidths={widths}
                                         top={row.start}
                                         dragLabel={t('NeiEditor.drag_row')}
                                         deleteLabel={t('NeiEditor.delete_row')}

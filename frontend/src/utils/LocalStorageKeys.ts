@@ -24,6 +24,8 @@ export const MaterialFormLayoutKey = "MaterialAssetsFormLayout"; // 存储材质
 
 export const Texture2DExportFormatKey = "Texture2DExportFormat"; // 存储 Texture2D 编辑器导出图像的默认格式（png / dds）
 
+export const NeiColumnWidthsKey = "NeiColumnWidths"; // 存储 nei 表格视图中各数据列拖拽后的宽度（JSON，key 为列序号）
+
 // 每个格式编辑器的视图模式键统一由此函数生成
 export function editorViewModeKey(formatKey: string): string {
     return `${formatKey}EditorViewMode`;
