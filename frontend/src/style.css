@@ -86,3 +86,193 @@ html.file-drop-target-active {
     overflow: auto;
     min-height: 0;
 }
+
+/*
+ * preset 表格的展开列（自己声明的，见 PresetRecordTable）
+ * 表头单元格留空更干净；列宽已由列定义给定，这里只处理视觉。
+ */
+.preset-expand-col-header {
+    padding-inline: 0 !important;
+}
+
+/* 展开按钮去掉 antd 按钮的内边距，让它居中且不撑宽列 */
+.preset-expand-col-button {
+    padding: 0 !important;
+    width: 22px;
+    height: 22px;
+    min-width: 22px;
+}
+
+/*
+ * preset 表格外层折叠栏（见 PresetRecordTable 的 Collapse）
+ * ghost 模式本来就没有底色和边框，这里只是收紧间距：
+ * 页面纵向要塞 4 张表，默认的 header 内边距会把高度堆起来。
+ * 内容区左内边距设 0，让表格与表头标题左对齐。
+ */
+.preset-table-collapse.ant-collapse-ghost > .ant-collapse-item > .ant-collapse-header {
+    padding: 4px 0 !important;
+    align-items: center;
+}
+
+.preset-table-collapse.ant-collapse-ghost > .ant-collapse-item > .ant-collapse-content > .ant-collapse-content-box {
+    padding: 6px 0 0 !important;
+}
+
+/*
+ * 「列出」下拉（见 PresetRecordTable 的 Dropdown）
+ * 勾选状态由 Checkbox 表达，所以把菜单项自身的选中高亮压掉，避免一列两处都"亮"。
+ * 另外列多了要能滚，撑开最大高度。
+ */
+.preset-column-toggle-menu .ant-dropdown-menu-item-selected,
+.preset-column-toggle-menu .ant-dropdown-menu-item-active:hover {
+    background: transparent !important;
+}
+
+.preset-column-toggle-menu .ant-dropdown-menu-item-selected:hover {
+    background: var(--ant-control-item-bg-hover, rgba(0, 0, 0, 0.04)) !important;
+}
+
+.preset-column-toggle-menu {
+    max-height: 320px;
+    overflow: auto;
+}
+
+/*
+ * 菜单项文字左对齐。
+ * 不能省：html 上有全局 text-align: center（见文件开头），会一路继承到浮层里，
+ * 菜单项没有显式对齐时就是居中的。
+ */
+.preset-column-toggle-menu .ant-dropdown-menu-item,
+.preset-column-toggle-menu .ant-dropdown-menu-item .ant-checkbox-wrapper {
+    text-align: left;
+}
+
+/* 复选框与文字之间留点距离，并让整项占满宽度方便点选 */
+.preset-column-toggle-menu .ant-dropdown-menu-item .ant-checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+/*
+ * 列宽拖拽把手（见 PresetRecordTable 的 ResizableHeaderCell，基于 react-resizable）
+ *
+ * 库的样式表 react-resizable/css/styles.css 本项目没有引入（main.tsx 只 import 了
+ * ./style.css），所以 .react-resizable-handle 那套默认定位并不存在，
+ * 这里的定位、尺寸、光标全部是自己给的 —— 不要以为在「覆盖」库样式。
+ *
+ * 同理 .react-resizable { position: relative } 也不在，把手的定位上下文靠
+ * ResizableHeaderCell 内层 div 上显式写的 position: relative 提供
+ * （早期版本是靠 antd 给 th 设的 position: relative 兜住的，已改为显式声明）。
+ *
+ * 热区 7px（好点中）但本身透明，靠 ::after 在 hover / 拖拽时画一条 2px 竖线，
+ * 否则每列右边都竖着一道线会显得很脏。
+ */
+.preset-col-resizer {
+    position: absolute;
+    top: 0;
+    right: -3px;
+    z-index: 1;
+    width: 7px;
+    height: 100%;
+    /* 让触摸设备把竖直滑动留给页面滚动，横向才用于拖拽 */
+    touch-action: none;
+    cursor: col-resize;
+}
+
+.preset-col-resizer::after {
+    content: "";
+    position: absolute;
+    top: 15%;
+    left: 50%;
+    width: 2px;
+    height: 70%;
+    transform: translateX(-50%);
+    border-radius: 1px;
+    background: transparent;
+    transition: background 0.15s;
+}
+
+/* 悬停 / 拖拽中显出竖线，给出「这里能拖」的提示 */
+.preset-col-resizer:hover::after,
+.preset-col-resizer:active::after {
+    background: var(--ant-color-primary, #1677ff);
+}
+
+/*
+ * 表头单元格要允许把手溢出到右边界外（right: -3px），
+ * 而 antd 的表头默认 overflow: hidden 会把把手裁掉。
+ */
+.preset-table-collapse .ant-table-thead > tr > th {
+    overflow: visible;
+}
+
+/*
+ * 单元格的内边距挪到内层 div 上（见 ResizableHeaderCell 的 padding: 0），
+ * 这样把手能贴到单元格真正的边线上，而不是被 8px 内边距顶进去。
+ */
+.preset-table-collapse .ant-table-thead > tr > th .preset-col-resizer-inner {
+    padding-inline: 8px;
+}
+
+/*
+ * nei 表格视图的列宽拖拽把手（见 NeiTableEditor 的 renderHeaderCellContent，基于 react-resizable）
+ *
+ * 与 preset 的 .preset-col-resizer 是同一套视觉效果，但这里不依赖库自带的
+ * .react-resizable-handle / .react-resizable 样式 —— 那套样式并没有在本项目里被引入
+ * （main.tsx 只 import 了 ./style.css），所以：
+ *
+ * 库自带的 .react-resizable { position: relative } 不在，必须自己补。
+ * 少了它，把手的 position: absolute 会一路向上找最近的定位祖先（最终落到
+ * 表格内容容器上），于是所有把手都堆在整张表的右边缘、且高度按整表算 —— 表现为「看不到把手」。
+ * 一个 display: contents 的包裹层就能补上这个定位上下文，同时不干扰 flex 布局。
+ *
+ * 热区 7px（好点中）但本身透明，靠 ::after 在 hover / 拖拽时画一条 2px 竖线，
+ * 否则每列右边都竖着一道线会显得很脏。
+ */
+.nei-resizer-anchor {
+    display: contents;
+}
+
+.nei-col-resizer {
+    position: absolute;
+    top: 0;
+    right: -3px;
+    z-index: 1;
+    width: 7px;
+    height: 100%;
+    /* 让触摸设备把竖直滑动留给页面滚动，横向才用于拖拽 */
+    touch-action: none;
+    cursor: col-resize;
+}
+
+.nei-col-resizer::after {
+    content: "";
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    width: 2px;
+    height: 50%;
+    transform: translateX(-50%);
+    border-radius: 1px;
+    /* 平时就淡淡地显出来，用户才知道这里能拖；hover / 拖拽时变成主色并拉长 */
+    background: var(--ant-color-border, #d9d9d9);
+    transition: background 0.15s ease, height 0.15s ease, top 0.15s ease;
+}
+
+/* 悬停 / 拖拽中显出醒目的竖线，给出「这里能拖」的提示 */
+.nei-col-resizer:hover::after,
+.nei-col-resizer:active::after {
+    top: 15%;
+    height: 70%;
+    background: var(--ant-color-primary, #1677ff);
+}
+
+/*
+ * 表头单元格要允许把手溢出到右边界外（right: -3px），否则会被裁掉；
+ * 内边距已挪到内层 div 上（见 renderHeaderCellContent 的 padding: 0）。
+ */
+.nei-header-cell {
+    overflow: visible;
+}
+

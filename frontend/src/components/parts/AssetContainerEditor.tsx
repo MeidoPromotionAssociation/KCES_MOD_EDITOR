@@ -1,6 +1,6 @@
 import React, {useEffect, useMemo, useRef, useState} from "react";
-import {Button, Empty, Input, Space, Splitter, theme, Typography} from "antd";
-import {CopyOutlined, DeleteOutlined, PlusOutlined} from "@ant-design/icons";
+import {Button, Empty, Input, Space, Splitter, theme, Tooltip, Typography} from "antd";
+import {CopyOutlined, DeleteOutlined, PlusOutlined, SortAscendingOutlined} from "@ant-design/icons";
 import {useTranslation} from "react-i18next";
 import {useVirtualizer} from "@tanstack/react-virtual";
 import {losslessParse, losslessStringify} from "../../utils/losslessJson";
@@ -61,6 +61,8 @@ const AssetContainerEditor: React.FC<AssetContainerEditorProps> = ({
     const {t} = useTranslation();
     const {token} = theme.useToken();
     const [search, setSearch] = useState("");
+    // 列表按名字排序显示；数组本身不动，编辑/删除仍按原始下标写回
+    const [sortByName, setSortByName] = useState(true);
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
     const [initialListWidth] = useState(readStoredListWidth);
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -78,8 +80,16 @@ const AssetContainerEditor: React.FC<AssetContainerEditorProps> = ({
                 result.push(index);
             }
         }
+        if (sortByName) {
+            // 只比较排序键，不依赖比较函数的正负号约定，保证结果稳定
+            result.sort((a, b) => {
+                const left = itemLabel(assets[a], a);
+                const right = itemLabel(assets[b], b);
+                return left < right ? -1 : left > right ? 1 : a - b;
+            });
+        }
         return result;
-    }, [assets, search, itemLabel]);
+    }, [assets, search, itemLabel, sortByName]);
 
     const virtualizer = useVirtualizer({
         count: visibleIndexes.length,
@@ -164,9 +174,21 @@ const AssetContainerEditor: React.FC<AssetContainerEditorProps> = ({
                     <Button icon={<PlusOutlined/>} onClick={() => addAsset(newAsset())}
                             title={t('PartsEditor.add_asset')}/>
                 </Space.Compact>
-                <Typography.Text type="secondary">
-                    {t('PartsEditor.asset_count', {count: assets.length})}
-                </Typography.Text>
+                <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8}}>
+                    <Typography.Text type="secondary">
+                        {t('PartsEditor.asset_count', {count: assets.length})}
+                    </Typography.Text>
+                    <Tooltip title={t('PartsEditor.sort_by_name_tip')}>
+                        <Button
+                            size="small"
+                            type={sortByName ? "primary" : "default"}
+                            icon={<SortAscendingOutlined/>}
+                            onClick={() => setSortByName((value) => !value)}
+                        >
+                            {t('PartsEditor.sort_by_name')}
+                        </Button>
+                    </Tooltip>
+                </div>
                 <div
                     ref={scrollRef}
                     role="listbox"

@@ -323,13 +323,15 @@ const BaseFormatEditor = forwardRef<FormatEditorRef, BaseFormatEditorProps>((pro
                     }
                 }}
             >
+                {/* 这层 div 必须有：ConfigProvider 渲染成的是普通 div，不是 flex 容器。
+                    少了它，下面 renderStyle1 里写的 flex: 1 会因为父级不是 flex 而失效，
+                    主体就只能靠内容撑高，头部的 renderHeader 也就被迫自己限高（曾用 maxHeight: 150）。
+                    有了这层，头部按内容自然高、主体拿走剩余高度，两边共享页面高度。 */}
+                <div style={{display: "flex", flexDirection: "column", flex: 1, minHeight: 0}}>
 
-                {props.renderHeader && data !== null && (
-                    <div style={{flexShrink: 0}}>
-                        {props.renderHeader(data, setData)}
-                    </div>
-                )}
-
+                {/* 视图切换放最上面：它是全局的入口，应该先于内容区出现。
+                    注意 renderHeader 渲染的是文件内容（缩略图、结构字段等），
+                    并不是顶栏，所以不能靠它来承载切换控件 */}
                 {/* 只有一个视图时不显示样式切换：去掉结构化表单的格式（nson/undressdat/undresspdat）
                     只剩 JSON，留一个灰掉的「样式1」按钮没有意义 */}
                 {hasStyle1 && (
@@ -351,19 +353,28 @@ const BaseFormatEditor = forwardRef<FormatEditorRef, BaseFormatEditorProps>((pro
                     </div>
                 )}
 
+                {/* 头部按内容自然撑高（flexShrink: 0 表示不参与压缩），
+                    高了就把下面的主体往下挤，而不是自己内部滚 */}
+                {props.renderHeader && data !== null && (
+                    <div style={{flexShrink: 0}}>
+                        {props.renderHeader(data, setData)}
+                    </div>
+                )}
+
                 {data === null || data === undefined ? (
                     <Empty
                         description={noNewDocument ? t('Infos.format_no_new_document') : t('Infos.pls_select_a_file_to_edit')}
                         style={{marginTop: 100}}
                     />
                 ) : (
-                    <>
+                    <div style={{flex: 1, minHeight: 0, display: "flex", flexDirection: "column"}}>
                         {viewMode === 1 && hasStyle1 && props.renderStyle1!(data, setData)}
                         {viewMode === 2 && (props.renderStyle2
                             ? props.renderStyle2(data, setData)
                             : <MonacoJsonEditor data={data} setData={setData} path={editingModelPath(format.key)}/>)}
-                    </>
+                    </div>
                 )}
+                </div>
             </ConfigProvider>
         </div>
     );

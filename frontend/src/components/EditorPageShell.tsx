@@ -11,6 +11,7 @@ import {FormatEditorRef} from "./common/BaseFormatEditor";
 import PayloadEditor from "./PayloadEditor";
 import JsonTextEditor from "./JsonTextEditor";
 import NeiEditor from "./NeiEditor";
+import PresetEditor from "./PresetEditor";
 import AutoFormEditor from "./AutoFormEditor";
 import MenuAssetsEditor from "./MenuAssetsEditor";
 import MaterialAssetsEditor from "./MaterialAssetsEditor";
@@ -44,6 +45,8 @@ function editorComponentFor(format: KCESFormatDef) {
             return JsonTextEditor;
         case "nei":
             return NeiEditor;
+        case "preset":
+            return PresetEditor;
         default:
             return AutoFormEditor;
     }
