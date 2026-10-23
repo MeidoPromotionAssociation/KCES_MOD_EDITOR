@@ -52,6 +52,7 @@ var protocolEditableExtensions = map[string]struct{}{
 	".undresspdat": {},
 	".psk":         {},
 	".nei":         {},
+	".neimp":       {},
 	".csv":         {},
 }
 

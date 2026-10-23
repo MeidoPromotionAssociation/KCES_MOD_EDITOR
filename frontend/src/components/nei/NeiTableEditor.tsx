@@ -360,7 +360,7 @@ const NeiTableEditor: React.FC<{
                 handle={(handleAxis, ref) => (
                     <span
                         ref={ref as React.Ref<HTMLSpanElement>}
-                        className={`nei-col-resizer nei-col-resizer-${handleAxis}`}
+                        className={`table-col-resizer table-col-resizer-${handleAxis}`}
                         role="separator"
                         aria-orientation="vertical"
                         title={t('NeiEditor.resize_column_tip')}
@@ -378,7 +378,7 @@ const NeiTableEditor: React.FC<{
                 )}
             >
                 {/* 内边距与定位上下文都放在这一层：把手才能贴到单元格真正的右边线上 */}
-                <div className="nei-col-resizer-inner" style={{
+                <div className="table-col-resizer-inner" style={{
                     position: "relative",
                     display: "flex",
                     alignItems: "center",
@@ -459,7 +459,7 @@ const NeiTableEditor: React.FC<{
                                     {Array.from({length: colCount}, (_, colIndex) => (
                                         // padding 归零后交给内层 div，把手才能贴到单元格右边线上；
                                         // 表头单元格默认的 overflow 不能裁掉向右溢出的把手（见 style.css）
-                                        <div key={colIndex} role="columnheader" className="nei-header-cell" style={{
+                                        <div key={colIndex} role="columnheader" className="table-header-cell" style={{
                                             ...headerCellStyle,
                                             padding: 0,
                                             flex: `0 0 ${widths[colIndex]}px`,

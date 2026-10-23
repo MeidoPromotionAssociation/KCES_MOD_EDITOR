@@ -111,6 +111,11 @@ fileAssociations:
     description: KCES Encrypted CSV File
     iconName: nei
     role: Editor
+  - ext: neimp
+    name: neimp
+    description: CRC3D3 CSV MessagePack File
+    iconName: nei
+    role: Editor
 
 # Custom URL Protocols
 # 供 ABA EXPLORER 等外部工具用 kces-mod-editor://open?path=<URL 编码的绝对路径> 唤起本编辑器，

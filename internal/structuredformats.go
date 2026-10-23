@@ -8,7 +8,9 @@ import (
 	"path/filepath"
 	"strings"
 
+	serializationCRC3D3 "github.com/MeidoPromotionAssociation/MeidoSerialization/v2/serialization/CRC3D3"
 	serializationKCES "github.com/MeidoPromotionAssociation/MeidoSerialization/v2/serialization/KCES"
+	CRC3D3Service "github.com/MeidoPromotionAssociation/MeidoSerialization/v2/service/CRC3D3"
 	KCESService "github.com/MeidoPromotionAssociation/MeidoSerialization/v2/service/KCES"
 	"github.com/MeidoPromotionAssociation/MeidoSerialization/v2/tools"
 )
@@ -86,6 +88,7 @@ func NewStructuredFormats() map[string]structuredFormat {
 	undress := &KCESService.UndressDataService{}
 	undressParts := &KCESService.UndressPartsDataService{}
 	nei := &KCESService.NeiService{}
+	neimp := &CRC3D3Service.NeimpService{}
 
 	// 三个含名称派生查找字段（ID/GUID）的格式绕过库 service（其写死重算），由编码选项决定是否重算
 	menuAssetsEncode := encodeWithLookupOptions(serializationKCES.EncodeMenuAssetsWithOptions, false)
@@ -179,6 +182,20 @@ func NewStructuredFormats() map[string]structuredFormat {
 				}
 				return nei.WriteNeiFile(p, value)
 			}),
+		},
+		"neimp": {
+			// NEIMP 即 NEI MessagePack：值树由库的 msgpack 包定义，Value 自带 MarshalJSON，
+			// 读出的 JSON 就是值树本身（无封套）。
+			// 写回不能走 decodeInto：普通 JSON 解码会丢掉映射的整数键与 float32 宽度，
+			// 必须用 DecodeNeimpJSON 还原类型后再编码
+			read: func(p string) (any, error) { return neimp.ReadNeimpFile(p) },
+			write: func(p string, jsonText []byte, _ bool) error {
+				value, err := serializationCRC3D3.DecodeNeimpJSON(jsonText)
+				if err != nil {
+					return fmt.Errorf("parse .neimp editing JSON: %w", err)
+				}
+				return neimp.WriteNeimpFile(p, value)
+			},
 		},
 	}
 }

@@ -90,7 +90,8 @@
     "undressdat": "UndressData",
     "undresspdat": "UndressPData",
     "psk": "PSK",
-    "nei": "NEI"
+    "nei": "NEI",
+    "neimp": "NEIMP"
   },
   "Formats": {
     "menuassets": "KCES 메뉴 애셋 (.menuassets)",
@@ -117,7 +118,8 @@
     "undressdat": "탈의 데이터 (.undressdat)",
     "undresspdat": "파츠 탈의 데이터 (.undresspdat)",
     "psk": "스커트 물리 (.psk)",
-    "nei": "NEI 데이터 테이블 (.nei)"
+    "nei": "NEI 데이터 테이블 (.nei)",
+    "neimp": "NEI MessagePack 데이터 테이블 (.neimp)"
   },
   "HomePage": {
     "new_version_button": "새 버전이 있습니다. 클릭하여 다운로드",
@@ -246,6 +248,32 @@
     "text_encoding": "셀 인코딩",
     "text_encoding_tip": "셀 텍스트의 문자 인코딩입니다. KCES는 UTF-8을 사용하고, COM3D2는 Shift-JIS(CP932)를 사용합니다. 읽을 때 셀 내용으로 판별하며 ASCII만 있는 표는 구분할 수 없어 Shift-JIS로 보고됩니다. 비워 두면 Shift-JIS로 기록됩니다",
     "text_encoding_not_utf8": "현재 UTF-8이 아닙니다. KCES의 .nei는 UTF-8로 기록해야 하며, 그렇지 않으면 게임에서 일본어가 깨져 보입니다. ASCII만 있는 표가 Shift-JIS로 판별되는 것은 정상이지만, ASCII가 아닌 문자가 있다면 UTF-8로 바꾸세요."
+  },
+  "NeimpEditor": {
+    "table_mode": "테이블 편집",
+    "json_editor_mode": "JSON",
+    "table_size_colon": "테이블 크기: ",
+    "table_version_colon": "버전: ",
+    "list_size_colon": "항목 수: ",
+    "table": "테이블",
+    "root_table": "루트",
+    "no_table": "이 .neimp에는 편집할 수 있는 데이터가 없습니다",
+    "no_table_description": "테이블 보기로 편집할 수 있는 것은 CsvData의 '[버전, {행 키: 행 배열}]'과 id 목록 배열입니다. 이 파일은 둘 다 아니므로(새 빈 파일 등) JSON 보기에서 편집하세요.",
+    "column_key_tip": "열 이름은 행 배열의 인덱스이며 게임 소스의 [Key(n)] 위치에 대응합니다(보통 0 = 버전, 1 = id). MessagePack은 위치로 직렬화하므로 필드 이름은 없습니다.",
+    "list_tip": "id 목록입니다(*_enabled_list.neimp 등). 각 항목이 하나의 id이며, 항목을 추가/삭제하면 id가 추가/삭제됩니다",
+    "list_value_column": "값",
+    "list_index": "번호",
+    "row_key": "행 키",
+    "row_key_tip": "행 키는 게임이 이 행을 찾는 기준(CsvData 사전 키)입니다. 변경은 JSON 보기에서 하세요",
+    "add_row": "행 추가",
+    "delete_row": "이 행 삭제",
+    "delete_column": "이 열 삭제",
+    "missing_cell_tip": "이 행에는 이 위치의 데이터가 없습니다. 값을 쓰면 배열 길이가 바뀌므로 편집할 수 없습니다",
+    "empty_table": "테이블에 데이터가 없습니다",
+    "resize_column_tip": "드래그하여 열 너비 조정, 더블 클릭으로 기본값 복원",
+    "cell_invalid_json": "문자열이 아닌 셀에는 JSON 리터럴만 입력할 수 있습니다. 문자열은 큰따옴표로 감싸세요",
+    "id_mismatch": "이 행의 키가 id 열 값과 일치하지 않습니다. 게임은 행 키로 조회하므로 이 행을 읽지 못할 수 있습니다",
+    "id_mismatch_count": "{{rows}}개 행의 키가 id 열과 일치하지 않습니다. 게임은 행 키로 조회하므로 해당 행을 읽지 못할 수 있습니다"
   },
   "PartsEditor": {
     "search_placeholder": "파일 이름 검색…",

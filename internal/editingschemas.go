@@ -208,7 +208,7 @@ func schemaDocLabel(locale, key string) string {
 }
 
 // editingSchemaIDs 编辑器 formatKey → 库 editing schema 的格式标识
-// nei 没有对应 schema；psk 使用 COM3D2 共用格式的 schema
+// nei 没有对应 schema；neimp 用 CRC3D3 的容器契约 schema；psk 使用 COM3D2 共用格式的 schema
 var editingSchemaIDs = map[string]string{
 	"menuassets":     "kces.menuassets",
 	"materialassets": "kces.materialassets",
@@ -232,6 +232,7 @@ var editingSchemaIDs = map[string]string{
 	"nson":           "kces.nson",
 	"undressdat":     "kces.undressdat",
 	"undresspdat":    "kces.undresspdat",
+	"neimp":          "crc3d3.neimp",
 	"psk":            "com3d2.psk",
 }
 

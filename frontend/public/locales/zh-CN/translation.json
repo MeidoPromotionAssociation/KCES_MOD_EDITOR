@@ -90,7 +90,8 @@
     "undressdat": "UndressData",
     "undresspdat": "UndressPData",
     "psk": "PSK",
-    "nei": "NEI"
+    "nei": "NEI",
+    "neimp": "NEIMP"
   },
   "Formats": {
     "menuassets": "KCES 部件菜单文件 (.menuassets)",
@@ -117,7 +118,8 @@
     "undressdat": "脱衣数据 (.undressdat)",
     "undresspdat": "部件脱衣数据 (.undresspdat)",
     "psk": "裙子物理文件 (.psk)",
-    "nei": "NEI 数据表 (.nei)"
+    "nei": "NEI 数据表 (.nei)",
+    "neimp": "NEI MessagePack 数据表 (.neimp)"
   },
   "HomePage": {
     "new_version_button": "有新版本可用，点击前往下载",
@@ -246,6 +248,32 @@
     "text_encoding": "单元格编码",
     "text_encoding_tip": "单元格文本的字符编码。KCES 使用 UTF-8；COM3D2 用 Shift-JIS（CP932）。读取时按单元格内容探测，纯 ASCII 的表格无法区分而报告为 Shift-JIS。留空写出时等同 Shift-JIS",
     "text_encoding_not_utf8": "当前不是 UTF-8。KCES 的 .nei 应写出 UTF-8，否则游戏会把日文读成乱码；纯 ASCII 表格被探测为 Shift-JIS 属正常，含非 ASCII 文本时请改为 UTF-8。"
+  },
+  "NeimpEditor": {
+    "table_mode": "表格编辑",
+    "json_editor_mode": "JSON",
+    "table_size_colon": "表格规模：",
+    "table_version_colon": "版本：",
+    "list_size_colon": "条目数：",
+    "table": "表",
+    "root_table": "根表",
+    "no_table": "这个 .neimp 里没有可编辑的数据",
+    "no_table_description": "表格视图能编辑 CsvData 的「[版本, {行键: 行数组}]」和 id 清单数组。这个文件两者都不是（例如新建的空文件），请切到 JSON 视图编辑。",
+    "column_key_tip": "列名是行数组的下标，对应游戏源码里的 [Key(n)] 位置（常见：0 = 版本、1 = id）。MessagePack 按位置序列化，所以没有字段名。",
+    "list_tip": "这是 id 清单（如 *_enabled_list.neimp）：每个条目就是一个 id，增删条目就是增删 id",
+    "list_value_column": "值",
+    "list_index": "序号",
+    "row_key": "行键",
+    "row_key_tip": "行键是游戏查找这一行的依据（CsvData 的字典键）。要改它请切到 JSON 视图",
+    "add_row": "添加行",
+    "delete_row": "删除此行",
+    "delete_column": "删除此列",
+    "missing_cell_tip": "这一行没有这个位置的数据，写进去会改变数组长度，因此不可编辑",
+    "empty_table": "表格暂无数据",
+    "resize_column_tip": "拖动调整列宽，双击恢复默认宽度",
+    "cell_invalid_json": "非字符串单元格只接受 JSON 字面量；要写字符串请加双引号",
+    "id_mismatch": "这一行的行键与 id 列的值不一致。游戏按行键查找，可能读不到该行",
+    "id_mismatch_count": "有 {{rows}} 行的行键与 id 列不一致，游戏按行键查找，这些行可能读不到"
   },
   "PartsEditor": {
     "search_placeholder": "搜索文件名…",

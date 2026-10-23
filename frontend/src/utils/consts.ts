@@ -71,6 +71,8 @@ export const KCESFormats: KCESFormatDef[] = [
     {key: "preset", fileType: "preset", suffixes: [".preset", ".perset"], group: "other"},
     // 数据 / Data
     {key: "nei", fileType: "nei", suffixes: [".nei"], altSuffixes: [".csv"], group: "data"},
+    // NEIMP 即 NEI MessagePack，.nei 的 MessagePack 后继格式
+    {key: "neimp", fileType: "neimp", suffixes: [".neimp"], group: "data"},
     {key: "nson", fileType: "nson", suffixes: [".nson"], group: "data"},
     {key: "undressdat", fileType: "undressdat", suffixes: [".undressdat"], group: "data"},
     {key: "undresspdat", fileType: "undresspdat", suffixes: [".undresspdat"], group: "data"},

@@ -42,6 +42,7 @@ Current Game Version KCES 1.34.5 and KCES2 1.36.0
 | `.undressdat` `.undresspdat`                                       | Half-undressed data                   | All versions    |                                                  |
 | `.nson`                                                            | JSON file                             | All versions    |                                                  |
 | `.nei`                                                             | Encryption CSV file                   | All versions    | COM3D2 use Shift-Jis Encoding and KCES use UTF-8 |
+| `.neimp`                                                           | NEI MessagePack table                 | All versions    | Successor of `.nei`                              |
 
 Each file corresponds to a .go
 file：[https://github.com/MeidoPromotionAssociation/MeidoSerialization/tree/main/serialization/KCES](https://github.com/MeidoPromotionAssociation/MeidoSerialization/tree/main/serialization/KCES)
@@ -215,6 +216,7 @@ KCES MOD 编辑器，使用 Golang + Wails v3 + React + TypeScript 打造，现�
 | `.undressdat` `.undresspdat`                                       | 半脱衣数据         | 所有版本 |                                             |
 | `.nson`                                                            | JSON 文件          | 所有版本 |                                             |
 | `.nei`                                                             | 加密 CSV 文件      | 所有版本 | COM3D2 使用 Shift-JIS 编码，KCES 使用 UTF-8 |
+| `.neimp`                                                           | NEI MessagePack 表 | 所有版本 | `.nei` 的后继格式                           |
 
 每种文件对应一个 .go
 文件：[https://github.com/MeidoPromotionAssociation/MeidoSerialization/tree/main/serialization/KCES](https://github.com/MeidoPromotionAssociation/MeidoSerialization/tree/main/serialization/KCES)
@@ -376,6 +378,7 @@ KCES2 向けに作成した MOD は、[COM3D2.5](https://com3d2.jp/) と [CRC3D3
 | `.undressdat` `.undresspdat`                                       | 半脱ぎデータ                     | 全バージョン   |                                                 |
 | `.nson`                                                            | JSON ファイル                    | 全バージョン   |                                                 |
 | `.nei`                                                             | 暗号化 CSV ファイル              | 全バージョン   | COM3D2 は Shift-JIS、KCES は UTF-8 を使用します |
+| `.neimp`                                                           | NEI MessagePack テーブル         | 全バージョン   | `.nei` の後継形式                               |
 
 各ファイルに対応する .go
 ファイル：[https://github.com/MeidoPromotionAssociation/MeidoSerialization/tree/main/serialization/KCES](https://github.com/MeidoPromotionAssociation/MeidoSerialization/tree/main/serialization/KCES)

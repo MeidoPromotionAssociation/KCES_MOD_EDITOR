@@ -90,7 +90,8 @@
     "undressdat": "UndressData",
     "undresspdat": "UndressPData",
     "psk": "PSK",
-    "nei": "NEI"
+    "nei": "NEI",
+    "neimp": "NEIMP"
   },
   "Formats": {
     "menuassets": "KCES menu assets file (.menuassets)",
@@ -117,7 +118,8 @@
     "undressdat": "Undress data (.undressdat)",
     "undresspdat": "Parts undress data (.undresspdat)",
     "psk": "Skirt physics file (.psk)",
-    "nei": "NEI data table (.nei)"
+    "nei": "NEI data table (.nei)",
+    "neimp": "NEI MessagePack data table (.neimp)"
   },
   "HomePage": {
     "new_version_button": "A new version is available, click to download",
@@ -246,6 +248,32 @@
     "text_encoding": "Cell Encoding",
     "text_encoding_tip": "Character encoding of cell text. KCES uses UTF-8, while COM3D2 uses Shift-JIS (CP932). The encoding is detected from cell content when reading, and ASCII-only tables carry no evidence so they are reported as Shift-JIS. An empty value writes as Shift-JIS",
     "text_encoding_not_utf8": "Not UTF-8. KCES .nei files should be written as UTF-8, otherwise the game reads Japanese text as garbage. Shift-JIS on an ASCII-only table is expected, but switch to UTF-8 once the table contains non-ASCII text."
+  },
+  "NeimpEditor": {
+    "table_mode": "Table",
+    "json_editor_mode": "JSON",
+    "table_size_colon": "Table size: ",
+    "table_version_colon": "Version: ",
+    "list_size_colon": "Entries: ",
+    "table": "Table",
+    "root_table": "root",
+    "no_table": "This .neimp has no editable data",
+    "no_table_description": "The table view edits CsvData tables shaped as [version, {row key: row array}] and id list arrays. This file is neither (a new empty file, for example), so edit it in the JSON view.",
+    "column_key_tip": "Columns are indexes of the row array, matching the [Key(n)] position in the game source (commonly 0 = version, 1 = id). MessagePack serializes by position, so there are no field names.",
+    "list_tip": "This is an id list (such as *_enabled_list.neimp): each entry is one id, so adding or deleting entries adds or removes ids",
+    "list_value_column": "Value",
+    "list_index": "Index",
+    "row_key": "Row key",
+    "row_key_tip": "The row key is how the game looks this row up (the CsvData dictionary key). Change it in the JSON view",
+    "add_row": "Add row",
+    "delete_row": "Delete row",
+    "delete_column": "Delete column",
+    "missing_cell_tip": "This row has no value at this position; writing one would change the array length, so it is read-only",
+    "empty_table": "The table has no rows yet",
+    "resize_column_tip": "Drag to resize the column, double-click to reset",
+    "cell_invalid_json": "Non-string cells accept JSON literals only; wrap text in double quotes to write a string",
+    "id_mismatch": "This row's key does not match its id column. The game looks rows up by key, so it may not find this row",
+    "id_mismatch_count": "{{rows}} row(s) have a key that does not match the id column; the game looks rows up by key and may not read them"
   },
   "PartsEditor": {
     "search_placeholder": "Search file name…",

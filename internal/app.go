@@ -13,6 +13,7 @@ import (
 	"time"
 
 	COM3D2Service "github.com/MeidoPromotionAssociation/MeidoSerialization/v2/service/COM3D2"
+	CRC3D3Service "github.com/MeidoPromotionAssociation/MeidoSerialization/v2/service/CRC3D3"
 	KCESService "github.com/MeidoPromotionAssociation/MeidoSerialization/v2/service/KCES"
 	"github.com/wailsapp/wails/v3/pkg/application"
 )
@@ -26,7 +27,8 @@ const (
 
 // App 提供应用级功能：文件对话框、版本检查、文件信息、文件类型识别
 type App struct {
-	app         *application.App
+	app *application.App
+	// fileType 探测本编辑器支持的格式；CRC3D3 的 .neimp 也在这一条探测链里，见 DetermineFileType
 	fileType    *KCESService.FileTypeService
 	structured  map[string]structuredFormat
 	startupFile string
@@ -124,15 +126,23 @@ func (a *App) SelectDirectory(title string) (string, error) {
 	return path, nil
 }
 
-// DetermineFileType 判断 KCES 文件类型；无法识别时 FileType 为 Unknown，前端可按扩展名回退
+// DetermineFileType 判断文件类型；无法识别时 FileType 为 Unknown，前端可按扩展名回退
+// 探测只有这一条链：先由 KCES 的探测认领，未命中再交给 CRC3D3 的探测（.neimp 只由后者认领），
+// 两个探测都不认识时才回退 Unknown
 func (a *App) DetermineFileType(path string) (COM3D2Service.FileInfo, error) {
 	info, matched, err := a.fileType.TryFileTypeDetermine(path)
-	if err != nil {
+	if err != nil || matched {
 		return info, err
 	}
-	if !matched {
-		info.FileType = COM3D2Service.UnknownFileType
+	// CRC3D3 的探测是无状态的零值类型，直接就地构造，不必再占一个字段
+	crcInfo, crcMatched, crcErr := (&CRC3D3Service.FileTypeService{}).TryFileTypeDetermine(path)
+	if crcErr != nil {
+		return crcInfo, crcErr
 	}
+	if crcMatched {
+		return crcInfo, nil
+	}
+	info.FileType = COM3D2Service.UnknownFileType
 	return info, nil
 }
 

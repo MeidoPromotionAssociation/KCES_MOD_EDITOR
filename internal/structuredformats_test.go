@@ -25,6 +25,7 @@ var structuredFormatSuffixes = map[string]string{
 	"dslcol":         ".dslcol",
 	"nson":           ".nson",
 	"nei":            ".nei",
+	"neimp":          ".neimp",
 }
 
 // findSample 在 testdata 中查找一个具有指定后缀的样本文件
@@ -111,7 +112,7 @@ func TestStructuredFormatsCoverEditorFormats(t *testing.T) {
 		"menuassets", "materialassets", "pmatassets", "model",
 		"dbconf", "dbcol", "db2conf", "dsbconf", "dsb2conf",
 		"dslconf", "dsl2conf", "dslcol",
-		"preset", "nson", "undressdat", "undresspdat", "nei",
+		"preset", "nson", "undressdat", "undresspdat", "nei", "neimp",
 	}
 	for _, key := range expected {
 		if _, ok := formats[key]; !ok {

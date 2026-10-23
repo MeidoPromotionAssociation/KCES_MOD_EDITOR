@@ -143,6 +143,11 @@ export const formatServices: Record<string, FormatService> = {
     nei: {
         ...structured("nei"),
     },
+    // .neimp 的值树由库的 msgpack 包定义，读写都要靠后端按类型还原（整数键、float32 宽度），
+    // 因此和 .nei 一样只走 JSON 字符串通道，不提供大文件直接转换
+    neimp: {
+        ...structured("neimp"),
+    },
 };
 
 /** 将 CSV 转换为 .nei 文件（NeiEditor 专用） */

@@ -445,6 +445,10 @@ func newStructuredDocument(formatKey string) (any, error) {
 	case "nei":
 		// KCES 通过 crc.dll 解码单元格，新表格必须写出 UTF-8，否则游戏把日文读成乱码
 		return serializationKCES.NewNei(1, 1, [][]string{{""}}), nil
+	case "neimp":
+		// .neimp 的 JSON 就是 MessagePack 值树本身，没有固定成员可预填；
+		// 空映射是唯一通用的起点，具体内容取决于该文件所属的 CsvData 类型
+		return json.RawMessage(`{}`), nil
 	default:
 		// preset 等 VirtualDirectory 类格式没有有意义的空文档
 		return nil, fmt.Errorf("format %q does not support creating a new document", formatKey)

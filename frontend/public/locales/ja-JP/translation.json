@@ -90,7 +90,8 @@
     "undressdat": "UndressData",
     "undresspdat": "UndressPData",
     "psk": "PSK",
-    "nei": "NEI"
+    "nei": "NEI",
+    "neimp": "NEIMP"
   },
   "Formats": {
     "menuassets": "KCES メニューアセット (.menuassets)",
@@ -117,7 +118,8 @@
     "undressdat": "脱衣データ (.undressdat)",
     "undresspdat": "パーツ脱衣データ (.undresspdat)",
     "psk": "スカート物理 (.psk)",
-    "nei": "NEI データテーブル (.nei)"
+    "nei": "NEI データテーブル (.nei)",
+    "neimp": "NEI MessagePack データテーブル (.neimp)"
   },
   "HomePage": {
     "new_version_button": "新しいバージョンがあります。クリックしてダウンロード",
@@ -246,6 +248,32 @@
     "text_encoding": "セルの文字コード",
     "text_encoding_tip": "セルテキストの文字コードです。KCES は UTF-8、COM3D2 は Shift-JIS（CP932）です。読み込み時はセルの内容から判定し、ASCII のみの表は判別できないため Shift-JIS として報告されます。空欄のまま書き出すと Shift-JIS と同じ扱いになります",
     "text_encoding_not_utf8": "現在 UTF-8 ではありません。KCES の .nei は UTF-8 で書き出す必要があり、そうしないとゲーム内で日本語が文字化けします。ASCII のみの表が Shift-JIS と判定されるのは正常ですが、非 ASCII の文字を含む場合は UTF-8 に変更してください。"
+  },
+  "NeimpEditor": {
+    "table_mode": "テーブル編集",
+    "json_editor_mode": "JSON",
+    "table_size_colon": "テーブルサイズ：",
+    "table_version_colon": "バージョン：",
+    "list_size_colon": "項目数：",
+    "table": "テーブル",
+    "root_table": "ルート",
+    "no_table": "この .neimp には編集できるデータがありません",
+    "no_table_description": "テーブル表示で編集できるのは、CsvData の「[バージョン, {行キー: 行配列}]」と id リスト配列です。このファイルはどちらでもないため（新規の空ファイルなど）、JSON 表示で編集してください。",
+    "column_key_tip": "列名は行配列のインデックスで、ゲームソースの [Key(n)] の位置に対応します（通常 0 = バージョン、1 = id）。MessagePack は位置でシリアライズするため、フィールド名はありません。",
+    "list_tip": "これは id リストです（*_enabled_list.neimp など）。各項目が 1 つの id で、項目の追加・削除は id の追加・削除になります",
+    "list_value_column": "値",
+    "list_index": "番号",
+    "row_key": "行キー",
+    "row_key_tip": "行キーはゲームがこの行を引くためのキー（CsvData の辞書キー）です。変更は JSON 表示で行ってください",
+    "add_row": "行を追加",
+    "delete_row": "この行を削除",
+    "delete_column": "この列を削除",
+    "missing_cell_tip": "この行にはこの位置のデータがありません。書き込むと配列長が変わるため編集できません",
+    "empty_table": "テーブルにデータがありません",
+    "resize_column_tip": "ドラッグで列幅を変更、ダブルクリックで既定値に戻す",
+    "cell_invalid_json": "文字列以外のセルには JSON リテラルのみ入力できます。文字列を書く場合は二重引用符で囲んでください",
+    "id_mismatch": "この行のキーが id 列の値と一致しません。ゲームは行キーで検索するため、この行を読めない可能性があります",
+    "id_mismatch_count": "{{rows}} 行のキーが id 列と一致しません。ゲームは行キーで検索するため、これらの行を読めない可能性があります"
   },
   "PartsEditor": {
     "search_placeholder": "ファイル名を検索…",

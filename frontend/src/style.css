@@ -230,11 +230,11 @@ html.file-drop-target-active {
  * 热区 7px（好点中）但本身透明，靠 ::after 在 hover / 拖拽时画一条 2px 竖线，
  * 否则每列右边都竖着一道线会显得很脏。
  */
-.nei-resizer-anchor {
+.table-resizer-anchor {
     display: contents;
 }
 
-.nei-col-resizer {
+.table-col-resizer {
     position: absolute;
     top: 0;
     right: -3px;
@@ -246,7 +246,7 @@ html.file-drop-target-active {
     cursor: col-resize;
 }
 
-.nei-col-resizer::after {
+.table-col-resizer::after {
     content: "";
     position: absolute;
     top: 25%;
@@ -261,8 +261,8 @@ html.file-drop-target-active {
 }
 
 /* 悬停 / 拖拽中显出醒目的竖线，给出「这里能拖」的提示 */
-.nei-col-resizer:hover::after,
-.nei-col-resizer:active::after {
+.table-col-resizer:hover::after,
+.table-col-resizer:active::after {
     top: 15%;
     height: 70%;
     background: var(--ant-color-primary, #1677ff);
@@ -272,7 +272,7 @@ html.file-drop-target-active {
  * 表头单元格要允许把手溢出到右边界外（right: -3px），否则会被裁掉；
  * 内边距已挪到内层 div 上（见 renderHeaderCellContent 的 padding: 0）。
  */
-.nei-header-cell {
+.table-header-cell {
     overflow: visible;
 }
 
