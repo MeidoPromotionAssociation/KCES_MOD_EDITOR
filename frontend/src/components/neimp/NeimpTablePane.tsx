@@ -119,9 +119,9 @@ const NeimpTablePane: React.FC<{
                             <Select
                                 size="small"
                                 style={{minWidth: 180}}
-                                // 复合表可能有上百张表（field_data 有 128 张），必须能按路径搜
-                                showSearch
-                                optionFilterProp="label"
+                                // 复合表可能有上百张表（field_data 有 128 张），必须能按路径搜；
+                                // antd 6 把 optionFilterProp 并进了 showSearch 配置
+                                showSearch={{optionFilterProp: "label"}}
                                 value={neimpTableKey(sheet)}
                                 onChange={onSelectTable}
                                 options={sheets.map((candidate) => ({
