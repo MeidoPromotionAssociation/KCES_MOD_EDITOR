@@ -11,31 +11,31 @@
   },
   "dependencies": {
     "@ant-design/icons": "^6.3.4",
-    "@dnd-kit/dom": "^0.5.1",
-    "@dnd-kit/react": "^0.5.1",
+    "@dnd-kit/dom": "^0.5.3",
+    "@dnd-kit/react": "^0.5.3",
     "@monaco-editor/react": "^4.7.0",
-    "@tanstack/react-virtual": "^3.14.22",
+    "@tanstack/react-virtual": "^3.14.26",
     "@wailsio/runtime": "latest",
-    "antd": "^6.6.7",
+    "antd": "^6.7.0",
     "dayjs": "^1.11.23",
-    "i18next": "^26.5.5",
-    "i18next-browser-languagedetector": "^8.2.1",
-    "i18next-http-backend": "^4.0.4",
+    "i18next": "^27.1.1",
+    "i18next-browser-languagedetector": "^8.3.0",
+    "i18next-http-backend": "^4.0.10",
     "lossless-json": "^4.3.3",
     "monaco-editor": "^0.57.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
-    "react-i18next": "^17.1.2",
+    "react-i18next": "^18.0.1",
     "react-resizable": "^4.0.2",
-    "react-router-dom": "7.18.4"
+    "react-router-dom": "7.18.5"
   },
   "devDependencies": {
-    "@rolldown/plugin-babel": "^0.2.4",
+    "@rolldown/plugin-babel": "^0.3.1",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
-    "@vitejs/plugin-react": "^6.1.2",
+    "@vitejs/plugin-react": "^6.3.0",
     "babel-plugin-react-compiler": "^1.0.0",
     "typescript": "^7.0.2",
-    "vite": "^8.3.5"
+    "vite": "^8.3.8"
   }
 }

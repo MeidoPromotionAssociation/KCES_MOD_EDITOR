@@ -1,6 +1,7 @@
 import {forwardRef, useMemo} from "react";
 import {Typography} from "antd";
 import {useTranslation} from "react-i18next";
+import type {TFunction} from "i18next";
 import BaseFormatEditor, {BaseFormatEditorProps, FormatEditorRef} from "./common/BaseFormatEditor";
 import JsonObjectForm, {FieldMeta} from "./common/JsonObjectForm";
 import PresetThumbnail from "./preset/PresetThumbnail";
@@ -82,7 +83,7 @@ const HEADER_FIELDS = [
 /** 把 i18n 里的 PresetField.* 按路径组装成 JsonObjectForm 的 fieldMeta */
 function buildFieldMeta(
     paths: string[],
-    t: (key: string, options?: any) => string,
+    t: TFunction,
 ): Record<string, FieldMeta> {
     const meta: Record<string, FieldMeta> = {};
     for (const p of paths) {
