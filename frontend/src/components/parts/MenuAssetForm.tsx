@@ -321,9 +321,11 @@ const MenuAssetForm: React.FC<{
             key: "commands",
             label: `${t('MenuAssetsEditor.command_list')} (${commands.length})`,
             // 命令编辑器要吃掉折叠面板的剩余高度，这一条链上的每层都得能伸缩，
-            // 中间的 .ant-collapse-panel 由 CSSMotion 控高、没有语义化入口，只能靠 CSS 类接上
+            // 中间的 .ant-collapse-panel 由 CSSMotion 控高、没有语义化入口，只能靠 CSS 类接上。
+            // 这里不写 minHeight: 0：让自动最小尺寸把编辑器的 500px 下限一路顶上来，
+            // 空间不够时由右侧面板滚动，而不是把编辑器压扁
             className: "menu-commands-collapse-item",
-            styles: {body: {display: "flex", flexDirection: "column", flex: 1, minHeight: 0}},
+            styles: {body: {display: "flex", flexDirection: "column", flex: 1}},
             children: (
                 <MenuCommandsEditor
                     commands={commands}

@@ -19,6 +19,10 @@ type FormatType = "treeIndent" | "colonSplit" | "TSV";
 
 const MenuCommandsFormatKey = "MenuAssetsCommandsFormat";
 
+// 命令编辑区的最小高度：窗口/上层表单再挤，也要留出一块能直接写命令的区域，
+// 剩下的交给右侧面板滚动，用户不必先折叠「基本信息」才能编辑
+const MinEditorHeight = 500;
+
 interface KCESCommand {
     type: number;
     args: string[] | null;
@@ -244,7 +248,7 @@ const MenuCommandsEditor: React.FC<{
     ]), [t]);
 
     return (
-        <div style={{display: "flex", flexDirection: "column", flex: 1, minHeight: 0}}>
+        <div style={{display: "flex", flexDirection: "column", flex: 1}}>
             <Radio.Group
                 size="small"
                 block
@@ -265,14 +269,18 @@ const MenuCommandsEditor: React.FC<{
                 />
             )}
             {/* 外层相对定位容器：帮助按钮浮在编辑器上，但不受内层 overflow:hidden 裁剪。
-                不给显式 height 时靠 flex:1 吃掉折叠面板的剩余高度；这里必须是 minHeight:0，
-                写成非 0 的下限会让它拒绝压缩到视口内，反而把外层顶出滚动条 */}
+                不给显式 height 时靠 flex:1 吃掉折叠面板的剩余高度，同时用 minHeight 兜底：
+                空间不足时它拒绝继续压缩，把右侧面板顶出滚动条，用户往下滚就能编辑 */}
             <div
                 style={height
                     ? {position: "relative", height}
-                    : {position: "relative", flex: 1, minHeight: 0}}
+                    : {position: "relative", flex: 1, minHeight: MinEditorHeight}}
             >
-                <div style={{height: "100%", borderRadius: 8, overflow: "hidden"}}>
+                {/* 内层用绝对定位铺满，不用 height:100%：
+                    Monaco 会把量到的像素高度写回自己的 DOM，若它参与父级的固有尺寸计算，
+                    就会反过来把外层的最小高度顶大 —— 窗口缩小后编辑器再也回不到 500px。
+                    绝对定位的子节点不参与固有尺寸，外层高度只由 flex + minHeight 决定 */}
+                <div style={{position: "absolute", inset: 0, borderRadius: 8, overflow: "hidden"}}>
                     <Editor
                         beforeMount={(monacoInstance) => setupMenuMonaco(monacoInstance)}
                         language={languageFor(format)}
@@ -285,7 +293,7 @@ const MenuCommandsEditor: React.FC<{
                             tabSize: 4,
                             // 让补全/悬停浮窗渲染到 body 上的固定层，可以超出编辑器边界显示
                             fixedOverflowWidgets: true,
-                            // 折叠面板隐藏内容时容器会变成 0 高，展开后靠这个自动重新测量并恢复
+                            // 折叠面板隐藏时容器不参与布局，展开后靠这个自动重新测量并恢复
                             automaticLayout: true,
                         }}
                     />

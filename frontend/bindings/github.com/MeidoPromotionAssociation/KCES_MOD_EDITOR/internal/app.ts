@@ -46,7 +46,9 @@ export function ConvertStructuredJsonToNative(formatKey: string, inputPath: stri
 }
 
 /**
- * DetermineFileType 判断 KCES 文件类型；无法识别时 FileType 为 Unknown，前端可按扩展名回退
+ * DetermineFileType 判断文件类型；无法识别时 FileType 为 Unknown，前端可按扩展名回退
+ * 探测只有这一条链：先由 KCES 的探测认领，未命中再交给 CRC3D3 的探测（.neimp 只由后者认领），
+ * 两个探测都不认识时才回退 Unknown
  */
 export function DetermineFileType(path: string): $CancellablePromise<COM3D2$0.FileInfo> {
     return $Call.ByID(3447304086, path).then(($result: any) => {
