@@ -3,7 +3,7 @@ module github.com/MeidoPromotionAssociation/KCES_MOD_EDITOR
 go 1.27.4
 
 require (
-	github.com/MeidoPromotionAssociation/MeidoSerialization/v2 v2.5.1
+	github.com/MeidoPromotionAssociation/MeidoSerialization/v2 v2.5.2
 	github.com/wailsapp/wails/v3 v3.1.0
 	golang.org/x/sys v0.50.0
 )
